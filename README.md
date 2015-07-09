@@ -1,10 +1,10 @@
-# cityhallmonitor
+### Local development setup
 
-Download Mac OS X Version 9.3.9
+#### 1.  Setup PostgreSQL
+
+Download and run installer for Mac OS X Version 9.3.9
 
 http://www.enterprisedb.com/products-services-training/pgdownload
-
-Mount disk image and run installer
 
     Default installation directory = /Library/PostgreSQL/9.3
     Default data directory /Library/PostgreSQL/9.3/data

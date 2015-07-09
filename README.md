@@ -1,6 +1,15 @@
 ### Local development setup
 
-#### 1.  Setup PostgreSQL
+#### Install Python 3.4.4
+
+Download installer from https://www.python.org/downloads/release/python-343/
+
+Upgrade virtualenvwrapper, if needed:
+
+`sudo pip install virtualenvwrapper --upgrade`
+
+
+#### Setup PostgreSQL
 
 Download and run installer for Mac OS X Version 9.3.9
 
@@ -19,7 +28,8 @@ You may need to add the PostgreSQL lib directory to your DYLD_FALLBACK_LIBRARY_P
 
 `DYLD_FALLBACK_LIBRARY_PATH=$DYLD_FALLBACK_LIBRARY_PATH:/Library/PostgreSQL/9.3/lib`
 
-#### 2.  Setup database and user
+
+#### Setup database and user
         
 ```
 $ createdb -U postgres cityhallmonitor
@@ -38,3 +48,11 @@ Verify you can connect to database as cityhallmonitor user:
 ```
 $ psql -U cityhallmonitor cityhallmonitor
 ```
+
+#### Create virtualenv and install requirements
+
+```
+$ mkvirtualenv --python=/usr/local/bin/python3 cityhallmonitor
+$ pip install -r requirements.txt
+```
+

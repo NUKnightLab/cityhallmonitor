@@ -1,7 +1,5 @@
 # cityhallmonitor
 
-
-
 Download Mac OS X Version 9.3.9
 
 http://www.enterprisedb.com/products-services-training/pgdownload
@@ -13,11 +11,13 @@ Mount disk image and run installer
     Default Port = 5432
     Use default locale
     
-Add the PostgreSQL bin directory to your PATH environment variable.
+Add the PostgreSQL bin directory to your PATH environment variable:
 
 `PATH=$PATH:/Library/PostgreSQL/9.3/bin`
 
-Add the PostgreSQL library path to your DYLD_LIBRARY_PATH environment variable.
+You may need to add the PostgreSQL lib directory to your DYLD_FALLBACK_LIBRARY_PATH environment variable:
 
-`DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Library/PostgreSQL/9.3/lib`
+`DYLD_FALLBACK_LIBRARY_PATH=$DYLD_FALLBACK_LIBRARY_PATH:/Library/PostgreSQL/9.3/lib`
+
+
         

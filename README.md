@@ -13,5 +13,11 @@ Mount disk image and run installer
     Default Port = 5432
     Use default locale
     
-Add `/Library/PostgreSQL/9.3/bin` to your PATH
+Add the PostgreSQL bin directory to your PATH environment variable.
+
+`PATH=$PATH:/Library/PostgreSQL/9.3/bin`
+
+Add the PostgreSQL library path to your DYLD_LIBRARY_PATH environment variable.
+
+`DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/Library/PostgreSQL/9.3/lib`
         

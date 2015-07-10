@@ -10,6 +10,7 @@ Run with `--help` option to see what models are supported, e.g.
 
 Due to the use of ForeignKeys, some data has to be pulled before other data (e.g. `BodyType` data has to be pulled before `Body` data, because the latter references the former).
 
+There is also a `pull_event_items` command that will pull the EventItems for every Event in the system.  However, it currently generates an IntegrityError on my local system because there is an EventItem that references a Matter than I do not have.  This should be handled programatically somewhow (TODO).
 
 
 ### Local development setup

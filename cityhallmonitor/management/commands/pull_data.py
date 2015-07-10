@@ -52,7 +52,7 @@ class Command(BaseCommand):
         item_list = r.json()
         n = len(item_list)
          
-        for i, item in enumerate(item_list[51100:]):
+        for i, item in enumerate(item_list):
             try:
                 r = model_class.from_json(item)
                 r.save()

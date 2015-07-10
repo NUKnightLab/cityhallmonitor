@@ -1,6 +1,51 @@
 from django.contrib import admin
-from cityhallmonitor.models import Action, MatterType
+from cityhallmonitor.models import \
+    Action, Person, \
+    BodyType, Body, \
+    MatterStatus, MatterType, Matter, \
+    VoteType, Event
+    
 
-admin.site.register(Action)
+class ActionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'active_flag', 'last_modified',)
+    list_filter = ('active_flag',)
+admin.site.register(Action, ActionAdmin)
 
-admin.site.register(MatterType)
+
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ('last_name', 'first_name', 'active_flag', 'last_modified')
+    list_filter = ('active_flag',)
+admin.site.register(Person, PersonAdmin)
+
+
+class BodyTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'last_modified')    
+admin.site.register(BodyType, BodyTypeAdmin)
+
+class BodyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'body_type', 'active_flag', 'last_modified')
+    list_filter = ('active_flag',)    
+admin.site.register(Body, BodyAdmin)
+
+class MatterStatusAdmin(admin.ModelAdmin):
+    list_display = ('name', 'active_flag', 'last_modified',)
+    list_filter = ('active_flag',)
+admin.site.register(MatterStatus, MatterStatusAdmin)
+
+class MatterTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'active_flag', 'last_modified',)
+    list_filter = ('active_flag',)
+admin.site.register(MatterType, MatterTypeAdmin)
+
+class MatterAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'matter_status', 'matter_type', 'intro_date', 'last_modified')
+    list_filter = ('matter_status', 'matter_type')
+admin.site.register(Matter, MatterAdmin)
+
+
+admin.site.register(VoteType)
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'date', 'time', 'last_modified',)
+    ordering = ('-date',)
+admin.site.register(Event, EventAdmin)

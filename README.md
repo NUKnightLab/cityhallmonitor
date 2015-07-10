@@ -1,3 +1,17 @@
+## DEV NOTES
+
+Use `pull_data` to pull basic data into the system:
+
+`python manage.py pull_data <MODEL>`
+
+Run with `--help` option to see what models are supported, e.g.
+
+`python manage.py pull_data --help`
+
+Due to the use of ForeignKeys, some data has to be pulled before other data (e.g. `BodyType` data has to be pulled before `Body` data, because the latter references the former).
+
+
+
 ### Local development setup
 
 #### Install Python 3.4.4

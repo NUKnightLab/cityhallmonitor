@@ -26,6 +26,8 @@ USE_TZ = True
 
 # Application definition
 
+STATIC_ROOT = '/tmp/projects-static'
+
 STATICFILES_DIRS = (
     join(PROJECT_ROOT, 'static'),
 )

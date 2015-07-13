@@ -26,7 +26,7 @@ USE_TZ = True
 
 # Application definition
 
-STATIC_ROOT = '/tmp/projects-static'
+STATIC_ROOT = '/tmp/cityhallmonitor-static'
 
 STATICFILES_DIRS = (
     join(PROJECT_ROOT, 'static'),

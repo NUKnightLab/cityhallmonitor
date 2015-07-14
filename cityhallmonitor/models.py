@@ -334,6 +334,7 @@ class MatterAttachment(LegistarModel):
     is_hyperlink = models.BooleanField()
     is_supporting_doc = models.BooleanField()
     binary = models.TextField(blank=True, default='') # <MatterAttachmentBinary i:nil="true"/>
+    link_obtained_at = models.DateTimeField(null=True)
 
     class Meta:
         #ordering =??

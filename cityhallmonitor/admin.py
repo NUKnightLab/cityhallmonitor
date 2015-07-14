@@ -2,7 +2,7 @@ from django.contrib import admin
 from cityhallmonitor.models import \
     Action, Person, \
     BodyType, Body, \
-    MatterStatus, MatterType, Matter, \
+    MatterAttachment, MatterStatus, MatterType, Matter, \
     VoteType, Event
     
 
@@ -41,6 +41,10 @@ class MatterAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'matter_status', 'matter_type', 'intro_date', 'last_modified')
     list_filter = ('matter_status', 'matter_type')
 admin.site.register(Matter, MatterAdmin)
+
+class MatterAttachmentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'hyperlink', 'link_obtained_at')
+admin.site.register(MatterAttachment, MatterAttachmentAdmin)
 
 
 admin.site.register(VoteType)

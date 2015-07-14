@@ -327,7 +327,7 @@ class MatterSponsor(models.Model):
 class MatterAttachment(LegistarModel):
     """Attachments"""
     matter = models.ForeignKey(Matter)
-    name = models.TextField()
+    name = models.TextField(blank=True, default='')
     hyperlink = models.TextField(blank=True)
     file_name = models.TextField(blank=True)
     matter_version = models.TextField(blank=True)    
@@ -355,7 +355,7 @@ class MatterAttachment(LegistarModel):
             row_version=d['MatterAttachmentRowVersion'],
             matter_id=matter_id,
             matter_version=d['MatterAttachmentMatterVersion'],
-            name=d['MatterAttachmentName'],
+            name=d['MatterAttachmentName'] or '',
             hyperlink=d['MatterAttachmentHyperlink'],
             file_name=d['MatterAttachmentFileName'],
             is_hyperlink=d['MatterAttachmentIsHyperlink'],

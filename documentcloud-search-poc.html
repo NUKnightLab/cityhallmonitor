@@ -1,0 +1,61 @@
+<html>
+<head>
+  <title>Document Cloud Search Proof-of-concept</title>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+</head>
+
+<style>
+  body {
+    margin: 2em;
+  }
+
+  .result {
+    border: 1px solid grey;
+    margin-right: 1em;
+    float: left;
+  }
+
+  #query-results {
+    margin-top: 2em;
+  }
+</style>
+
+<body>
+
+<input type="text" placeholder="Query" />
+<input type="submit" value="Search" />
+<div id="query-results" />
+
+<div id="current-result" />
+
+<script>
+  $(function() {
+
+    var addResult = function(obj) {
+        var doc = $('<div class="result" id="' + obj.id + '"><img src="' + obj.resources.thumbnail + '" /></div>').appendTo('#query-results').click(function() {
+            var self = $(this);
+            $.ajax({
+              url: 'http://www.documentcloud.org/api/documents/' + self.attr('id') + '.json'
+            }).success(function(data) {
+              var doc = data.document;
+              $('#current-result').html('<div><h3>' + doc.title + '</h3><p>pdf: ' + data.document.resources.pdf + '</p>')
+            });
+        });
+    }
+
+    $('input[type=submit]').click(function() {
+      var q = $('input[type=text]').val();
+      q = q + ' group:medill';
+      $.ajax({
+        url: 'http://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000'
+      }).success(function(data) {
+        $.each(data.documents, function(i, doc) {
+            addResult(doc);
+        });
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

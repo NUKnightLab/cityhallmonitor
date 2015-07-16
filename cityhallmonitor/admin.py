@@ -43,7 +43,7 @@ class MatterAdmin(admin.ModelAdmin):
 admin.site.register(Matter, MatterAdmin)
 
 class MatterAttachmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'hyperlink', 'link_obtained_at')
+    list_display = ('name', 'hyperlink', 'link_obtained_at', 'matter')
 admin.site.register(MatterAttachment, MatterAttachmentAdmin)
 
 

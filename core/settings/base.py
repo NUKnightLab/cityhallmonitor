@@ -32,10 +32,6 @@ STATICFILES_DIRS = (
     join(PROJECT_ROOT, 'static'),
 )
 
-TEMPLATE_DIRS = (
-    join(PROJECT_ROOT, 'templates'),
-)
-
 FIXTURE_DIRS = (
     join(PROJECT_ROOT, 'fixtures'),
 )
@@ -72,7 +68,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            join(PROJECT_ROOT, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,0 +1,38 @@
+<script>
+  $(function() {
+
+    var resultTemplate = _.template(
+          '<div class="result" id="<%= id %>">'
+        + '  <a href="<%= canonical_url %>"><img src="<%= resources.thumbnail %>" /></a>'
+        + '  <div><%= description %></div>'
+        + '  <div>'
+        + '    <a href="<%= canonical_url %>">Read</a>'
+        + '    &nbsp;<a href="<%= source %>">Download PDF</a>'
+        + '  </div>'
+        + '</div>'
+    )
+
+    var addResult = function(obj) {
+        var doc = $(resultTemplate(obj)).appendTo('#search-results');
+    }
+
+    $('input[type=submit]').click(function() {
+      var q = $('input[type=text]').val();
+      q = q + ' account:12872-knight-lab';
+      $.ajax({
+        url: 'http://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000'
+      }).success(function(data) {
+        $.each(data.documents, function(i, doc) {
+            addResult(doc);
+        });
+      });
+    });
+
+    $('.example-search').click(function() {
+      console.log($(this).text());
+      $('#search-input').val($(this).text());
+      $('#search-submit').click();
+      return false;
+    });
+  });
+</script>

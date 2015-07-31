@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div id="search-block">
+  <p>We've got some city hall documents. You should search them for interesting things. You can also <a href="{% url 'about' %}">learn more about this project</a></p>
+  <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input"/>
+  <input type="submit" value="Go" id="search-submit"/>
+  <p>
+    Examples: <a href="" class="example-search">disabled parking permits</a> | <a href="" class="example-search">Patrick O'Connor</a> | <a href="" class="example-search">40th ward</a>
+  </p>
+</div>
+
+<hr/>
+
+<div id="results-block">
+  <div id="search-results" />
+</div>
+
+{% include "cdn_includes.html" %}
+{% include "search_script.html" %}
+
+{% endblock content %}

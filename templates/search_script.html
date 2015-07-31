@@ -20,7 +20,7 @@
       var q = $('input[type=text]').val();
       q = q + ' account:12872-knight-lab';
       $.ajax({
-        url: 'http://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000'
+        url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000'
       }).success(function(data) {
         $.each(data.documents, function(i, doc) {
             addResult(doc);

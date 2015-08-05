@@ -1,32 +1,19 @@
 <html>
 <head>
   <title>City Hall Monitor</title>
+  <link href="http://cloud.webtype.com/css/d4767ecb-457a-4677-8761-72f890add836.css" rel="stylesheet" type="text/css">
+  <link href="static/css/shame.css" rel="stylesheet" type="text/css">
+  <link href="//cdn.knightlab.com/libs/purpleline/latest/css/purpleline.min.css" rel="stylesheet" type="text/css">
+  {% block extra_head %}
+  {% endblock %}
 </head>
-
-<style>
-  body {
-    margin: 2em;
-  }
-
-  .result {
-    margin-bottom: 2em;
-  }
-
-  .result img {
-    border: 1px solid grey;
-    margin-right: 1em;
-  }
-
-  #query-results {
-    margin-top: 2em;
-  }
-</style>
-
 <body>
-  <div>
-    <h1>City Hall Monitor</h1>
-    {% block content %}  
+  <div class="container">
+    {% block content %}
       Hey, you need some content in this here template
-    {% endblock content %}  
+    {% endblock content %}
   <div>
+  {% block scripts %}
+  <script type="text/javascript" src="//cdn.knightlab.com/libs/purpleline/latest/js/purpleline.min.js"></script>
+  {% endblock %}
 </body>

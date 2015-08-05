@@ -2,17 +2,26 @@
 
 
 {% block content %}
-
-<div id="search-block">
-  <p>We've got some city hall documents. You should search them for interesting things. You can also <a href="{% url 'about' %}">learn more about this project</a></p>
-  <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input"/>
-  <input type="submit" value="Go" id="search-submit"/>
-  <p>
-    Examples: <a href="" class="example-search">disabled parking permits</a> | <a href="" class="example-search">Patrick O'Connor</a> | <a href="" class="example-search">40th ward</a>
-  </p>
+<div class="panel" id="hero-unit">
+  <div class="row">
+    <h1><span class="secondary">City Hall</span> <span class="logo-mark xxl">Monitor</span></h1>
+    <h2 class="intro">We've got some city hall documents.</h2>
+  </div>
+  <div class="row">
+    <div id="search-block" class="small-12 columns">
+      <!--<p>You should search for interesting things. You can also <a href="{% url 'about' %}">learn more about this project</a></p>-->
+      <div class="row collapse">
+        <div class="small-10 medium-8 medium-offset-1 columns">
+          <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input"/>
+          <p class="help">Examples: <a href="" class="example-search">disabled parking permits</a> | <a href="" class="example-search">Patrick O'Connor</a> | <a href="" class="example-search">40th ward</a></p>
+        </div>
+        <div class="small-2 medium-2 columns end">
+          <input type="submit" value="Go" id="search-submit" class="button postfix alert small"/>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<hr/>
 
 <div id="results-block">
   <div id="search-results" />

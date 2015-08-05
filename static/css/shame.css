@@ -1,0 +1,45 @@
+  .result {
+    margin-bottom: 2em;
+  }
+
+  .result img {
+    border: 1px solid grey;
+    margin-right: 1em;
+  }
+
+  #query-results {
+    margin-top: 2em;
+  }
+h1 {
+    text-align: center;
+}
+.panel .intro {
+    text-align: center;
+    margin: 20px 0 50px;
+}
+h1 span {
+    display: block;
+}
+span.logo-mark.xxl {
+    margin-top: 0;
+}
+.help,
+.updated-date,
+.download-pdf {
+    font-size: 12px;
+    font-family: 'Apres RE', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.updated-date {
+    margin-bottom: 0;
+    color: #999;
+}
+.result-thumb {
+    float: left;
+}
+.more-info {
+    font-family: 'Apres RE', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    float: right;
+}
+.download-pdf {
+    margin-left: 20px;
+}

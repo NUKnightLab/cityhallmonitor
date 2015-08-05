@@ -6,5 +6,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'cityhallmonitor.views.search', name='search'),
     url(r'^about$', TemplateView.as_view(template_name='about.html'),
-        name='about')
+        name='about'),
+    url(r'^documents/(?P<id>[0-9]+)$', 
+        'cityhallmonitor.views.documents', name='documents'),
 ]

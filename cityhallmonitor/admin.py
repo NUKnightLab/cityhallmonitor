@@ -1,9 +1,8 @@
 from django.contrib import admin
 from cityhallmonitor.models import \
-    Action, Person, \
-    BodyType, Body, \
+    Action, Person, BodyType, Body, \
     MatterAttachment, MatterStatus, MatterType, Matter, \
-    VoteType, Event
+    VoteType, Event, EventItem
     
 
 class ActionAdmin(admin.ModelAdmin):
@@ -56,3 +55,5 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ['body__name']
     ordering = ('-date', '-time')
 admin.site.register(Event, EventAdmin)
+
+admin.site.register(EventItem)

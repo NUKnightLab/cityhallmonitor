@@ -451,6 +451,7 @@ class EventItem(LegistarModel):
 
     class Meta:
         ordering = ['agenda_sequence']
+        verbose_name = 'EventItem'
     
     def __str__(self):
         return self.matter

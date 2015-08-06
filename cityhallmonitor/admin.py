@@ -40,6 +40,8 @@ admin.site.register(MatterType, MatterTypeAdmin)
 class MatterAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'matter_status', 'matter_type', 'intro_date', 'last_modified')
     list_filter = ('matter_status', 'matter_type')
+    search_fields = ['name', 'title']
+
 admin.site.register(Matter, MatterAdmin)
 
 class MatterAttachmentAdmin(admin.ModelAdmin):
@@ -51,5 +53,6 @@ admin.site.register(VoteType)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'date', 'time', 'last_modified',)
-    ordering = ('-date',)
+    search_fields = ['body__name']
+    ordering = ('-date', '-time')
 admin.site.register(Event, EventAdmin)

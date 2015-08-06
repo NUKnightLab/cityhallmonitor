@@ -11,11 +11,12 @@
 
 <h4>{{ matter_attachment.matter }}</h4>    
 <p>(sample doc 2194103-so2010-5172-pdf)</p>
-<div id="document_cloud_viewer" style="position: absolute;top: 160px;left: 30px;right: 30px;bottom: 20px;"></div>
+<div id="document_cloud_viewer"></div>
 <script src="//s3.amazonaws.com/s3.documentcloud.org/viewer/loader.js"></script>
 <script>
   DV.load('http://www.documentcloud.org/documents/2194103-so2010-5172-pdf.js', {
-    container : '#document_cloud_viewer'
+    container : '#document_cloud_viewer',
+    responsive: true /* this sort of works? */
     /*
     width: 800,
     height: 450*/

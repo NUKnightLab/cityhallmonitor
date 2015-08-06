@@ -21,7 +21,7 @@
             '<h4><%= MatterTitle %></h4>'
         );
 
-    var resultTemplate = _.template($("#search-result").html());
+        var resultTemplate = _.template($("#search-result").html());
 
         var addResult = function(obj) {
             $(matterTemplate(obj.data)).appendTo('#search-results');
@@ -57,7 +57,9 @@
                         addResult(g);
                     });
                 } else {
-                    $('#search-results').html('<p>No matching documents found</p>');
+                    $('#search-results').html(
+                        '<div data-alert class="alert-box">No matching documents found</div>'
+                    );
                 }
             });
         });

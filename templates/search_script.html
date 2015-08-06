@@ -33,15 +33,16 @@
 
         $('input[type=submit]').click(function() {
             var q = $('input[type=text]').val();
-            q = q + ' account:12872-knight-lab';
+            q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
             $.ajax({
                 url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
-            }).success(function(data) {
+            })
+            .success(function(data) {
                 var groups = {};
 
                 $.each(data.documents, function(i, doc) {
                     if(doc.data.MatterId in groups) {
-                        groups[doc.data.MatterId][docs].push(doc);
+                        groups[doc.data.MatterId]['docs'].push(doc);
                     } else {
                         groups[doc.data.MatterId] = {
                             'data': doc.data,

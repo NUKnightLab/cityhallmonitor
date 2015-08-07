@@ -335,6 +335,7 @@ class MatterAttachment(LegistarModel):
     is_supporting_doc = models.BooleanField()
     binary = models.TextField(blank=True, default='') # <MatterAttachmentBinary i:nil="true"/>
     link_obtained_at = models.DateTimeField(null=True)
+    doccloud_id = models.CharField(max_length=100, default='')
 
     class Meta:
         #ordering =??

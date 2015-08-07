@@ -86,6 +86,7 @@ class Command(BaseCommand):
             project=project_id, published_url=published_url
         )
         self.stdout.write(new_document.get_pdf_url())
+        return new_document
 
     def search(self, query):
         return DocumentCloud(USERNAME, PASSWORD).documents.search(query)
@@ -104,6 +105,7 @@ class Command(BaseCommand):
         published_url = ATTACHMENT_PUBLISH_URL % attachment.id
         description = self.short_description(attachment)
         data = {
+            'MatterAttachmentId': str(attachment.id),
             'MatterId': str(matter.id),
             'MatterFile': matter.file,
             'MatterName': matter.name,
@@ -130,6 +132,9 @@ class Command(BaseCommand):
                     'document: %s' % attachment.hyperlink)
             else:
                 doc = r[0]
+                if attachment.doccloud_id == '':
+                    attachment.doccloud_id = doc.id
+                    attachment.save()
                 olddata = { k:v for k,v in doc.data.items()
                     if k != 'ops:DescriptionProcessed' }
                 if self.datadiff(data, olddata):
@@ -143,16 +148,20 @@ class Command(BaseCommand):
             self.stdout.write(
                 'Transferring to Document Cloud: %s ...' % attachment.hyperlink)   
             data['ops:DescriptionProcessed'] = '0'
-            self.upload_to_doccloud(attachment.hyperlink, attachment.name,
+            doc = self.upload_to_doccloud(
+                attachment.hyperlink, attachment.name,
                 data=data, published_url=published_url, project_id=project_id)
+            attachment.doccloud_id = doc.id
+            attachment.save()
 
     def delete_all(self):
         """Deletes all documents for this account!!!"""
-        print('Deleting all DocumentCloud documents for account: %s' % (
+        self.stdout.write(
+            'Deleting all DocumentCloud documents for account: %s' % (
             DOCUMENT_CLOUD_ACCOUNT))
         r = self.search('account:%s' % DOCUMENT_CLOUD_ACCOUNT)
         for doc in r:
-            print('Deleting document: %s' % doc.source)
+            self.stdout.write('Deleting document: %s' % doc.source)
             doc.delete()
         
 
@@ -164,7 +173,7 @@ class Command(BaseCommand):
             if answer == '' or answer.lower().startswith('y'):
                 self.delete_all()
             else:
-                print('Aborting ...')
+                self.stdout.write('Aborting ...')
             return
         matter_id = options['matter_id']
         project = self.get_project(DEFAULT_PROJECT)
@@ -183,9 +192,11 @@ class Command(BaseCommand):
                 q = q.filter(
                     Q(link_obtained_at=None)
                     | Q(link_obtained_at__lte=F('last_modified')) )
-            for attachment in q:
+            for attachment in [a for a in q]:
                 self.fetch(attachment, project.id)
                 attachment.link_obtained_at = timezone.now()
+                self.stdout.write('Updating link_obtained_at timestamp for '\
+                    'MatterAttachment: %s' % attachment.id)
                 attachment.save()
         self.stdout.write('Done')
         

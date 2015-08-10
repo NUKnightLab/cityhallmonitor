@@ -10,11 +10,10 @@
 {% else %}
 
 <h4>{{ matter_attachment.matter }}</h4>    
-<p>(sample doc 2194103-so2010-5172-pdf)</p>
 <div id="document_cloud_viewer"></div>
 <script src="//s3.amazonaws.com/s3.documentcloud.org/viewer/loader.js"></script>
 <script>
-  DV.load('http://www.documentcloud.org/documents/2194103-so2010-5172-pdf.js', {
+  DV.load('http://www.documentcloud.org/documents/{{ matter_attachment.doccloud_id }}.js', {
     container : '#document_cloud_viewer',
     responsive: true /* this sort of works? */
     /*

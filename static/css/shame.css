@@ -23,6 +23,10 @@ h1 span {
 span.logo-mark.xxl {
     margin-top: 0;
 }
+.result h4 {
+    margin: 10px 0 30px 0;
+    line-height: 1.4;
+}
 .help,
 .updated-date,
 .download-pdf {
@@ -42,4 +46,9 @@ span.logo-mark.xxl {
 }
 .download-pdf {
     margin-left: 20px;
+}
+
+.no-summary {
+    color: #999;
+    font-style: italic;
 }

@@ -6,7 +6,7 @@
       <a class="result-thumb" href="<%= canonical_url %>"><img src="<%= resources.thumbnail %>" /></a>
       <div class="description"><% if (description) { %><%= description %><% } else { %> <span class="no-summary">No summary available for this item.</span><% } %></div>
       <div class="more-info">
-        <a class="read-more button info tiny" href="<%= canonical_url %>">Read</a>
+        <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
         <a class="download-pdf" href="<%= source %>">Download PDF</a>
       </div>
     </div>
@@ -54,7 +54,7 @@
                     $('#search-results').html(
                         '<div data-alert class="alert-box">No matching documents found</div>'
                     );
-                }
+                }                
             });
         });
 

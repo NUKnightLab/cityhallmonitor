@@ -1,11 +1,20 @@
 from django.conf import settings
 from django.shortcuts import render
 from documentcloud import DocumentCloud
-from cityhallmonitor.models import Matter, MatterAttachment
+from cityhallmonitor.models import Matter, MatterAttachment, \
+    MatterStatus, MatterType
 
 
 def search(request):
     return render(request, 'search.html', context={})
+
+def facet(request):
+    return render(request, 'facet.html', context={
+        'MatterStatuses': MatterStatus.objects\
+            .values_list('name', flat=True).order_by('name'),
+        'MatterTypes': MatterType.objects\
+            .values_list('name', flat=True).order_by('name')
+    })
     
     
 def documents(request, id):

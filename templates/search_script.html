@@ -1,3 +1,10 @@
+
+<script type="text/template" id="summary-template">
+  <div class="row">
+    <h5 class="result-total">We found <%= total %> results for your search.</h5>  
+  </div>
+</script>
+
 <script type="text/template" id="result-template">
   <div class="result row" id="<%= data.MatterId %>">
     <div class="small-12 medium-10 medium-offset-1 columns">
@@ -16,7 +23,9 @@
 
 <script>
     $(function() {
+        var summaryTemplate = _.template($("#summary-template").html());
         var resultTemplate = _.template($("#result-template").html());
+
 
         var addResult = function(obj) {
             $.each(obj.docs, function(i, doc) {
@@ -46,8 +55,7 @@
                     }
                 });
 
-                $('#search-results').html(
-                    '<h5 class="result-total">We found '+data.total+' results for your search.</h5>');
+                $('#search-results').html($(summaryTemplate(data)));
 
                  if(data.documents.length) {
                     $.each(groups, function(i, g) {

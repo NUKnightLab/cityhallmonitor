@@ -27,14 +27,10 @@ def documents(request, id):
             raise Exception(
                 'Multiple instances exist in DocumentCloud for "%s"' % \
                 matter_attachment.hyperlink)
-        doc = r[0]
-        print(doc.id)
-        
-        #settings.DOCUMENT_CLOUD_ACCOUNT
-        
+         
         return render(request, 'documents.html', context={
             'matter_attachment': matter_attachment,
-            'doc': doc
+            'doc': r[0]
         })
     except Exception as e:
         return render(request, 'documents.html', context={

@@ -1,13 +1,12 @@
-<script type="text/template" id="search-result">
-  <div class="result row" id="<%= id %>">
+<script type="text/template" id="result-template">
+  <div class="result row" id="<%= data.MatterId %>">
     <div class="small-12 medium-10 medium-offset-1 columns">
       <p class="updated-date"><%= updated_at %></p>
-      <h3><%= title %></h3>
+      <h4><%= data.MatterTitle %></h4>
       <a class="result-thumb" href="<%= canonical_url %>"><img src="<%= resources.thumbnail %>" /></a>
-      <div class="description">test description go test description go test description go test description go test description go test description go</div>
-      <div class="description"><%= description %></div>
+      <div class="description"><% if (description) { %><%= description %><% } else { %> <span class="no-summary">No summary available for this item.</span><% } %></div>
       <div class="more-info">
-        <a class="read-more button info tiny" href="<%= canonical_url %>">Read</a>
+        <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
         <a class="download-pdf" href="<%= source %>">Download PDF</a>
       </div>
     </div>
@@ -17,15 +16,9 @@
 
 <script>
     $(function() {
-        var matterTemplate = _.template(
-            '<h4><%= MatterTitle %></h4>'
-        );
-
-        var resultTemplate = _.template($("#search-result").html());
+        var resultTemplate = _.template($("#result-template").html());
 
         var addResult = function(obj) {
-            $(matterTemplate(obj.data)).appendTo('#search-results');
-
             $.each(obj.docs, function(i, doc) {
                 $(resultTemplate(doc)).appendTo('#search-results');
             });
@@ -52,7 +45,7 @@
                 });
 
                 $('#search-results').empty();
-                
+
                  if(data.documents.length) {
                     $.each(groups, function(i, g) {
                         addResult(g);
@@ -61,7 +54,7 @@
                     $('#search-results').html(
                         '<div data-alert class="alert-box">No matching documents found</div>'
                     );
-                }
+                }                
             });
         });
 

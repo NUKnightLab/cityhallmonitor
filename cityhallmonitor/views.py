@@ -10,7 +10,7 @@ def documents(request, id):
     """View MatterAttachment"""
     try:    
         matter_attachment = MatterAttachment.objects.get(pk=id) 
-
+        
         return render(request, 'documents.html', context={
             'matter_attachment': matter_attachment
         })

@@ -1,0 +1,145 @@
+{% load staticfiles %}
+<html>
+<head>
+<title>Facet Demo Page</title>
+
+<link href="//cdn.knightlab.com/libs/purpleline/latest/css/purpleline.min.css" rel="stylesheet" type="text/css">
+
+<!--[if (!IE)|(gte IE 8)]><!-->
+  <link href="{% static 'vs/css/visualsearch-datauri.css' %}" media="screen" rel="stylesheet" type="text/css" />
+<!--<![endif]-->
+<!--[if lte IE 7]><!-->
+  <link href="{% static 'vs/css/visualsearch.css' %}" media="screen" rel="stylesheet" type="text/css" />
+<!--<![endif]-->
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
+<script src="{% static 'vs/js/visualsearch.js' %}" type="text/javascript"></script>
+
+<style>
+body {padding: 20px;}
+div.row {margin: 10px;}
+</style>
+
+</head>
+<body>
+
+<div class="row">
+    <div class="visual_search"></div>
+</div>
+
+<div id="search-results" class="row">
+
+</div>
+
+<script type="text/template" id="result-template">
+  <div class="result row" id="<%= data.MatterId %>">
+    <div class="small-12 medium-10 medium-offset-1 columns">
+      <p class="updated-date"><%= updated_at %></p>
+      <h4><%= data.MatterTitle %></h4>
+      <a class="result-thumb" href="<%= canonical_url %>"><img src="<%= resources.thumbnail %>" /></a>
+      <div class="description"><% if (description) { %><%= description %><% } else { %> <span class="no-summary">No summary available for this item.</span><% } %></div>
+      <div class="more-info">
+        <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
+        <a class="download-pdf" href="<%= source %>">Download PDF</a>
+      </div>
+    </div>
+    <hr />
+  </div>
+</script>
+
+<script type="text/javascript">
+
+var visualSearch;
+ 
+$(function() {
+
+var resultTemplate = _.template($("#result-template").html());
+
+var addResult = function(obj) {
+    $.each(obj.docs, function(i, doc) {
+        $(resultTemplate(doc)).appendTo('#search-results');
+    });
+};
+
+visualSearch = VS.init({
+    container: $('.visual_search'),
+    query: '',
+    autosearch: true,
+    placeholder: 'Search for a keyword, ordinance, or alderman',
+    callbacks: {
+        clearSearch: function(f) {
+            console.log('VS.clearSearch');
+            f();            
+            $('#search-results').html('');
+        },
+        
+        search: function(query, searchCollection) {
+            console.log('VS.search');
+            if(!query) {
+                return;
+            }
+            
+            var q = query + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';                
+            console.log(q);
+            $.ajax({
+                url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=20&data=true'
+            })
+            .success(function(data) {
+                var groups = {};
+
+                $.each(data.documents, function(i, doc) {
+                    if(doc.data.MatterId in groups) {
+                        groups[doc.data.MatterId]['docs'].push(doc);
+                    } else {
+                        groups[doc.data.MatterId] = {
+                            'data': doc.data,
+                            'docs': [doc]
+                        };
+                    }
+                });
+
+                $('#search-results').empty();
+
+                if(data.documents.length) {
+                    $.each(groups, function(i, g) {
+                        addResult(g);
+                    });
+                } else {
+                    $('#search-results').html(
+                        '<div data-alert class="alert-box">No matching documents found</div>'
+                    );
+                }  
+                
+                console.log(groups);   
+            });
+        
+        },
+        // categories that are autocompeted
+        facetMatches: function(callback) {
+            callback(['MatterStatus', 'MatterType'])    
+        },
+        // values that match specific categories
+        valueMatches: function(facet, searchTerm, callback) {
+            switch(facet) {
+                case 'MatterStatus':
+                    callback({{ MatterStatuses|safe }});
+                    break;
+                
+                case 'MatterType':
+                    callback({{ MatterTypes|safe }});
+                    break;
+            }
+        
+        }
+    }
+});
+
+});
+
+</script>
+
+</body>
+</html>

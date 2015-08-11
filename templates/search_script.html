@@ -25,6 +25,8 @@
         };
 
         $('input[type=submit]').click(function() {
+            $('#search-results').html('');
+            
             var q = $('input[type=text]').val();
             q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
             $.ajax({
@@ -44,16 +46,13 @@
                     }
                 });
 
-                $('#search-results').empty();
+                $('#search-results').html(
+                    '<h5 class="result-total">We found '+data.total+' results for your search.</h5>');
 
                  if(data.documents.length) {
                     $.each(groups, function(i, g) {
                         addResult(g);
                     });
-                } else {
-                    $('#search-results').html(
-                        '<div data-alert class="alert-box">No matching documents found</div>'
-                    );
                 }                
             });
         });

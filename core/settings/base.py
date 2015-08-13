@@ -82,3 +82,11 @@ TEMPLATES = [
         },
     },
 ]
+
+
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+
+EMAIL_PORT = 25
+
+EMAIL_USE_TLS = True
+

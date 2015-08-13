@@ -52,3 +52,12 @@ span.logo-mark.xxl {
     color: #999;
     font-style: italic;
 }
+
+#results-summary {
+    text-align: center;
+}
+/*
+h5.result-total {
+   text-align: center;
+}
+*/

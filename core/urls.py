@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^facet$', 'cityhallmonitor.views.facet', name='facet'),
     url(r'^documents/(?P<id>[0-9]+)$', 
         'cityhallmonitor.views.documents', name='documents'),
+    url(r'^subscribe$', 'cityhallmonitor.views.subscribe', name='subscribe'),
+    url(r'^unsubscribe$', 'cityhallmonitor.views.unsubscribe', name='unsubscribe'),
 ]

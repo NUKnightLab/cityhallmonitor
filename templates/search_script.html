@@ -1,3 +1,20 @@
+
+<script type="text/template" id="summary-template">
+  <h5>We found <%= total %> results for your search.</h5>  
+  <p>Email me when these results change</p>
+  <div class="row">
+    <div class="small-12 columns">
+      <div class="row collapse">
+        <div class="small-4 small-offset-3 columns">
+           <input type="text" id="search-subscribe-email" placeholder="enter email address">
+        </div>
+        <div class="small-2 columns end">
+          <input type="button" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+        </div>
+      </div>
+    </div>
+</script>
+
 <script type="text/template" id="result-template">
   <div class="result row" id="<%= data.MatterId %>">
     <div class="small-12 medium-10 medium-offset-1 columns">
@@ -15,8 +32,44 @@
 </script>
 
 <script>
+
+function handle_subscribe(event) {
+    var email = $('#search-subscribe-email').val().trim();
+    if(!email) {
+        alert('You must enter your email address');
+        return;
+    } 
+    var query = $('#search-input').val().trim();
+    if(!query) {
+        alert('YOu must enter a search query');
+        return;
+    }
+    
+    $.ajax({
+        url: '{% url "subscribe" %}',
+        type: 'GET',
+        data: {email: email, query: query},
+        cache: false,
+        dataType: 'json',
+        timeout: 20000,
+        error: function(xhr, status, err) {
+            alert('Error making subscription: '+err);
+        },
+        success: function(data) {
+            if(data.error) {
+                alert('Error making subscription: '+data.error);            
+            } else {
+                alert('Ok, you should get an email');
+            }        
+        }
+    });    
+}
+
+
     $(function() {
+        var summaryTemplate = _.template($("#summary-template").html());
         var resultTemplate = _.template($("#result-template").html());
+
 
         var addResult = function(obj) {
             $.each(obj.docs, function(i, doc) {
@@ -25,7 +78,9 @@
         };
 
         $('input[type=submit]').click(function() {
-            var q = $('input[type=text]').val();
+            $('#results-summary, #search-results').html('');
+            
+            var q = $('#search-input').val();
             q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
             $.ajax({
                 url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
@@ -44,16 +99,15 @@
                     }
                 });
 
-                $('#search-results').empty();
+                $('#results-summary').html($(summaryTemplate(data)));
+               
+                $('#search-subscribe').click(handle_subscribe);
+                
 
                  if(data.documents.length) {
                     $.each(groups, function(i, g) {
                         addResult(g);
                     });
-                } else {
-                    $('#search-results').html(
-                        '<div data-alert class="alert-box">No matching documents found</div>'
-                    );
                 }                
             });
         });

@@ -111,16 +111,23 @@ class Command(BaseCommand):
                     self.stdout.write('SKIPPING: description processing of '
                     'document with error status. %s' % doc.source)
                 continue
-            text = str(doc.full_text).replace('\\n', ' ')
-            text = self.cleanup(text)
-            summary = ' '.join(
-                summarize(text=text, title=doc.data['MatterTitle']))
-            if len(summary) < 20:
-                summary = ' '.join(text.split(' ')[:100])
-            doc.description = summary
-            try:
-                del(doc.data['ops:DescriptionProcessed'])
-            except KeyError:
-                pass # if we use --all this key might not be there
-            doc.put()
-            self.stdout.write('Description written: %s' % doc.source)
+            elif doc.access == 'pending':
+                self.stdout.write('SKIPPING: description processing of ' \
+                    'pending document: %s' % doc.source)
+            elif doc.access == 'public':
+                text = str(doc.full_text).replace('\\n', ' ')
+                text = self.cleanup(text)
+                summary = ' '.join(
+                    summarize(text=text, title=doc.data['MatterTitle']))
+                if len(summary) < 20:
+                    summary = ' '.join(text.split(' ')[:100])
+                doc.description = summary
+                try:
+                    del(doc.data['ops:DescriptionProcessed'])
+                except KeyError:
+                    pass # if we use --all this key might not be there
+                doc.put()
+                self.stdout.write('Description written: %s' % doc.source)
+            else:
+                self.stdout.write('WARNING: skipping document with ' \
+                'unknown status %s: %s' % (doc.access, doc.source))

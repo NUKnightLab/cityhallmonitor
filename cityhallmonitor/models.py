@@ -484,7 +484,17 @@ class EventItem(LegistarModel):
             mover_id=d['EventItemMoverId'],
             seconder_id=d['EventItemSeconderId'],
             matter_id=d['EventItemMatterId'])
+
+
+class Subscription(models.Model):
+    """User alert subscription"""
+    id = models.AutoField(primary_key=True)
+    email = models.EmailField()
+    query = models.TextField()
+    last_check = models.DateTimeField(null=True)
     
-    
+    def __str__(self):
+        return 'id=%d, email=%s, query="%s"' % \
+            (self.id, self.email, self.query)
     
     

@@ -2,7 +2,7 @@ from django.contrib import admin
 from cityhallmonitor.models import \
     Action, Person, BodyType, Body, \
     MatterAttachment, MatterStatus, MatterType, Matter, \
-    VoteType, Event, EventItem
+    VoteType, Event, EventItem, Subscription
     
 
 class ActionAdmin(admin.ModelAdmin):
@@ -57,3 +57,9 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 admin.site.register(EventItem)
+
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('email', 'query', 'last_check')
+    search_fields = ('email', 'query')    
+admin.site.register(Subscription, SubscriptionAdmin)
+

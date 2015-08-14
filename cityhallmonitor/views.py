@@ -123,11 +123,17 @@ def unsubscribe(request):
             raise Exception('Invalid search subscription identifier')
             
         r.delete()   
-        return JsonResponse({})  
+        return render(request, 'unsubscribe.html', context={})
     except ValueError as ve:
-        return JsonResponse({'error': 'Malformed subscription identifier'})
+        return render(request, 'unsubscribe.html', context={
+            'error': 'Malformed subscription identifier'
+        })
     except Subscription.DoesNotExist:
-        return JsonResponse({'error': 'Search subscription not found'})
+        return render(request, 'unsubscribe.html', context={
+            'error': 'Search subscription not found'
+        })
     except Exception as e:
-        return JsonResponse({'error': str(e)})
+        return render(request, 'unsubscribe.html', context={
+            'error': str(e)
+        })
         

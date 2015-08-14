@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if error %}
+
+<div data-alert class="alert-box alert">
+Error deleting subscription: <em>{{ error }}</em>
+</div>
+
+{% else %}
+
+<div data-alert class="alert-box success">
+Your subscription has been successfully deleted.
+</div>
+
+{% endif %}
+
+{% include "cdn_includes.html" %}
+
+{% endblock content %}

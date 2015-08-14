@@ -237,6 +237,7 @@ class Matter(LegistarModel):
     ex_date9 = models.DateTimeField(null=True)
     ex_date10 = models.DateTimeField(null=True)
     attachments_obtained_at = models.DateTimeField(null=True)
+    sponsors_obtained_at = models.DateTimeField(null=True)
     
     def __str__(self):
         return self.title or self.name or self.file

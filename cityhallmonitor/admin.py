@@ -2,7 +2,7 @@ from django.contrib import admin
 from cityhallmonitor.models import \
     Action, Person, BodyType, Body, \
     MatterAttachment, MatterStatus, MatterType, Matter, \
-    VoteType, Event, EventItem, Subscription
+    MatterSponsor, VoteType, Event, EventItem, Subscription
     
 
 class ActionAdmin(admin.ModelAdmin):
@@ -47,6 +47,11 @@ class MatterAttachmentAdmin(admin.ModelAdmin):
     list_display = ('name', 'hyperlink', 'link_obtained_at', 'matter')
 admin.site.register(MatterAttachment, MatterAttachmentAdmin)
 
+class MatterSponsorAdmin(admin.ModelAdmin):
+    list_display = ('person', 'matter')
+    list_filter = ('person',)
+
+admin.site.register(MatterSponsor, MatterSponsorAdmin)
 
 admin.site.register(VoteType)
 

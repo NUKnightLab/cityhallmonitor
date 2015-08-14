@@ -2,7 +2,7 @@ PATH=/home/apps/env/cityhallmonitor/bin:$PATH
 MAILTO=knightlab@northwestern.edu
 DJANGO_SETTINGS_MODULE=core.settings.prd
 
-01 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Matter
-10 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_attachments
-25 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_pdfs
-50 * * * * apps /home/apps/sites/cityhallmonitor/manage.py get_descriptions
+01 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Matter >> /home/apps/log/cityhallmonitor/matter.log
+10 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_attachments >> /home/apps/log/cityhallmonitor/matter_attachments.log
+25 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_pdfs >> /home/apps/log/cityhallmonitor/pdfs.log
+50 * * * * apps /home/apps/sites/cityhallmonitor/manage.py get_descriptions >> /home/apps/log/cityhallmonitor/descriptions.log

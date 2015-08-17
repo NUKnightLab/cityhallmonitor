@@ -12,8 +12,6 @@ DEFAULT_PROJECT = 'Chicago City Hall Monitor'
 
 EMAIL_SUBJECT = 'City Hall Monitor Search Alert'
 
-EMAIL_FROM = 'KnightLab@northwestern.edu'
-
 EMAIL_TEMPLATE = 'email_alert.html'
 
 
@@ -44,10 +42,7 @@ class Command(BaseCommand):
         
         print('Sending alert for %d documents [%s]' % (
             len(document_list), subscription))      
-        send_mail(
-            EMAIL_SUBJECT,
-            '',
-            EMAIL_FROM,
+        send_mail(EMAIL_SUBJECT, '', '',
             [subscription.email],
             fail_silently=False,
             html_message=html_message)

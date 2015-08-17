@@ -85,9 +85,7 @@ def subscribe(request):
                         
         try:          
             send_mail(
-                'City Hall Monitor Search Subscription',
-                '',
-                'KnightLab@northwestern.edu',
+                'City Hall Monitor Search Subscription', '', '',
                 [email],
                 fail_silently=False,
                 html_message=html_message)

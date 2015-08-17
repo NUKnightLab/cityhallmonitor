@@ -5,6 +5,7 @@ from django.template.loader import get_template
 from django.utils import timezone
 from cityhallmonitor.models import Subscription
 from documentcloud import DocumentCloud
+from smtplib import SMTPException
 
 
 DEFAULT_PROJECT = 'Chicago City Hall Monitor'

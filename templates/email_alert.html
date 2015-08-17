@@ -1,0 +1,16 @@
+<p>
+Your search alert on City Hall Monitor:
+</p>
+<p>
+{{ query }}
+</p>
+<p>
+Matched {{ documents|length }} new documents:
+</p>
+
+{% for doc in documents %}
+<p>
+{{ doc.data.MatterTitle }}<br>
+<a href="{{ doc.published_url }}">{{ doc.title }}</a>
+</p>
+{% endfor %}

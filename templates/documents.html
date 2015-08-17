@@ -17,7 +17,7 @@
 <h4>{{ matter_attachment.matter }}</h4>    
 <div id="document_cloud_viewer"></div>
 <script>
-    DV.load('http://www.documentcloud.org/documents/{{ doc.id }}.js', {
+    DV.load('https://www.documentcloud.org/documents/{{ doc.id }}.js', {
         container : '#document_cloud_viewer',
         responsive: true
     });
@@ -26,6 +26,5 @@
 {% endif %}
 
 {% include "cdn_includes.html" %}
-{% include "search_script.html" %}
 
 {% endblock content %}

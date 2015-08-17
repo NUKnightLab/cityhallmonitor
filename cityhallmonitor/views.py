@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from documentcloud import DocumentCloud
 import hashlib
 from smtplib import SMTPException
@@ -81,8 +82,9 @@ def subscribe(request):
         query = request.GET.get('query')
         if not query:
             raise Exception('Expected "query" parameter')
-               
-        r = Subscription(email=email, query=query)
+                      
+        r = Subscription(email=email, query=query, 
+            last_check=timezone.now())
         r.save()
                 
         html_message = _subscribe_email_template % {

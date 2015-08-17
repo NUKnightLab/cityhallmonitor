@@ -3,24 +3,13 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import get_template
 from django.utils import timezone
 from documentcloud import DocumentCloud
 import hashlib
 from smtplib import SMTPException
 from cityhallmonitor.models import Matter, MatterAttachment, \
     MatterStatus, MatterType, Subscription
-
-
-_subscribe_email_template = """
-<p>
-You have been subscribed to a search on City Hall Monitor:
-</p>
-<p>
-%(query)s
-</p>
-<hr>
-<a href="%(unsubscribe_url)s?sid=%(sid)s">click here to unsubscribe</a>
-"""
 
 
 def _make_subscription_sid(id, email):
@@ -86,13 +75,14 @@ def subscribe(request):
         r = Subscription(email=email, query=query, 
             last_check=timezone.now())
         r.save()
-                
-        html_message = _subscribe_email_template % {
+    
+        email_template = get_template('email_subscribe.html')
+        html_message = email_template.render({
             'query': query,
             'unsubscribe_url': request.build_absolute_uri(reverse(unsubscribe)),
             'sid': _make_subscription_sid(r.id, email)
-        }
-                
+        })
+                        
         try:          
             send_mail(
                 'City Hall Monitor Search Subscription',

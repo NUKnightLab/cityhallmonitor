@@ -2,7 +2,12 @@ PATH=/home/apps/env/cityhallmonitor/bin:$PATH
 MAILTO=knightlab@northwestern.edu
 DJANGO_SETTINGS_MODULE=core.settings.prd
 
-01 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Matter >> /home/apps/log/cityhallmonitor/matter.log
-10 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_attachments >> /home/apps/log/cityhallmonitor/matter_attachments.log
-25 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_pdfs >> /home/apps/log/cityhallmonitor/pdfs.log
-50 * * * * apps /home/apps/sites/cityhallmonitor/manage.py get_descriptions >> /home/apps/log/cityhallmonitor/descriptions.log
+00 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Person >> /home/apps/log/cityhallmonitor/person.log
+05 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data BodyType >> /home/apps/log/cityhallmonitor/bodytype.log
+10 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Body >> /home/apps/log/cityhallmonitor/body.log
+15 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data MatterType >> /home/apps/log/cityhallmonitor/mattertype.log
+20 * * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data MatterStatus >> /home/apps/log/cityhallmonitor/matterstatus.log
+30 */2 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Matter >> /home/apps/log/cityhallmonitor/matter.log
+35 */2 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_attachments >> /home/apps/log/cityhallmonitor/matter_attachments.log
+25 */2 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_pdfs >> /home/apps/log/cityhallmonitor/pdfs.log
+50 */2 * * * apps /home/apps/sites/cityhallmonitor/manage.py get_descriptions >> /home/apps/log/cityhallmonitor/descriptions.log

@@ -1,4 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.db.models import Max
+from django.utils import timezone
 import json
 import pydoc
 import requests
@@ -33,36 +35,55 @@ class Command(BaseCommand):
         if not data_type in _data_type_to_api:
             raise CommandError('Unsupported data type "%s"' % data_type)
             
-        # Find Model class
+        # Find model class
         model_class_name = 'cityhallmonitor.models.%s' % data_type
         model_class = pydoc.locate(model_class_name)
         if not model_class:
             raise CommandError('Could not find Model "%s"' % model_class_name)
-           
-        # Pull data         
-        url = '%s/%s' % (_legistar_url, _data_type_to_api[data_type])       
-        self.stdout.write('Downloading %s...' % url)   
-     
-        headers = {'Accept': 'text/json'}
-        r = requests.get(url, headers=headers)
-        if not r.ok:
-            raise Exception('Error downloading %s [%d]' \
-                % (url, r.status_code))
         
-        item_list = r.json()
-        n = len(item_list)
-         
-        for i, item in enumerate(item_list):
-            try:
-                r = model_class.from_json(item)
-                r.save()
-            except TypeError as e:
-                print(item)
-                raise e
+        # Set filter only if there is a max modification date
+        filter = ''
+        d = model_class.objects.aggregate(Max('last_modified'))   
+        if d['last_modified__max']:
+            filter = "&$filter=%sLastModifiedUtc eq null or %sLastModifiedUtc gt datetime'%s'" % (
+                data_type, data_type, d['last_modified__max'].strftime('%Y-%m-%dT%H:%M:%S.%f'))
+        
+        self.stdout.write('%s %s' % (timezone.now(), filter))
+        
+
+        # Can never get more than 1000 records at a time
+        url_format = '%s/%s?$top=1000&$skip=%%d&$orderby=%sLastModifiedUtc%s' \
+            % (_legistar_url, _data_type_to_api[data_type], data_type, filter)
+                        
+        skip = 0
+                        
+        while True:
+            url = url_format % skip
+                   
+            headers = {'Accept': 'text/json'}
+            r = requests.get(url, headers=headers)
+            if not r.ok:
+                raise Exception('Error downloading %s [%d]' \
+                    % (url, r.status_code))
+        
+            item_list = r.json()
+            n = len(item_list)
             
-            if i % 100 == 0:
-                print('Processed %d/%d records...' % (i, n))
-                
-                    
-        self.stdout.write('Done')
+            for item in item_list:
+                try:
+                    r = model_class.from_json(item)
+                    r.save()
+                except TypeError as e:
+                    print(item)
+                    raise e
+                                      
+            skip += n
+            if n < 1000:
+                break
+            
+            print('Processed %d records' % skip)
+       
+        print('Processed %d records' % skip)
+                            
+        self.stdout.write('%s Done' % timezone.now())
         

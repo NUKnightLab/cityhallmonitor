@@ -122,6 +122,10 @@ class Command(BaseCommand):
         }
         r = self.search('account:%s source: "%s"' % (
             DOCUMENT_CLOUD_ACCOUNT, attachment.hyperlink))
+      
+        assert type(r) is list, \
+            'DocumentCloud search response is %s: %s' % (type(r), repr(r))
+           
         if r:
             self.stdout.write(
                 'Document exists in DocumentCloud. Not transferring: %s' % (

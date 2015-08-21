@@ -21,13 +21,20 @@ _data_type_to_api = {
 }
 
 class Command(BaseCommand):
-    help = 'Do basic data pull from the chicago legistar API.'
+    help = 'Pull data from the Chicago Legistar API.'
 
     def add_arguments(self, parser):
         # Positional arguments
-        parser.add_argument('data_type', nargs='?',
+        parser.add_argument('data_type', #nargs='?',
             help=', '.join(sorted(_data_type_to_api.keys()))
         )
+
+        # Named (optional) arguments
+        parser.add_argument('--all',
+            action='store_true',
+            dest='all',
+            default=False,
+            help='Pull all data items, regardless of modification date')
 
     def handle(self, *args, **options):
         try:
@@ -35,19 +42,20 @@ class Command(BaseCommand):
             data_type = options['data_type']       
             if not data_type in _data_type_to_api:
                 raise CommandError('Unsupported data type "%s"' % data_type)
-            
+             
             # Find model class
             model_class_name = 'cityhallmonitor.models.%s' % data_type
             model_class = pydoc.locate(model_class_name)
             if not model_class:
                 raise CommandError('Could not find Model "%s"' % model_class_name)
         
-            # Set filter only if there is a max modification date
+            # Set filter?
             filter = ''
-            d = model_class.objects.aggregate(Max('last_modified'))   
-            if  d['last_modified__max']:
-                filter = "&$filter=%sLastModifiedUtc eq null or %sLastModifiedUtc gt datetime'%s'" % (
-                    data_type, data_type, d['last_modified__max'].strftime('%Y-%m-%dT%H:%M:%S.%f'))
+            if not options['all']:
+                d = model_class.objects.aggregate(Max('last_modified'))   
+                if  d['last_modified__max']:
+                    filter = "&$filter=%sLastModifiedUtc eq null or %sLastModifiedUtc gt datetime'%s'" % (
+                        data_type, data_type, d['last_modified__max'].strftime('%Y-%m-%dT%H:%M:%S.%f'))
         
             self.stdout.write('%s %s' % (timezone.now(), filter or '[no filter]'))
         

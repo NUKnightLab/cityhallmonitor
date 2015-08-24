@@ -183,16 +183,21 @@ class Command(BaseCommand):
         project = self.get_project(DEFAULT_PROJECT)
         if matter_id:
             self.stdout.write(
-                'Fetching attachment links for matter ID %s.' % matter_id)
+                '%s Fetching attachment links for matter ID %s.' \
+                % (timezone.now(), matter_id))
             for attachment in MatterAttachment.objects.filter(
                     matter_id=matter_id):
                 self.fetch(attchment, project.id)
         else:
             q = MatterAttachment.objects.all()
             if options['all']:
-                self.stdout.write('Fetching all matter attachment links.')
+                self.stdout.write(
+                    '%s Fetching all matter attachment links.' \
+                    % timezone.now())
             else:
-                self.stdout.write('Fetching all new matter attachment links.')
+                self.stdout.write(
+                    '%s Fetching all new matter attachment links.' \
+                    % timezone.now())
                 q = q.filter(
                     Q(link_obtained_at=None)
                     | Q(link_obtained_at__lte=F('last_modified')) )
@@ -202,5 +207,6 @@ class Command(BaseCommand):
                 self.stdout.write('Updating link_obtained_at timestamp for '\
                     'MatterAttachment: %s' % attachment.id)
                 attachment.save()
-        self.stdout.write('Done')
+                
+        self.stdout.write('%s Done' % timezone.now())
         

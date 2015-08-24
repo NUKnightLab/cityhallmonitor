@@ -136,4 +136,4 @@ class Command(BaseCommand):
                 self.stdout.write('WARNING: skipping document with ' \
                 'unknown status %s: %s' % (doc.access, doc.source))
                 
-        self.stdout.write('%s %s' % (timezone.now(), 'Done'))
+        self.stdout.write('%s Done' % timezone.now())

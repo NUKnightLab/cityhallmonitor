@@ -36,17 +36,24 @@ class Command(BaseCommand):
         matter.save()
 
     def handle(self, *args, **options):
-        matter_id = options['matter_id']
-        if matter_id:
-            self.stdout.write(
-                'Fetching attachments for matter ID %s.' % matter_id)
-            matter = Matter.objects.get(id=matter_id)
-            self.fetch(matter)
-        else:
-            self.stdout.write('Fetching all updated matter attachments.')
-            for matter in Matter.objects.filter(
-                    Q(attachments_obtained_at=None)
-                    | Q(attachments_obtained_at__lte=F('last_modified')) ):
+        try:
+            matter_id = options['matter_id']
+            if matter_id:
+                self.stdout.write(
+                    '%s Fetching attachments for matter ID %s.' \
+                    % (timezone.now(), matter_id))
+                matter = Matter.objects.get(id=matter_id)
                 self.fetch(matter)
-        self.stdout.write('Done')
-        
+            else:
+                self.stdout.write(
+                    '%s Fetching all updated matter attachments.' \
+                    % timezone.now())
+                for matter in Matter.objects.filter(
+                        Q(attachments_obtained_at=None)
+                        | Q(attachments_obtained_at__lte=F('last_modified')) ):
+                    self.fetch(matter)
+            self.stdout.write('%s Done' % timezone.now())
+        except Exception as e:
+            self.stdout.write('ERROR: %s %s' % (type(e), str(e)))
+            self.stdout.write('%s Ending'  % timezone.now())
+                  

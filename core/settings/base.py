@@ -92,3 +92,49 @@ EMAIL_USE_TLS = True
 
 # Email address used for sending subscription-related emails
 DEFAULT_FROM_EMAIL = 'KnightLab@northwestern.edu'
+
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(message)s'        
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+        # Configure handlers for management commands per-environ:
+        # pull_data
+        # pull_attachments
+        # pull_pdfs
+        # get_descriptions
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['null'],
+            'propagate': True,
+            'level': 'INFO'
+        }
+        # Configure loggers for management commands per-environ:
+        # cityhallmonitor.management.commands.pull_data
+        # cityhallmonitor.management.commands.pull_attachments
+        # cityhallmonitor.management.commands.pull_pdfs
+        # cityhallmonitor.management.commands.get_descriptions
+        
+    }
+}
+

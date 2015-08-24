@@ -49,3 +49,27 @@ DATABASES = {
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
+
+# Logging overrides
+
+LOGGING['loggers'].update({
+    'cityhallmonitor.management.commands.pull_data': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.pull_attachments': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.pull_pdfs': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.get_descriptions': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
+    }
+})
+    
+    
+

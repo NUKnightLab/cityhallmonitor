@@ -2,8 +2,13 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Max
 from django.utils import timezone
 import json
+import logging
 import pydoc
 import requests
+
+
+logger = logging.getLogger(__name__)
+
 
 _legistar_url = 'http://webapi.legistar.com/v1/chicago'
 
@@ -37,7 +42,9 @@ class Command(BaseCommand):
             help='Pull all data items, regardless of modification date')
 
     def handle(self, *args, **options):
-        try:
+        logger.info('data_type=%(data_type)s, all=%(all)s' % options)
+        
+        try:                        
             # Check data type
             data_type = options['data_type']       
             if not data_type in _data_type_to_api:
@@ -57,8 +64,8 @@ class Command(BaseCommand):
                     filter = "&$filter=%sLastModifiedUtc eq null or %sLastModifiedUtc gt datetime'%s'" % (
                         data_type, data_type, d['last_modified__max'].strftime('%Y-%m-%dT%H:%M:%S.%f'))
         
-            self.stdout.write('%s %s' % (timezone.now(), filter or '[no filter]'))
-        
+            logger.info('filter=%s', filter)
+                    
             # Can never get more than 1000 records at a time
             url_format = '%s/%s?$top=1000&$skip=%%d&$orderby=%sLastModifiedUtc%s' \
                 % (_legistar_url, _data_type_to_api[data_type], data_type, filter)
@@ -89,13 +96,11 @@ class Command(BaseCommand):
                 if n < 1000:
                     break
             
-                self.stdout.write('Processed %d records' % skip)
+                logger.info('Processed %d records' % skip)
        
-            self.stdout.write('Processed %d records' % skip)                           
-            self.stdout.write('%s Done' % timezone.now())
-        
+            logger.info('Processed %d records' % skip)                           
         except Exception as fe:
-            self.stdout.write('ERROR: %s %s' % (type(fe), str(fe)))
-            self.stdout.write('%s Ending'  % timezone.now())
+            logger.exception('Ending on exception')
             
-        
+        logger.info('Done\n')
+       

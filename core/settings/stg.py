@@ -49,3 +49,52 @@ DATABASES = {
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '//media.knilab.com/cityhallmonitor/'
+
+
+# Logging overrides
+
+LOGGING['handlers'].update({
+    'pull_data': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/pull_data.log'
+    },
+    'pull_attachments': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/pull_attachments.log'
+    },
+    'pull_pdfs': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/pull_attachments.log'
+    },
+    'get_descriptions': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/get_descriptions.log'
+    }
+})
+
+LOGGING['loggers'].update({
+    'cityhallmonitor.management.commands.pull_data': {
+        'handlers': ['pull_data'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.pull_attachments': {
+        'handlers': ['pull_attachments'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.pull_pdfs': {
+        'handlers': ['pull_pdfs'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.get_descriptions': {
+        'handlers': ['get_descriptions'],
+        'level': 'DEBUG'
+    }
+})

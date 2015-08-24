@@ -3,6 +3,7 @@ import sys
 import urllib
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import timezone
 from documentcloud import DocumentCloud
 from cityhallmonitor.models import MatterAttachment
 from newspaper.nlp import summarize
@@ -82,6 +83,9 @@ class Command(BaseCommand):
         query = 'account:%s' % DOCUMENT_CLOUD_ACCOUNT
         if not options['all']:
             query += ' ops:DescriptionProcessed: 0' 
+        
+        self.stdout.write('%s %s' % (timezone.now(), query))
+        
         r = self.search(query)
         for doc in r:
             if doc.access == 'error':
@@ -131,3 +135,5 @@ class Command(BaseCommand):
             else:
                 self.stdout.write('WARNING: skipping document with ' \
                 'unknown status %s: %s' % (doc.access, doc.source))
+                
+        self.stdout.write('%s %s' % (timezone.now(), 'Done'))

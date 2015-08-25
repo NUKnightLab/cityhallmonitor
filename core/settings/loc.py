@@ -50,6 +50,7 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 
+
 # Logging overrides
 
 LOGGING['loggers'].update({

@@ -9,7 +9,6 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-
 _legistar_url = 'http://webapi.legistar.com/v1/chicago'
 
 # Map data_type to API call suffix
@@ -29,12 +28,8 @@ class Command(BaseCommand):
     help = 'Pull data from the Chicago Legistar API.'
 
     def add_arguments(self, parser):
-        # Positional arguments
-        parser.add_argument('data_type', #nargs='?',
-            help=', '.join(sorted(_data_type_to_api.keys()))
-        )
-
-        # Named (optional) arguments
+        parser.add_argument('data_type',
+            help=', '.join(sorted(_data_type_to_api.keys())))
         parser.add_argument('--all',
             action='store_true',
             dest='all',
@@ -99,8 +94,8 @@ class Command(BaseCommand):
                 logger.info('Processed %d records' % skip)
        
             logger.info('Processed %d records' % skip)                           
-        except Exception as fe:
-            logger.exception('Ending on exception')
+        except Exception as e:
+            logger.exception(str(e))
             
         logger.info('Done\n')
        

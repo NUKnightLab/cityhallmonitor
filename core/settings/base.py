@@ -117,7 +117,7 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         }
-        # Configure handlers for management commands per-environ:
+        # Configure handlers for management commands per-environment
         # pull_data
         # pull_attachments
         # pull_pdfs
@@ -133,8 +133,7 @@ LOGGING = {
         # cityhallmonitor.management.commands.pull_data
         # cityhallmonitor.management.commands.pull_attachments
         # cityhallmonitor.management.commands.pull_pdfs
-        # cityhallmonitor.management.commands.get_descriptions
-        
+        # cityhallmonitor.management.commands.get_descriptions        
     }
 }
 

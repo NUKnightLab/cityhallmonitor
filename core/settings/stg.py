@@ -70,7 +70,7 @@ LOGGING['handlers'].update({
         'level': 'DEBUG',
         'class': 'logging.FileHandler',
         'formatter': 'verbose',
-        'filename': '/home/apps/log/cityhallmonitor/pull_attachments.log'
+        'filename': '/home/apps/log/cityhallmonitor/pull_pdfs.log'
     },
     'get_descriptions': {
         'level': 'DEBUG',

@@ -100,6 +100,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
+            '()': 'cityhallmonitor.formatter.UtcFormatter',
             'format': '%(asctime)s %(levelname)s %(message)s'        
         }
     },

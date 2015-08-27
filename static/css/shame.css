@@ -53,14 +53,6 @@ span.logo-mark.xxl {
     font-style: italic;
 }
 
-#results-summary {
-    text-align: center;
-}
-
-#results-progress {
-    text-align: center;
-}
-
 #results-progress i {
     margin-right: 10px;
 }

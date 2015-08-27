@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 
@@ -13,7 +14,15 @@ class LegistarModel(models.Model):
     class Meta:
         abstract = True
     
-    
+    @classmethod
+    def get_or_new(cls, id):
+        """Get existing record by id or create a new instance"""
+        try:
+            return cls.objects.get(id=id)
+        except ObjectDoesNotExist:
+            return cls(id=id)
+                
+            
 class Action(LegistarModel):
     """Actions, e.g., Adopted, Amended in Committee"""
     name = models.TextField()
@@ -24,18 +33,19 @@ class Action(LegistarModel):
         ordering = ['name']
 
     def __str__(self):
-        return self.name
-            
-    def from_json(d):
+        return self.name        
+                       
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return Action(
-            id=d['ActionId'],
-            guid=d['ActionGuid'] or '',
-            last_modified=d['ActionLastModifiedUtc']+'Z',
-            row_version=d['ActionRowVersion'],
-            name=d['ActionName'],
-            active_flag=d['ActionActiveFlag'],
-            used_flag=d['ActionUsedFlag'])
+        r = cls.get_or_new(d['ActionId'])
+        r.guid = d['ActionGuid'] or ''
+        r.last_modified = d['ActionLastModifiedUtc']+'Z'
+        r.row_version = d['ActionRowVersion']
+        r.name = d['ActionName']
+        r.active_flag =d['ActionActiveFlag']
+        r.used_flag = d['ActionUsedFlag']
+        return r
 
 
 class Person(LegistarModel):
@@ -52,18 +62,19 @@ class Person(LegistarModel):
     def __str__(self):
         return self.full_name
 
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return Person(
-            id=d['PersonId'],
-            guid=d['PersonGuid'] or '',
-            last_modified=d['PersonLastModifiedUtc']+'Z',
-            row_version=d['PersonRowVersion'],
-            first_name=d['PersonFirstName'],
-            last_name=d['PersonLastName'],
-            full_name=d['PersonFullName'],
-            active_flag=d['PersonActiveFlag'],
-            used_sponsor_flag=d['PersonUsedSponsorFlag'])
+        r = cls.get_or_new(d['PersonId'])
+        r.guid = d['PersonGuid'] or ''
+        r.last_modified = d['PersonLastModifiedUtc']+'Z'
+        r.row_version = d['PersonRowVersion']
+        r.first_name = d['PersonFirstName']
+        r.last_name = d['PersonLastName']
+        r.full_name = d['PersonFullName']
+        r.active_flag = d['PersonActiveFlag']
+        r.used_sponsor_flag = d['PersonUsedSponsorFlag']
+        return r
 
 
 class BodyType(LegistarModel):
@@ -74,18 +85,18 @@ class BodyType(LegistarModel):
         ordering = ['name']
         verbose_name = 'BodyType'
  
-
     def __str__(self):
         return self.name
     
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return BodyType(
-            id=d['BodyTypeId'],
-            guid=d['BodyTypeGuid'] or '',
-            row_version=d['BodyTypeRowVersion'],
-            last_modified=d['BodyTypeLastModifiedUtc']+'Z',
-            name=d['BodyTypeName'])
+        r = cls.get_or_new(d['BodyTypeId'])   
+        r.guid = d['BodyTypeGuid'] or ''
+        r.row_version = d['BodyTypeRowVersion']
+        r.last_modified = d['BodyTypeLastModifiedUtc']+'Z'
+        r.name = d['BodyTypeName']
+        return r
 
 
 class Body(LegistarModel):
@@ -110,25 +121,26 @@ class Body(LegistarModel):
     def __str__(self):
         return self.name
     
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return Body(
-            id=d['BodyId'],
-            guid=d['BodyGuid'] or '',
-            last_modified=d['BodyLastModifiedUtc']+'Z',
-            row_version=d['BodyRowVersion'],
-            name=d['BodyName'],
-            body_type_id=d['BodyTypeId'],
-            meet_flag=d['BodyMeetFlag'],
-            active_flag=d['BodyActiveFlag'],
-            sort=d['BodySort'],
-            description=d['BodyDescription'] or '',
-            contact=d['BodyContactNameId'],
-            used_control_flag=d['BodyUsedControlFlag'],
-            n_members=d['BodyNumberOfMembers'],
-            used_acting_flag=d['BodyUsedActingFlag'],
-            used_target_flag=d['BodyUsedTargetFlag'],
-            used_sponsor_flag=d['BodyUsedSponsorFlag'])
+        r = cls.get_or_new(d['BodyId'])   
+        r.guid = d['BodyGuid'] or ''
+        r.last_modified = d['BodyLastModifiedUtc']+'Z'
+        r.row_version = d['BodyRowVersion']
+        r.name = d['BodyName']
+        r.body_type_id = d['BodyTypeId']
+        r.meet_flag = d['BodyMeetFlag']
+        r.active_flag = d['BodyActiveFlag']
+        r.sort = d['BodySort']
+        r.description = d['BodyDescription'] or ''
+        r.contact = d['BodyContactNameId']
+        r.used_control_flag = d['BodyUsedControlFlag']
+        r.n_members = d['BodyNumberOfMembers']
+        r.used_acting_flag = d['BodyUsedActingFlag']
+        r.used_target_flag = d['BodyUsedTargetFlag']
+        r.used_sponsor_flag = d['BodyUsedSponsorFlag']
+        return r
 
 
 class MatterStatus(LegistarModel):
@@ -147,18 +159,19 @@ class MatterStatus(LegistarModel):
     def __str__(self):
         return self.name
 
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return MatterStatus(
-            id=d['MatterStatusId'],
-            guid=d['MatterStatusGuid'] or '',
-            last_modified=d['MatterStatusLastModifiedUtc']+'Z',
-            row_version=d['MatterStatusRowVersion'],
-            name=d['MatterStatusName'],
-            description=d['MatterStatusDescription'] or '',
-            sort=d['MatterStatusSort'],
-            active_flag=d['MatterStatusActiveFlag'],
-            used_flag=d['MatterStatusUsedFlag'])
+        r = cls.get_or_new(d['MatterStatusId'])   
+        r.guid = d['MatterStatusGuid'] or ''
+        r.last_modified = d['MatterStatusLastModifiedUtc']+'Z'
+        r.row_version = d['MatterStatusRowVersion']
+        r.name = d['MatterStatusName']
+        r.description = d['MatterStatusDescription'] or ''
+        r.sort = d['MatterStatusSort']
+        r.active_flag = d['MatterStatusActiveFlag']
+        r.used_flag = d['MatterStatusUsedFlag']
+        return r
             
                  
 class MatterType(LegistarModel):
@@ -177,18 +190,19 @@ class MatterType(LegistarModel):
     def __str__(self):
         return self.name
 
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return MatterType(
-            id=d['MatterTypeId'],
-            guid=d['MatterTypeGuid'] or '',
-            last_modified=d['MatterTypeLastModifiedUtc']+'Z',
-            row_version=d['MatterTypeRowVersion'],
-            name=d['MatterTypeName'],
-            description=d['MatterTypeDescription'] or '',
-            sort=d['MatterTypeSort'],
-            active_flag=d['MatterTypeActiveFlag'],
-            used_flag=d['MatterTypeUsedFlag'])
+        r = cls.get_or_new(d['MatterTypeId'])   
+        r.guid = d['MatterTypeGuid'] or ''
+        r.last_modified = d['MatterTypeLastModifiedUtc']+'Z'
+        r.row_version = d['MatterTypeRowVersion']
+        r.name = d['MatterTypeName']
+        r.description = d['MatterTypeDescription'] or ''
+        r.sort = d['MatterTypeSort']
+        r.active_flag = d['MatterTypeActiveFlag']
+        r.used_flag = d['MatterTypeUsedFlag']
+        return r
 
 
 class Matter(LegistarModel):
@@ -242,54 +256,55 @@ class Matter(LegistarModel):
     def __str__(self):
         return self.title or self.name or self.file
     
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return Matter(
-            id=d['MatterId'],
-            guid=d['MatterGuid'] or '',
-            last_modified=d['MatterLastModifiedUtc']+'Z' if d['MatterLastModifiedUtc'] else None,
-            row_version=d['MatterRowVersion'],
-            file=d['MatterFile'] or '',
-            name=d['MatterName'] or '',
-            title=d['MatterTitle'] or '',
-            matter_type_id=d['MatterTypeId'],
-            matter_status_id=d['MatterStatusId'],
-            body_id=d['MatterBodyId'],
-            intro_date=d['MatterIntroDate']+'Z' if d['MatterIntroDate'] else None,
-            agenda_date=d['MatterAgendaDate']+'Z' if d['MatterAgendaDate'] else None,
-            passed_date=d['MatterPassedDate']+'Z' if d['MatterPassedDate'] else None,
-            enactment_date=d['MatterEnactmentDate']+'Z' if d['MatterEnactmentDate'] else None,
-            enactment_number=d['MatterEnactmentNumber'] or '',
-            requester=d['MatterRequester'] or '',
-            notes=d['MatterNotes'] or '',
-            version=d['MatterVersion'] or '',
-            text1=d['MatterText1'] or '',
-            text2=d['MatterText2'] or '',
-            text3=d['MatterText3'] or '',
-            text4=d['MatterText4'] or '',
-            text5=d['MatterText5'] or '',
-            date1=d['MatterDate1']+'Z' if d['MatterDate1'] else None,
-            date2=d['MatterDate2']+'Z' if d['MatterDate2'] else None,
-            ex_text1=d['MatterEXText1'] or '',
-            ex_text2=d['MatterEXText2'] or '',
-            ex_text3=d['MatterEXText3'] or '',
-            ex_text4=d['MatterEXText4'] or '',
-            ex_text5=d['MatterEXText5'] or '',
-            ex_text6=d['MatterEXText6'] or '',
-            ex_text7=d['MatterEXText7'] or '',
-            ex_text8=d['MatterEXText8'] or '',
-            ex_text9=d['MatterEXText9'] or '',
-            ex_text10=d['MatterEXText10'] or '',
-            ex_date1=d['MatterEXDate1']+'Z' if d['MatterEXDate1'] else None,
-            ex_date2=d['MatterEXDate2']+'Z' if d['MatterEXDate2'] else None,
-            ex_date3=d['MatterEXDate3']+'Z' if d['MatterEXDate3'] else None,
-            ex_date4=d['MatterEXDate4']+'Z' if d['MatterEXDate4'] else None,
-            ex_date5=d['MatterEXDate5']+'Z' if d['MatterEXDate5'] else None,
-            ex_date6=d['MatterEXDate6']+'Z' if d['MatterEXDate6'] else None,
-            ex_date7=d['MatterEXDate7']+'Z' if d['MatterEXDate7'] else None,
-            ex_date8=d['MatterEXDate8']+'Z' if d['MatterEXDate8'] else None,
-            ex_date9=d['MatterEXDate9']+'Z' if d['MatterEXDate9'] else None,
-            ex_date10=d['MatterEXDate10']+'Z' if d['MatterEXDate10'] else None)   
+        r = cls.get_or_new(d['MatterId'])   
+        r.guid = d['MatterGuid'] or ''
+        r.last_modified = d['MatterLastModifiedUtc']+'Z' if d['MatterLastModifiedUtc'] else None
+        r.row_version = d['MatterRowVersion']
+        r.file = d['MatterFile'] or ''
+        r.name = d['MatterName'] or ''
+        r.title = d['MatterTitle'] or ''
+        r.matter_type_id = d['MatterTypeId']
+        r.matter_status_id = d['MatterStatusId']
+        r.body_id = d['MatterBodyId']
+        r.intro_date = d['MatterIntroDate']+'Z' if d['MatterIntroDate'] else None
+        r.agenda_date = d['MatterAgendaDate']+'Z' if d['MatterAgendaDate'] else None
+        r.passed_date = d['MatterPassedDate']+'Z' if d['MatterPassedDate'] else None
+        r.enactment_date = d['MatterEnactmentDate']+'Z' if d['MatterEnactmentDate'] else None
+        r.enactment_number = d['MatterEnactmentNumber'] or ''
+        r.requester = d['MatterRequester'] or ''
+        r.notes = d['MatterNotes'] or ''
+        r.version = d['MatterVersion'] or ''
+        r.text1 = d['MatterText1'] or ''
+        r.text2 = d['MatterText2'] or ''
+        r.text3 = d['MatterText3'] or ''
+        r.text4 = d['MatterText4'] or ''
+        r.text5 = d['MatterText5'] or ''
+        r.date1 = d['MatterDate1']+'Z' if d['MatterDate1'] else None
+        r.date2 = d['MatterDate2']+'Z' if d['MatterDate2'] else None
+        r.ex_text1 = d['MatterEXText1'] or ''
+        r.ex_text2 = d['MatterEXText2'] or ''
+        r.ex_text3 = d['MatterEXText3'] or ''
+        r.ex_text4 = d['MatterEXText4'] or ''
+        r.ex_text5 = d['MatterEXText5'] or ''
+        r.ex_text6 = d['MatterEXText6'] or ''
+        r.ex_text7 = d['MatterEXText7'] or ''
+        r.ex_text8 = d['MatterEXText8'] or ''
+        r.ex_text9 = d['MatterEXText9'] or ''
+        r.ex_text10 = d['MatterEXText10'] or ''
+        r.ex_date1 = d['MatterEXDate1']+'Z' if d['MatterEXDate1'] else None
+        r.ex_date2 = d['MatterEXDate2']+'Z' if d['MatterEXDate2'] else None
+        r.ex_date3 = d['MatterEXDate3']+'Z' if d['MatterEXDate3'] else None
+        r.ex_date4 = d['MatterEXDate4']+'Z' if d['MatterEXDate4'] else None
+        r.ex_date5 = d['MatterEXDate5']+'Z' if d['MatterEXDate5'] else None
+        r.ex_date6 = d['MatterEXDate6']+'Z' if d['MatterEXDate6'] else None
+        r.ex_date7 = d['MatterEXDate7']+'Z' if d['MatterEXDate7'] else None
+        r.ex_date8 = d['MatterEXDate8']+'Z' if d['MatterEXDate8'] else None
+        r.ex_date9 = d['MatterEXDate9']+'Z' if d['MatterEXDate9'] else None
+        r.ex_date10 = d['MatterEXDate10']+'Z' if d['MatterEXDate10'] else None
+        return r
 
 
 class MatterSponsor(models.Model):
@@ -306,23 +321,23 @@ class MatterSponsor(models.Model):
     sequence = models.IntegerField()
 
     class Meta:
-        # TODO: set ordering my person name?
         verbose_name = 'MatterSponsor'
 
     def __str__(self):
         return self.person.full_name
 
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return MatterSponsor(
-            id=d['MatterSponsorId'],
-            guid=d['MatterSponsorGuid'] or '',
-            last_modified=d['MatterSponsorLastModifiedUtc']+'Z',
-            row_version=d['MatterSponsorRowVersion'],
-            matter_id=d['MatterSponsorMatterId'],
-            matter_version=d['MatterSponsorMatterVersion'],
-            person_id=d['MatterSponsorNameId'],
-            sequence=d['MatterSponsorSequence'])
+        r = cls.get_or_new(d['MatterSponsorId'])   
+        r.guid = d['MatterSponsorGuid'] or ''
+        r.last_modified = d['MatterSponsorLastModifiedUtc']+'Z'
+        r.row_version = d['MatterSponsorRowVersion']
+        r.matter_id = d['MatterSponsorMatterId']
+        r.matter_version = d['MatterSponsorMatterVersion']
+        r.person_id = d['MatterSponsorNameId']
+        r.sequence = d['MatterSponsorSequence']
+        return r
 
 
 class MatterAttachment(LegistarModel):
@@ -338,31 +353,31 @@ class MatterAttachment(LegistarModel):
     link_obtained_at = models.DateTimeField(null=True)
 
     class Meta:
-        #ordering =??
         verbose_name = 'MatterAttachment'
 
     def __str__(self):
         return self.file_name
     
-    def from_json(matter_id, d):
+    @classmethod
+    def from_json(cls, matter_id, d):
         """
         Convert legistar dictionary to model instance
         Note that you need to pass in MatterId!
         """
-        return MatterAttachment(
-            id=d['MatterAttachmentId'],
-            guid=d['MatterAttachmentGuid'] or '',
-            last_modified=d['MatterAttachmentLastModifiedUtc']+'Z',          
-            row_version=d['MatterAttachmentRowVersion'],
-            matter_id=matter_id,
-            matter_version=d['MatterAttachmentMatterVersion'],
-            name=d['MatterAttachmentName'] or '',
-            hyperlink=d['MatterAttachmentHyperlink'],
-            file_name=d['MatterAttachmentFileName'],
-            is_hyperlink=d['MatterAttachmentIsHyperlink'],
-            is_supporting_doc=d['MatterAttachmentIsSupportingDocument'],
-            binary=d['MatterAttachmentBinary'] or '')
-    
+        r = cls.get_or_new(d['MatterAttachmentId'])       
+        r.guid = d['MatterAttachmentGuid'] or ''
+        r.last_modified = d['MatterAttachmentLastModifiedUtc']+'Z'          
+        r.row_version = d['MatterAttachmentRowVersion']
+        r.matter_id = matter_id
+        r.matter_version = d['MatterAttachmentMatterVersion']
+        r.name = d['MatterAttachmentName'] or ''
+        r.hyperlink = d['MatterAttachmentHyperlink']
+        r.file_name = d['MatterAttachmentFileName']
+        r.is_hyperlink = d['MatterAttachmentIsHyperlink']
+        r.is_supporting_doc = d['MatterAttachmentIsSupportingDocument']
+        r.binary = d['MatterAttachmentBinary'] or ''
+        return r
+
     
 class VoteType(LegistarModel):
     """Vote types e.g., Yea, Nay, Present"""
@@ -379,17 +394,18 @@ class VoteType(LegistarModel):
     def __str__(self):
         return self.name
 
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return VoteType(
-            id=d['VoteTypeId'],
-            guid=d['VoteTypeGuid'] or '',
-            last_modified=d['VoteTypeLastModifiedUtc']+'Z',
-            row_version=d['VoteTypeRowVersion'],
-            name=d['VoteTypeName'],
-            used_for=d['VoteTypeUsedFor'],
-            result=d['VoteTypeResult'],
-            sort=d['VoteTypeSort'])
+        r = cls.get_or_new(d['VoteTypeId'])       
+        r.guid = d['VoteTypeGuid'] or ''
+        r.last_modified = d['VoteTypeLastModifiedUtc']+'Z'
+        r.row_version = d['VoteTypeRowVersion']
+        r.name = d['VoteTypeName']
+        r.used_for = d['VoteTypeUsedFor']
+        r.result = d['VoteTypeResult']
+        r.sort = d['VoteTypeSort']
+        return r
     
     
 class Event(LegistarModel):
@@ -410,22 +426,23 @@ class Event(LegistarModel):
     def __str__(self):
         return self.body.name
     
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return Event(
-            id=d['EventId'],
-            guid=d['EventGuid'] or '',
-            last_modified=d['EventLastModifiedUtc']+'Z',
-            row_version=d['EventRowVersion'],
-            body_id=d['EventBodyId'],
-            date=d['EventDate'].split('T')[0],
-            time=d['EventTime'] or '',
-            video_status=d['EventVideoStatus'] or '',
-            agenda_status_id=d['EventAgendaStatusId'] or 0,
-            agenda_status_name=d['EventAgendaStatusName'] or '',
-            minutes_status_id=d['EventMinutesStatusId'] or 0,
-            minutes_status_name=d['EventMinutesStatusName'] or '',
-            location=d['EventLocation'] or '')
+        r = cls.get_or_new(d['EventId'])       
+        r.guid = d['EventGuid'] or ''
+        r.last_modified = d['EventLastModifiedUtc']+'Z'
+        r.row_version = d['EventRowVersion']
+        r.body_id = d['EventBodyId']
+        r.date = d['EventDate'].split('T')[0]
+        r.time = d['EventTime'] or ''
+        r.video_status = d['EventVideoStatus'] or ''
+        r.agenda_status_id = d['EventAgendaStatusId'] or 0
+        r.agenda_status_name = d['EventAgendaStatusName'] or ''
+        r.minutes_status_id = d['EventMinutesStatusId'] or 0
+        r.minutes_status_name = d['EventMinutesStatusName'] or ''
+        r.location = d['EventLocation'] or ''
+        return r
 
 
 class EventItem(LegistarModel):
@@ -457,33 +474,34 @@ class EventItem(LegistarModel):
     def __str__(self):
         return self.matter
     
-    def from_json(d):
+    @classmethod
+    def from_json(cls, d):
         """Convert legistar dictionary to model instance"""
-        return EventItem(
-            id=d['EventItemId'],
-            guid=d['EventItemGuid'] or '',
-            last_modified=d['EventItemLastModifiedUtc']+'Z',
-            row_version=d['EventItemRowVersion'],
-            event_id=d['EventItemEventId'],
-            agenda_sequence=d['EventItemAgendaSequence'] or 0,
-            minutes_sequence=d['EventItemMinutesSequence'] or 0,
-            agenda_number=d['EventItemAgendaNumber'] or '',
-            video=d['EventItemVideo'] or 0,
-            video_index=d['EventItemVideoIndex'] or 0,            
-            version=d['EventItemVersion'] or '',            
-            agenda_note=d['EventItemAgendaNote'] or '',
-            minutes_note=d['EventItemMinutesNote'] or '',
-            action_id=d['EventItemActionId'],
-            passed_flag=d['EventItemPassedFlag'] or 0,
-            passed_flag_name=d['EventItemPassedFlagName'] or '',
-            roll_call_flag=d['EventItemRollCallFlag'] or 0,
-            flag_extra=d['EventItemFlagExtra'] or 0,
-            title=d['EventItemTitle'] or '',
-            tally=d['EventItemTally'] or '',
-            consent=d['EventItemConsent'] or 0,
-            mover_id=d['EventItemMoverId'],
-            seconder_id=d['EventItemSeconderId'],
-            matter_id=d['EventItemMatterId'])
+        r = cls.get_or_new(d['EventItemId'])       
+        r.guid = d['EventItemGuid'] or ''
+        r.last_modified = d['EventItemLastModifiedUtc']+'Z'
+        r.row_version = d['EventItemRowVersion']
+        r.event_id = d['EventItemEventId']
+        r.agenda_sequence = d['EventItemAgendaSequence'] or 0
+        r.minutes_sequence = d['EventItemMinutesSequence'] or 0
+        r.agenda_number = d['EventItemAgendaNumber'] or ''
+        r.video = d['EventItemVideo'] or 0
+        r.video_index = d['EventItemVideoIndex'] or 0            
+        r.version = d['EventItemVersion'] or ''            
+        r.agenda_note = d['EventItemAgendaNote'] or ''
+        r.minutes_note = d['EventItemMinutesNote'] or ''
+        r.action_id = d['EventItemActionId']
+        r.passed_flag = d['EventItemPassedFlag'] or 0
+        r.passed_flag_name = d['EventItemPassedFlagName'] or ''
+        r.roll_call_flag = d['EventItemRollCallFlag'] or 0
+        r.flag_extra = d['EventItemFlagExtra'] or 0
+        r.title = d['EventItemTitle'] or ''
+        r.tally = d['EventItemTally'] or ''
+        r.consent = d['EventItemConsent'] or 0
+        r.mover_id = d['EventItemMoverId']
+        r.seconder_id = d['EventItemSeconderId']
+        r.matter_id = d['EventItemMatterId']
+        return r
 
 
 class Subscription(models.Model):

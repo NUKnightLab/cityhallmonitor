@@ -79,6 +79,7 @@ function handle_subscribe(event) {
 
         $('input[type=submit]').click(function() {
             $('#results-summary, #search-results').html('');
+            $('#results-progress').show();
             
             var q = $('#search-input').val();
             q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
@@ -108,7 +109,9 @@ function handle_subscribe(event) {
                     $.each(groups, function(i, g) {
                         addResult(g);
                     });
-                }                
+                }  
+                
+                $('#results-progress').hide();              
             });
         });
 

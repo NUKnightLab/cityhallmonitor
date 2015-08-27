@@ -56,8 +56,11 @@ span.logo-mark.xxl {
 #results-summary {
     text-align: center;
 }
-/*
-h5.result-total {
-   text-align: center;
+
+#results-progress {
+    text-align: center;
 }
-*/
+
+#results-progress i {
+    margin-right: 10px;
+}

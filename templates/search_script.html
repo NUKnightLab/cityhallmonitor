@@ -4,14 +4,16 @@
   <p>Email me when these results change</p>
   <div class="row">
     <div class="small-12 columns">
-      <div class="row collapse">
-        <div class="small-4 small-offset-3 columns">
-           <input type="text" id="search-subscribe-email" placeholder="enter email address">
+      <form action="#" id="search-subscribe-form">
+        <div class="row collapse">
+          <div class="small-4 small-offset-3 columns">
+             <input type="text" id="search-subscribe-email" placeholder="enter email address">
+          </div>
+          <div class="small-2 columns end">
+            <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+          </div>
         </div>
-        <div class="small-2 columns end">
-          <input type="button" value="Subscribe" id="search-subscribe" class="button postfix small"/>
-        </div>
-      </div>
+      </form>
     </div>
 </script>
 
@@ -77,7 +79,7 @@ function handle_subscribe(event) {
             });
         };
 
-        $('input[type=submit]').click(function() {
+        var doSearch = function() {
             $('#results-summary, #search-results').html('');
             $('#results-progress').show();
             
@@ -102,7 +104,10 @@ function handle_subscribe(event) {
 
                 $('#results-summary').html($(summaryTemplate(data)));
                
-                $('#search-subscribe').click(handle_subscribe);
+                $('#search-subscribe-form').submit(function(event) {
+                    handle_subscribe(event);
+                    return false;
+                });
                 
 
                  if(data.documents.length) {
@@ -113,6 +118,11 @@ function handle_subscribe(event) {
                 
                 $('#results-progress').hide();              
             });
+        };
+
+        $('#search-form').submit(function() {
+            doSearch();
+            return false;
         });
 
         $('.example-search').click(function() {

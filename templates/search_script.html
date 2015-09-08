@@ -22,7 +22,7 @@
     <div class="small-12 medium-10 medium-offset-1 columns">
       <p class="updated-date"><%= updated_at %></p>
       <h4><%= data.MatterTitle %></h4>
-      <a class="result-thumb" href="<%= canonical_url %>"><img src="<%= resources.thumbnail %>" /></a>
+      <a class="result-thumb" href="documents/<%= data.MatterAttachmentId %>"><img src="<%= resources.thumbnail %>" /></a>
       <div class="description"><% if (description) { %><%= description %><% } else { %> <span class="no-summary">No summary available for this item.</span><% } %></div>
       <div class="more-info">
         <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>

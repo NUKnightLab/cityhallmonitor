@@ -58,6 +58,10 @@ LOGGING['loggers'].update({
         'handlers': ['console'],
         'level': 'DEBUG'
     },
+    'cityhallmonitor.management.commands.pull_sponsors': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
+    },
     'cityhallmonitor.management.commands.pull_attachments': {
         'handlers': ['console'],
         'level': 'DEBUG'

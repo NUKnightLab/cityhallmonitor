@@ -60,6 +60,12 @@ LOGGING['handlers'].update({
         'formatter': 'verbose',
         'filename': '/home/apps/log/cityhallmonitor/pull_data.log'
     },
+    'pull_sponsors': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/pull_sponsors.log'
+    },
     'pull_attachments': {
         'level': 'DEBUG',
         'class': 'logging.FileHandler',
@@ -83,6 +89,10 @@ LOGGING['handlers'].update({
 LOGGING['loggers'].update({
     'cityhallmonitor.management.commands.pull_data': {
         'handlers': ['pull_data'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.pull_sponsors': {
+        'handlers': ['pull_sponsors'],
         'level': 'DEBUG'
     },
     'cityhallmonitor.management.commands.pull_attachments': {

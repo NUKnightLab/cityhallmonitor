@@ -307,14 +307,10 @@ class Matter(LegistarModel):
         return r
 
 
-class MatterSponsor(models.Model):
+class MatterSponsor(LegistarModel):
     """
     Sponsors (links Matter to Person)
     """
-    id = models.IntegerField(primary_key=True)
-    guid = models.CharField(max_length=100, blank=True)
-    row_version = models.CharField(max_length=100, blank=True)
-    last_modified = models.DateTimeField(null=True)        
     matter = models.ForeignKey(Matter)   
     matter_version = models.TextField(blank=True, default='0')    
     person = models.ForeignKey(Person)

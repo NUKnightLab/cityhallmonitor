@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render

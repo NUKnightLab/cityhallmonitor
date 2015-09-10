@@ -310,6 +310,10 @@ class Matter(LegistarModel):
 class MatterSponsor(LegistarModel):
     """
     Sponsors (links Matter to Person)
+    
+    In the Legistar data, the MatterSponsorNameId can be None, which is
+    indicative of no sponsor (e.g. a simple communication).  Those
+    records are skipped over in the pull_sponsors management command.
     """
     matter = models.ForeignKey(Matter)   
     matter_version = models.TextField(blank=True, default='0')    

@@ -31,8 +31,9 @@ class Command(BaseCommand):
                 % (url, r.status_code))
         for i, item in enumerate(r.json()):
             try:
-                r = MatterSponsor.from_json(item)
-                r.save()
+                if item['MatterSponsorNameId']:
+                    r = MatterSponsor.from_json(item)
+                    r.save()
             except Exception as e:
                 logger.info(item)
                 raise e

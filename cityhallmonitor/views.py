@@ -87,14 +87,9 @@ def subscribe(request):
             msg = EmailMessage(
                 'City Hall Monitor Search Subscription', html_message,
                 settings.DEFAULT_FROM_EMAIL, [email], [],
-                reply_to=['<Do not reply>'])
+                reply_to=['do-not-reply@knightlab.com'])
             msg.content_subtype = 'html'
             msg.send()
-            #send_mail(
-            #    'City Hall Monitor Search Subscription', '', '',
-            #    [email],
-            #    fail_silently=False,
-            #    html_message=html_message)
         except SMTPException as se:
             r.delete()
             raise se

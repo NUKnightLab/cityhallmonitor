@@ -91,7 +91,7 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 
 # Email address used for sending subscription-related emails
-DEFAULT_FROM_EMAIL = 'KnightLab@northwestern.edu'
+DEFAULT_FROM_EMAIL = 'knightlab.cityhallmonitor@gmail.com'
 
 # Logging
 

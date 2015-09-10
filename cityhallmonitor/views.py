@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -84,11 +84,17 @@ def subscribe(request):
         })
                         
         try:          
-            send_mail(
-                'City Hall Monitor Search Subscription', '', '',
-                [email],
-                fail_silently=False,
-                html_message=html_message)
+            msg = EmailMessage(
+                'City Hall Monitor Search Subscription', html_message,
+                settings.DEFAULT_FROM_EMAIL, [email], [],
+                reply_to=['<Do not reply>'])
+            msg.content_subtype = 'html'
+            msg.send()
+            #send_mail(
+            #    'City Hall Monitor Search Subscription', '', '',
+            #    [email],
+            #    fail_silently=False,
+            #    html_message=html_message)
         except SMTPException as se:
             r.delete()
             raise se

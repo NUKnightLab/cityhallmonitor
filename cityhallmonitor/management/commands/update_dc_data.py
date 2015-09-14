@@ -92,8 +92,8 @@ class Command(BaseCommand):
                 try:
                     self.check_update(doc)  
                 except Exception as ex:
-                    logger.info(doc.data)
-                    raise ex             
+                    logger.error(doc.data)
+                    logger.exception(str(ex))            
         except Exception as e:
             logger.exception(str(e))
               

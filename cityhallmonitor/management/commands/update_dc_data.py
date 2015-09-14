@@ -89,8 +89,11 @@ class Command(BaseCommand):
             logger.info('Found %d matching documents' % len(r))
             
             for doc in r:
-                self.check_update(doc)
-             
+                try:
+                    self.check_update(doc)  
+                except Exception as ex:
+                    logger.info(doc.data)
+                    raise ex             
         except Exception as e:
             logger.exception(str(e))
               

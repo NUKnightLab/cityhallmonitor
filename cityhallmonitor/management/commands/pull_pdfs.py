@@ -112,6 +112,11 @@ class Command(BaseCommand):
         matter = attachment.matter
         published_url = ATTACHMENT_PUBLISH_URL % attachment.id
         description = self.short_description(attachment)
+        sort_date = max([d for d in [
+                matter.intro_date, 
+                matter.agenda_date, 
+                matter.passed_date, 
+                matter.enactment_date] if d is not None], default=None)
         data = {
             'MatterAttachmentId': str(attachment.id),
             'MatterId': str(matter.id),
@@ -126,7 +131,8 @@ class Command(BaseCommand):
             'MatterEnactmentDate': str(matter.enactment_date),
             'MatterEnactmentNumber': str(matter.enactment_number),
             'MatterRequester': matter.requester,
-            'MatterNotes': matter.notes
+            'MatterNotes': matter.notes,
+            'MatterSortDate': sort_date
         }
         r = self.search('account:%s source: "%s"' % (
             DOCUMENT_CLOUD_ACCOUNT, attachment.hyperlink))

@@ -64,7 +64,7 @@ class Command(BaseCommand):
             'MatterEnactmentNumber': str(matter.enactment_number),
             'MatterRequester': matter.requester,
             'MatterNotes': matter.notes,
-            'MatterSortDate': sort_date
+            'MatterSortDate': str(sort_date)
         }
            
         olddata = { k:v for k,v in doc.data.items()

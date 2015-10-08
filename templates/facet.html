@@ -37,7 +37,6 @@ div.row {margin: 10px;}
       <p class="updated-date"><%= updated_at %></p>
       <h4><%= data.MatterTitle %></h4>
       <a class="result-thumb" href="<%= canonical_url %>"><img src="<%= resources.thumbnail %>" /></a>
-      <div class="description"><% if (description) { %><%= description %><% } else { %> <span class="no-summary">No summary available for this item.</span><% } %></div>
       <div class="more-info">
         <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
         <a class="download-pdf" href="<%= source %>">Download PDF</a>
@@ -69,17 +68,17 @@ visualSearch = VS.init({
     callbacks: {
         clearSearch: function(f) {
             console.log('VS.clearSearch');
-            f();            
+            f();
             $('#search-results').html('');
         },
-        
+
         search: function(query, searchCollection) {
             console.log('VS.search');
             if(!query) {
                 return;
             }
-            
-            var q = query + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';                
+
+            var q = query + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
             console.log(q);
             $.ajax({
                 url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=20&data=true'

@@ -1,7 +1,9 @@
 
 <script type="text/template" id="summary-template">
-  <h5>We found <%= total %> results for your search.</h5>  
-  <p>Email me when these results change</p>
+  <h5>We found <%= total %> results for your search.</h5>
+  <form>
+    <input type="checkbox" value="Email me when these results change" id="email-checkbox"/><label for="email-checkbox">Email me when these results change</label>
+  </form>
   <div class="row">
     <div class="small-12 columns">
       <form action="#" id="search-subscribe-form">
@@ -20,15 +22,21 @@
 <script type="text/template" id="result-template">
   <div class="result row" id="<%= data.MatterId %>">
     <div class="small-12 medium-10 medium-offset-1 columns">
-      <p class="updated-date"><%= updated_at %></p>
-      <h4><%= data.MatterTitle %></h4>
-      <a class="result-thumb" href="documents/<%= data.MatterAttachmentId %>"><img src="<%= resources.thumbnail %>" /></a>
-      <div class="description"><% if (description) { %><%= description %><% } else { %> <span class="no-summary">No summary available for this item.</span><% } %></div>
-      <div class="more-info">
-        <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
-        <a class="download-pdf" href="<%= source %>">Download PDF</a>
-      </div>
-    </div>
+      <div class="row">
+        <div class="small-2 columns">
+          <img class="result-thumb"  src="<%= resources.thumbnail %>" />
+        </div>
+        <div class="small-10 columns">
+          <a href="documents/<%= data.MatterAttachmentId %>">
+            <p class="updated-date"><%= updated_at %></p>
+            <h4><%= data.MatterTitle %></h4>
+          </a>
+          <div class="more-info">
+            <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
+            <a class="download-pdf" href="<%= source %>">Download PDF</a>
+          </div>
+        </div>
+      </div>    </div>
     <hr />
   </div>
 </script>
@@ -40,13 +48,13 @@ function handle_subscribe(event) {
     if(!email) {
         alert('You must enter your email address');
         return;
-    } 
+    }
     var query = $('#search-input').val().trim();
     if(!query) {
         alert('YOu must enter a search query');
         return;
     }
-    
+
     $.ajax({
         url: '{% url "subscribe" %}',
         type: 'GET',
@@ -59,77 +67,97 @@ function handle_subscribe(event) {
         },
         success: function(data) {
             if(data.error) {
-                alert('Error making subscription: '+data.error);            
+                alert('Error making subscription: '+data.error);
             } else {
                 alert('Ok, you should get an email');
-            }        
+            }
         }
-    });    
+    });
 }
 
-
-    $(function() {
-        var summaryTemplate = _.template($("#summary-template").html());
-        var resultTemplate = _.template($("#result-template").html());
-
-
-        var addResult = function(obj) {
-            $.each(obj.docs, function(i, doc) {
-                $(resultTemplate(doc)).appendTo('#search-results');
-            });
-        };
-
-        var doSearch = function() {
-            $('#results-summary, #search-results').html('');
-            $('#results-progress').show();
-            
-            var q = $('#search-input').val();
-            q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
-            $.ajax({
-                url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
-            })
-            .success(function(data) {
-                var groups = {};
-
-                $.each(data.documents, function(i, doc) {
-                    if(doc.data.MatterId in groups) {
-                        groups[doc.data.MatterId]['docs'].push(doc);
-                    } else {
-                        groups[doc.data.MatterId] = {
-                            'data': doc.data,
-                            'docs': [doc]
-                        };
-                    }
-                });
-
-                $('#results-summary').html($(summaryTemplate(data)));
-               
-                $('#search-subscribe-form').submit(function(event) {
-                    handle_subscribe(event);
-                    return false;
-                });
-                
-
-                 if(data.documents.length) {
-                    $.each(groups, function(i, g) {
-                        addResult(g);
-                    });
-                }  
-                
-                $('#results-progress').hide();              
-            });
-        };
-
-        $('#search-form').submit(function() {
-            doSearch();
-            return false;
-        });
-
-        $('.example-search').click(function() {
-              console.log($(this).text());
-              $('#search-input').val($(this).text());
-              $('#search-submit').click();
-              return false;
-        });
+function buildDateUI(){
+  $('#date').on('change', 'select', function(){
+    if ($('#date option:selected').val() == 'date-range'){
+      $('.custom-date-start, .custom-date-end label').slideDown();
+    } else {
+      $('.custom-date-start, .custom-date-end').slideUp();
+    }
+    $('.custom-date-end label').on('click', function(){
+      $('.custom-date-end form').slideToggle();
+      $('.custom-date-end').toggleClass('visible');
     });
+  });
+}
+
+$(function() {
+    $('#results-summary').on('change', '#email-checkbox', function(){
+      if ($(this).is(':checked')){
+        $('#search-subscribe-form').show();
+      } else {
+        $('#search-subscribe-form').hide();
+      }
+    });
+    var summaryTemplate = _.template($("#summary-template").html());
+    var resultTemplate = _.template($("#result-template").html());
+
+
+    var addResult = function(obj) {
+        $.each(obj.docs, function(i, doc) {
+            $(resultTemplate(doc)).appendTo('#search-results');
+        });
+    };
+
+    var doSearch = function() {
+        $('#results-summary, #search-results').html('');
+        $('#results-progress').show();
+
+        var q = $('#search-input').val();
+        q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
+        $.ajax({
+            url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
+        })
+        .success(function(data) {
+            var groups = {};
+
+            $.each(data.documents, function(i, doc) {
+                if(doc.data.MatterId in groups) {
+                    groups[doc.data.MatterId]['docs'].push(doc);
+                } else {
+                    groups[doc.data.MatterId] = {
+                        'data': doc.data,
+                        'docs': [doc]
+                    };
+                }
+            });
+
+            $('#results-summary').html($(summaryTemplate(data)));
+
+            $('#search-subscribe-form').submit(function(event) {
+                handle_subscribe(event);
+                return false;
+            });
+
+             if(data.documents.length) {
+                $.each(groups, function(i, g) {
+                    addResult(g);
+                });
+            }
+            $('#results-progress').hide();
+        });
+    };
+
+    $('#search-form').submit(function() {
+        doSearch();
+        return false;
+    });
+
+    $('.example-search').click(function() {
+        console.log($(this).text());
+        $('#search-input').val($(this).text());
+        $('#search-submit').click();
+        return false;
+    });
+
+    buildDateUI();
+});
 </script>

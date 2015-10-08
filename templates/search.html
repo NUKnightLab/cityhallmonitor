@@ -2,14 +2,14 @@
 
 
 {% block content %}
-<div class="panel" id="hero-unit">
+<!--<div class="panel" id="hero-unit">-->
+<div class="img-overlay">
   <div class="row">
     <h1><span class="secondary">City Hall</span> <span class="logo-mark xxl">Monitor</span></h1>
     <h2 class="intro">We've got some city hall documents.</h2>
   </div>
   <div class="row">
     <div id="search-block" class="small-12 columns">
-      <!--<p>You should search for interesting things. You can also <a href="{% url 'about' %}">learn more about this project</a></p>-->
       <form action="#" id="search-form">
         <div class="row collapse">
           <div class="small-10 medium-8 medium-offset-1 columns">
@@ -21,21 +21,101 @@
           </div>
         </div>
       </form>
+      <div class="row">
+        <div class="small-6 medium-3 columns">
+          <form id="date">
+            <select>
+              <option value="any">Any date</option>
+              <option value="past-year">Past Year</option>
+              <option value="past-month">Past Month</option>
+              <option value="date-range">Date range...</option>
+            </select>
+          </form>
+        </div>
+        <div class="small-6 medium-3 columns">
+          <form id="matter-type">
+            <select>
+              <option value="any">Any matter type</option>
+              <option value=""></option>
+              <option value=""></option>
+              <option value=""></option>
+            </select>
+          </form>
+        </div>
+        <div class="small-6 medium-3 columns">
+          <form id="status">
+            <select>
+              <option value="any">Any status</option>
+              <option value=""></option>
+              <option value=""></option>
+              <option value=""></option>
+            </select>
+          </form>
+        </div>
+        <div class="small-6 medium-3 columns">
+          <form id="body">
+            <select>
+              <option value="any">Any government body</option>
+              <option value=""></option>
+              <option value=""></option>
+              <option value=""></option>
+            </select>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row datepicker">
+    <div class="small-6 columns custom-date-start">
+      <label>Start date</label>
+      <div class="row">
+        <form class="small-6 columns">
+          <select>
+            <option value="all-months">All months</option>
+          </select>
+        </form>
+        <form class="small-6 columns">
+          <select>
+            <option value="all-years">All years</option>
+          </select>
+        </form>
+      </div>
+    </div>
+    <div class="small-6 columns custom-date-end">
+      <div class="row">
+        <label><i class="fa fa-plus"></i><i class="fa fa-minus"></i> <span>End date</span></label>
+        <div class="small-6 columns">
+          <form>
+            <select>
+              <option value="all-months">All months</option>
+            </select>
+          </form>
+        </div>
+        <div class="small-6 columns">
+          <form>
+            <select>
+              <option value="all-years">All years</option>
+            </select>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<p id="results-progress" class="text-center hide">
-    <i class="fa fa-spinner fa-pulse fa-2x"></i> <span>Searching documents...</span>
-</p>
-
 <div id="results-summary" class="text-center">
+  <p id="results-progress" class="text-center hide">
+      <i class="fa fa-spinner fa-pulse fa-2x"></i> <span>Searching documents...</span>
+  </p>
 </div>
 
 <div id="results-block">
   <div id="search-results" />
 </div>
-
+<div class="main-photo-credit">
+  <p>Photo: <a href="https://www.flickr.com/photos/juggernautco/16179217449">Dan X. O'Neil</a>. Used under <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons license 2.0</a>.</p>
+</div>
 {% include "cdn_includes.html" %}
 {% include "search_script.html" %}
 

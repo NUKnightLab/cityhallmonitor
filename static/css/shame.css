@@ -56,3 +56,79 @@ span.logo-mark.xxl {
 #results-progress i {
     margin-right: 10px;
 }
+
+/* Email sub box */
+#search-subscribe-form {
+    display: none;
+}
+
+/* Filters */
+.custom-date-start,
+.custom-date-end label,
+.custom-date-end form{
+    display: none;
+}
+.custom-date-end .fa.fa-minus {
+    display: none;
+}
+
+.custom-date-end.visible .fa.fa-minus {
+    display: inline-block;
+}
+
+.custom-date-end.visible .fa.fa-plus {
+    display: none;
+}
+.custom-date-end label {
+    padding-top: 25px;
+    transition: padding 0.5s ease;
+}
+.custom-date-end.visible label {
+    padding-top: 0;
+}
+
+/* Index page with big photo */
+body {
+    padding-top: 5% !important;
+}
+
+body:before{
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.8;
+    background-image: url("https://c2.staticflickr.com/8/7334/16179217449_7a0eec61b2_h.jpg");
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+
+.main-photo-credit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(200, 200, 200, 0.8);
+    font-family: 'Apres RE', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    padding: 10px;
+    color: white;
+}
+.main-photo-credit p { margin-bottom:0; font-size: 12px; }
+.main-photo-credit a { color: white; text-decoration: underline; }
+.img-overlay {
+    background-color: rgba(250, 250, 250, 0.8);
+    margin: auto;
+    padding: 40px 0;
+    border: 1px solid #dcdcdc;
+    width: 90%;
+}
+.img-overlay h1,
+.img-overlay h2 { text-align: center; }

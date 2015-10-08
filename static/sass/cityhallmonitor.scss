@@ -1,0 +1,110 @@
+$font-family-sans-serif: 'Apres RE', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+/* colors */
+$orange: #ce4d28;
+$white: #fff;
+$iron: #ccc;
+$jumbo: #888;
+
+/* Title style overrides */
+h1,
+h2.intro {
+    text-align: center;
+}
+span.secondary { display: block; }
+span.logo-mark.xxl { margin-top: 0; }
+
+/* Big photo styles for index */
+body {
+    padding-top: 5% !important;
+    &:before{
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.8;
+        background-image: url("https://c2.staticflickr.com/8/7334/16179217449_7a0eec61b2_h.jpg");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+}
+
+.main-photo-credit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(204, 204, 204, 0.8); //$iron
+    font-family: $font-family-sans-serif;
+    padding: 10px;
+    color: $white;
+    p { margin-bottom: 0; font-size: 12px; }
+    a { color: $white; text-decoration: underline; }
+}
+.img-overlay {
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: auto;
+    padding: 40px 0;
+    border: 1px solid $iron;
+    width: 90%;
+}
+
+/* Filter UI */
+.custom-date-start { display: none; }
+.custom-date-end {
+    &.visible {
+        .fa.fa-minus { display: inline-block; }
+        .fa.fa-plus { display: none; }
+        label { padding-top: 0; }
+    }
+    .fa { color: $orange; }
+    .fa.fa-minus,
+    label,
+    form {
+        display: none;
+    }
+    label {
+        padding-top: 25px;
+        padding-left: 18px;
+        transition: padding 0.5s ease;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+/* Search results list */
+.result {
+    margin-bottom: 2em;
+    img {
+        border: 1px solid $jumbo;
+        margin-right: 1em;
+    }
+    h4 {
+        margin: 10px 0 30px 0;
+        line-height: 1.4;
+    }
+}
+.help,
+.updated-date,
+.download-pdf,
+.more-info {
+    font-size: 12px;
+    font-family: $font-family-sans-serif;
+}
+
+.updated-date {
+    margin-bottom: 0;
+    color: $jumbo;
+}
+.result-thumb { float: left; }
+.more-info { float: right; }
+.download-pdf { margin-left: 20px; }

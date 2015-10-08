@@ -58,3 +58,7 @@ target/
 
 # Mac
 .DS_Store
+
+# SASS
+.sass-cache
+*.map

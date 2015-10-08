@@ -1,0 +1,110 @@
+/* colors */
+/* Title style overrides */
+h1,
+h2.intro {
+  text-align: center; }
+
+span.secondary {
+  display: block; }
+
+span.logo-mark.xxl {
+  margin-top: 0; }
+
+/* Big photo styles for index */
+body {
+  padding-top: 5% !important; }
+  body:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.8;
+    background-image: url("https://c2.staticflickr.com/8/7334/16179217449_7a0eec61b2_h.jpg");
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    background-size: cover; }
+
+.main-photo-credit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(204, 204, 204, 0.8);
+  font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 10px;
+  color: #fff; }
+  .main-photo-credit p {
+    margin-bottom: 0;
+    font-size: 12px; }
+  .main-photo-credit a {
+    color: #fff;
+    text-decoration: underline; }
+
+.img-overlay {
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: auto;
+  padding: 40px 0;
+  border: 1px solid #ccc;
+  width: 90%; }
+
+/* Filter UI */
+.custom-date-start {
+  display: none; }
+
+.custom-date-end.visible .fa.fa-minus {
+  display: inline-block; }
+.custom-date-end.visible .fa.fa-plus {
+  display: none; }
+.custom-date-end.visible label {
+  padding-top: 0; }
+.custom-date-end .fa {
+  color: #ce4d28; }
+.custom-date-end .fa.fa-minus,
+.custom-date-end label,
+.custom-date-end form {
+  display: none; }
+.custom-date-end label {
+  padding-top: 25px;
+  padding-left: 18px;
+  transition: padding 0.5s ease; }
+  .custom-date-end label:hover {
+    text-decoration: underline; }
+
+/* Search results list */
+.result {
+  margin-bottom: 2em; }
+  .result img {
+    border: 1px solid #888;
+    margin-right: 1em; }
+  .result h4 {
+    margin: 10px 0 30px 0;
+    line-height: 1.4; }
+
+.help,
+.updated-date,
+.download-pdf,
+.more-info {
+  font-size: 12px;
+  font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.updated-date {
+  margin-bottom: 0;
+  color: #888; }
+
+.result-thumb {
+  float: left; }
+
+.more-info {
+  float: right; }
+
+.download-pdf {
+  margin-left: 20px; }
+
+/*# sourceMappingURL=cityhallmonitor.css.map */

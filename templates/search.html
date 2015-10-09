@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 
 {% block content %}
 <!--<div class="panel" id="hero-unit">-->
@@ -73,22 +73,58 @@
         <form class="small-6 columns">
           <select>
             <option value="all-months">All months</option>
+              <option value="jan">January</option>
+              <option value="feb">February</option>
+              <option value="march">March</option>
+              <option value="april">April</option>
+              <option value="may">May</option>
+              <option value="june">June</option>
+              <option value="july">July</option>
+              <option value="aug">August</option>
+              <option value="sept">September</option>
+              <option value="oct">October</option>
+              <option value="nov">November</option>
+              <option value="dec">December</option>
           </select>
         </form>
         <form class="small-6 columns">
           <select>
             <option value="all-years">All years</option>
+              <option value="jan">January</option>
+              <option value="feb">February</option>
+              <option value="march">March</option>
+              <option value="april">April</option>
+              <option value="may">May</option>
+              <option value="june">June</option>
+              <option value="july">July</option>
+              <option value="aug">August</option>
+              <option value="sept">September</option>
+              <option value="oct">October</option>
+              <option value="nov">November</option>
+              <option value="dec">December</option>
           </select>
         </form>
       </div>
     </div>
     <div class="small-6 columns custom-date-end">
       <div class="row">
-        <label><a><i class="fa fa-plus"></i><i class="fa fa-minus"></i> <span>End date</span></a></label>
+        <label id="end-date-trigger"><i class="fa fa-plus"></i><i class="fa fa-minus"></i> <span>End date</span></label>
         <div class="small-6 columns">
           <form>
             <select>
               <option value="all-months">All months</option>
+              <option value="jan">January</option>
+              <option value="feb">February</option>
+              <option value="march">March</option>
+              <option value="april">April</option>
+              <option value="may">May</option>
+              <option value="june">June</option>
+              <option value="july">July</option>
+              <option value="aug">August</option>
+              <option value="sept">September</option>
+              <option value="oct">October</option>
+              <option value="nov">November</option>
+              <option value="dec">December</option>
             </select>
           </form>
         </div>
@@ -96,6 +132,18 @@
           <form>
             <select>
               <option value="all-years">All years</option>
+              <option value="jan">January</option>
+              <option value="feb">February</option>
+              <option value="march">March</option>
+              <option value="april">April</option>
+              <option value="may">May</option>
+              <option value="june">June</option>
+              <option value="july">July</option>
+              <option value="aug">August</option>
+              <option value="sept">September</option>
+              <option value="oct">October</option>
+              <option value="nov">November</option>
+              <option value="dec">December</option>
             </select>
           </form>
         </div>
@@ -116,7 +164,51 @@
 <div class="main-photo-credit">
   <p>Photo: <a href="https://www.flickr.com/photos/juggernautco/16179217449">Dan X. O'Neil</a>. Used under <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons license 2.0</a>.</p>
 </div>
-{% include "cdn_includes.html" %}
-{% include "search_script.html" %}
+<script type="text/template" id="summary-template">
+  <h5>We found <%= total %> results for your search.</h5>
+  <form>
+    <input type="checkbox" value="Email me when these results change" id="email-checkbox"/><label for="email-checkbox">Email me when these results change</label>
+  </form>
+  <div class="row">
+    <div class="small-12 columns">
+      <form action="#" id="search-subscribe-form">
+        <div class="row collapse">
+          <div class="small-4 small-offset-3 columns">
+             <input type="text" id="search-subscribe-email" placeholder="enter email address">
+          </div>
+          <div class="small-2 columns end">
+            <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+          </div>
+        </div>
+      </form>
+    </div>
+</script>
+
+<script type="text/template" id="result-template">
+  <div class="result row" id="<%= data.MatterId %>">
+    <div class="small-12 medium-10 medium-offset-1 columns">
+      <div class="row">
+        <div class="small-2 columns">
+          <img class="result-thumb"  src="<%= resources.thumbnail %>" />
+        </div>
+        <div class="small-10 columns">
+          <a href="documents/<%= data.MatterAttachmentId %>">
+            <p class="updated-date"><%= updated_at %></p>
+            <h4><%= data.MatterTitle %></h4>
+          </a>
+          <div class="more-info">
+            <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
+            <a class="download-pdf" href="<%= source %>">Download PDF</a>
+          </div>
+        </div>
+      </div>    </div>
+    <hr />
+  </div>
+</script>
+
+{% block extra_scripts %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="{% static 'js/cityhallmonitor.js' %}"></script>
+{% endblock %}
 
 {% endblock content %}

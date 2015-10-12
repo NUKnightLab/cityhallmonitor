@@ -53,6 +53,7 @@ admin.site.register(Matter, MatterAdmin)
 
 class MatterAttachmentAdmin(admin.ModelAdmin):
     list_display = ('name', 'hyperlink', 'link_obtained_at', 'matter')
+    search_fields = ('matter__id',)
 admin.site.register(MatterAttachment, MatterAttachmentAdmin)
 
 class MatterSponsorAdmin(admin.ModelAdmin):

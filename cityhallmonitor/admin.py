@@ -40,6 +40,14 @@ class MatterAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'matter_status', 'matter_type', 'intro_date', 'last_modified')
     list_filter = ('matter_status', 'matter_type')
     search_fields = ['name', 'title']
+    # Hide unused fields in admin form
+    exclude = (
+        'date1', 'date2',
+        'ex_text1', 'ex_text2', 'ex_text3', 'ex_text4', 'ex_text5',
+        'ex_text6', 'ex_text7', 'ex_text8', 'ex_text9', 'ex_text10',
+        'ex_date1', 'ex_date2', 'ex_date3', 'ex_date4', 'ex_date5',
+        'ex_date6', 'ex_date7', 'ex_date8', 'ex_date9', 'ex_date10'
+    )
 
 admin.site.register(Matter, MatterAdmin)
 

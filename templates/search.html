@@ -10,89 +10,80 @@
   </div>
   <div class="row">
     <div id="search-block" class="small-12 columns">
-      <form action="#" id="search-form">
-        <div class="row">
+      <div class="row">
+        <form action="#" id="search-form">
           <div class="small-12 medium-8 medium-offset-1 columns">
             <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input" tabindex=1 />
             <p class="help">Examples: "<a href="" class="example-search">sale of city-owned property</a>" or "<a href="" class="example-search">Patrick O'Connor</a>."</p>
           </div>
-      </form>
           <div class="small-12 medium-3 columns">
             <label for="date">Only show items with action taken in...</label>
-            <form id="date">
-              <select>
+              <select id="date">
                 <option value="past-year">Past year</option>
                 <option value="past-month">Past month</option>
                 <option value="any">Any time</option>
                 <option value="date-range">Date range...</option>
               </select>
-            </form>
-            <div class="row datepicker">
-              <div class="small-12 columns custom-date-start">
-                <div class="row">
-                  <label class="small-2 columns">from</label>
-                  <form class="small-6 columns">
-                    <select>
-                        <option value="jan">January</option>
-                        <option value="feb">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="aug">August</option>
-                        <option value="sept">September</option>
-                        <option value="oct">October</option>
-                        <option value="nov">November</option>
-                        <option value="dec">December</option>
-                    </select>
-                  </form>
-                  <form class="small-4 columns">
-                    <select>
-                      <option value="2013">2013</option>
-                    </select>
-                  </form>
-                </div>
-              </div>
-              <div class="small-12 columns custom-date-end">
-                <div class="row">
-                  <label class="small-2 columns">to</label>
-                  <div class="small-6 columns">
-                    <form>
-                      <select>
-                        <option value="jan">January</option>
-                        <option value="feb">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="aug">August</option>
-                        <option value="sept">September</option>
-                        <option value="oct">October</option>
-                        <option value="nov">November</option>
-                        <option value="dec">December</option>
+              <div class="row datepicker">
+                <div class="small-12 columns custom-date-start">
+                  <div class="row">
+                    <label class="small-2 columns">from</label>
+                      <select class="small-6 columns">
+                          <option value="jan">January</option>
+                          <option value="feb">February</option>
+                          <option value="march">March</option>
+                          <option value="april">April</option>
+                          <option value="may">May</option>
+                          <option value="june">June</option>
+                          <option value="july">July</option>
+                          <option value="aug">August</option>
+                          <option value="sept">September</option>
+                          <option value="oct">October</option>
+                          <option value="nov">November</option>
+                          <option value="dec">December</option>
                       </select>
-                    </form>
-                  </div>
-                  <div class="small-4 columns">
-                    <form>
-                      <select>
-                        <option value="2014">2014</option>
+                      <select class="small-4 columns">
+                        <option value="2013">2013</option>
                       </select>
-                    </form>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                </div><!--custom-date-start-->
+                <div class="small-12 columns custom-date-end">
+                  <div class="row">
+                    <label class="small-2 columns">to</label>
+                    <div class="small-6 columns">
+                        <select>
+                          <option value="jan">January</option>
+                          <option value="feb">February</option>
+                          <option value="march">March</option>
+                          <option value="april">April</option>
+                          <option value="may">May</option>
+                          <option value="june">June</option>
+                          <option value="july">July</option>
+                          <option value="aug">August</option>
+                          <option value="sept">September</option>
+                          <option value="oct">October</option>
+                          <option value="nov">November</option>
+                          <option value="dec">December</option>
+                        </select>
+                    </div>
+                    <div class="small-4 columns">
+                        <select>
+                          <option value="2014">2014</option>
+                        </select>
+                    </div>
+                  </div>
+                </div><!--custom-date-end-->
+              </div><!--datepicker-->
+            </div><!--small-12 medium-3 columns-->
+          </div><!--row-->
+        </div><!--search-block-->
+      </div><!--row-->
+      <div class="row">
+        <div class="small-2 medium-4 medium-offset-4 columns">
+          <input type="submit" value="Go" id="search-submit" class="button postfix alert small" tabindex=2 />
         </div>
-    </div>
-    <div class="row">
-      <div class="small-2 medium-4 medium-offset-4 columns">
-        <input type="submit" value="Go" id="search-submit" class="button postfix alert small" tabindex=2 />
       </div>
-    </div>
+    </form>
 <p id="results-progress" class="text-center hide">
     <i class="fa fa-spinner fa-pulse fa-2x"></i> <span>Searching documents...</span>
 </p>

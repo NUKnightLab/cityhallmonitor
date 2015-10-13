@@ -65,6 +65,10 @@ body {
 #date > select {
   margin-bottom: 0; }
 
+.datepicker label {
+  text-align: right;
+  margin-top: 8px; }
+
 #date select,
 .datepicker select,
 #search-form input {

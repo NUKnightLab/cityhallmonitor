@@ -57,27 +57,29 @@ body {
   width: 90%; }
 
 /* Filter UI */
-.custom-date-start {
+.custom-date-start,
+.custom-date-end {
   display: none; }
 
-.custom-date-end.visible .fa.fa-minus {
-  display: inline-block; }
-.custom-date-end.visible .fa.fa-plus {
-  display: none; }
-.custom-date-end.visible label {
-  padding-top: 0; }
-.custom-date-end .fa {
-  color: #ce4d28; }
-.custom-date-end .fa.fa-minus,
-.custom-date-end label,
-.custom-date-end form {
-  display: none; }
-.custom-date-end label {
-  padding-top: 25px;
-  padding-left: 18px;
-  transition: padding 0.5s ease; }
-  .custom-date-end label:hover {
-    text-decoration: underline; }
+.datepicker form,
+#date > select {
+  margin-bottom: 0; }
+
+#date select,
+.datepicker select,
+#search-form input {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: white; }
+
+#search-form input {
+  margin-top: 20px; }
+
+#search-form {
+  margin-top: 40px; }
 
 /* Email sub box */
 #search-subscribe-form {

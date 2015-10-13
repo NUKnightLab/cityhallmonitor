@@ -35,14 +35,10 @@ function handle_subscribe(event) {
 function buildDateUI(){
   $('#date').on('change', 'select', function(){
     if ($('#date option:selected').val() == 'date-range'){
-      $('.custom-date-start, .custom-date-end label').slideDown();
+      $('.custom-date-start, .custom-date-end').slideDown();
     } else {
       $('.custom-date-start, .custom-date-end').slideUp();
     }
-  });
-  $('#end-date-trigger').on('click', function(){
-    $('.custom-date-end form').slideToggle();
-    $('.custom-date-end').toggleClass('visible');
   });
 }
 

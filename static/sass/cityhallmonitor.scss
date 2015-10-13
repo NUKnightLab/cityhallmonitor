@@ -64,27 +64,28 @@ body {
 }
 
 /* Filter UI */
-.custom-date-start { display: none; }
-.custom-date-end {
-    &.visible {
-        .fa.fa-minus { display: inline-block; }
-        .fa.fa-plus { display: none; }
-        label { padding-top: 0; }
-    }
-    .fa { color: $orange; }
-    .fa.fa-minus,
-    label,
-    form {
-        display: none;
-    }
-    label {
-        padding-top: 25px;
-        padding-left: 18px;
-        transition: padding 0.5s ease;
-        &:hover {
-            text-decoration: underline;
-        }
-    }
+.custom-date-start,
+.custom-date-end { display: none; }
+.datepicker form,
+#date > select{
+    margin-bottom: 0;
+}
+#date select,
+.datepicker select,
+#search-form input {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+    border-radius: 0;
+    background-color: white;
+}
+#search-form input {
+    margin-top: 20px;
+}
+
+#search-form {
+    margin-top: 40px;
 }
 
 /* Email sub box */

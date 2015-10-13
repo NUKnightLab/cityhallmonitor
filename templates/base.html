@@ -10,6 +10,9 @@
   {% endblock %}
 </head>
 <body>
+  {% block nav %}
+  {% include "_nav.html" %}
+  {% endblock %}
   <div class="container">
     {% block content %}
       Hey, you need some content in this here template

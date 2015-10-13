@@ -11,61 +11,22 @@
   <div class="row">
     <div id="search-block" class="small-12 columns">
       <form action="#" id="search-form">
-        <div class="row collapse">
-          <div class="small-10 medium-8 medium-offset-1 columns">
-            <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input" tabindex=1 />
-            <p class="help">Examples: <a href="" class="example-search">disabled parking permits</a> | <a href="" class="example-search">Patrick O'Connor</a> | <a href="" class="example-search">40th ward</a></p>
+        <div class="row">
+          <div class="small-12 medium-8 medium-offset-1 columns">
+            <label>Search for something like "<a href="" class="example-search">sale of city-owned property</a>" or "<a href="" class="example-search">Patrick O'Connor</a>."</label>
+            <input type="text" placeholder="Enter a keyword, ordinance, or alderman" id="search-input" tabindex=1 />
           </div>
-          <div class="small-2 medium-2 columns end">
-            <input type="submit" value="Go" id="search-submit" class="button postfix alert small" tabindex=2 />
-          </div>
-        </div>
-      </form>
-      <div class="row">
-        <div class="small-6 medium-3 columns">
-          <form id="date">
-            <select>
-              <option value="any">Any date</option>
-              <option value="past-year">Past Year</option>
-              <option value="past-month">Past Month</option>
-              <option value="date-range">Date range...</option>
-            </select>
-          </form>
-        </div>
-        <div class="small-6 medium-3 columns">
-          <form id="matter-type">
-            <select>
-              <option value="any">Any matter type</option>
-              <option value=""></option>
-              <option value=""></option>
-              <option value=""></option>
-            </select>
-          </form>
-        </div>
-        <div class="small-6 medium-3 columns">
-          <form id="status">
-            <select>
-              <option value="any">Any status</option>
-              <option value=""></option>
-              <option value=""></option>
-              <option value=""></option>
-            </select>
-          </form>
-        </div>
-        <div class="small-6 medium-3 columns">
-          <form id="body">
-            <select>
-              <option value="any">Any government body</option>
-              <option value=""></option>
-              <option value=""></option>
-              <option value=""></option>
-            </select>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
+          <div class="small-12 medium-3 columns">
+            <label for="date">Only show items with action taken in...</label>
+            <form id="date">
+              <select>
+                <option value="past-year">Past year</option>
+                <option value="past-month">Past month</option>
+                <option value="any">Any time</option>
+                <option value="date-range">Date range...</option>
+              </select>
+            </form>
+            
   <div class="row datepicker">
     <div class="small-6 columns custom-date-start">
       <label>Start date</label>
@@ -126,6 +87,15 @@
       </div>
     </div>
   </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="row">
+      <div class="small-2 medium-4 medium-offset-4 columns">
+        <input type="submit" value="Go" id="search-submit" class="button postfix alert small" tabindex=2 />
+      </div>
+    </div>
 <p id="results-progress" class="text-center hide">
     <i class="fa fa-spinner fa-pulse fa-2x"></i> <span>Searching documents...</span>
 </p>

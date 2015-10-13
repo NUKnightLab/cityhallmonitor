@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import F
 from cityhallmonitor.models import \
     Action, Person, BodyType, Body, \
     MatterAttachment, MatterStatus, MatterType, Matter, \
@@ -26,6 +27,7 @@ class BodyAdmin(admin.ModelAdmin):
     list_filter = ('active_flag',)    
 admin.site.register(Body, BodyAdmin)
 
+
 class MatterStatusAdmin(admin.ModelAdmin):
     list_display = ('name', 'active_flag', 'last_modified',)
     list_filter = ('active_flag',)
@@ -37,9 +39,10 @@ class MatterTypeAdmin(admin.ModelAdmin):
 admin.site.register(MatterType, MatterTypeAdmin)
 
 class MatterAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'matter_status', 'matter_type', 'intro_date', 'last_modified')
+    list_display = ('display_val', 'matter_status', 'matter_type', 'intro_date', 'last_modified')
     list_filter = ('matter_status', 'matter_type')
     search_fields = ['name', 'title']
+    
     # Hide unused fields in admin form
     exclude = (
         'date1', 'date2',
@@ -48,6 +51,18 @@ class MatterAdmin(admin.ModelAdmin):
         'ex_date1', 'ex_date2', 'ex_date3', 'ex_date4', 'ex_date5',
         'ex_date6', 'ex_date7', 'ex_date8', 'ex_date9', 'ex_date10'
     )
+    
+    def get_queryset(self, request):
+        """
+        Annotate queryset with value of __str__, so we can sort on it.
+        """
+        qs = super(MatterAdmin, self).get_queryset(request)
+        return qs.annotate(display_str=(F('title') or F('name') or F('file')))
+    
+    def display_val(self, obj):
+        return obj.display_str
+    display_val.admin_order_field = 'display_str'
+    display_val.short_description = 'Matter'
 
 admin.site.register(Matter, MatterAdmin)
 

@@ -84,15 +84,27 @@
         </div>
       </div>
     </form>
+  </div>
 <p id="results-progress" class="text-center hide">
     <i class="fa fa-spinner fa-pulse fa-2x"></i> <span>Searching documents...</span>
 </p>
 <div id="results-summary" class="text-center">
 </div>
 
-<div id="results-block">
-  <div id="search-results" />
-</div>
+<div id="results-block" class="row">
+  <div id="facets" class="small-12 medium-4 columns">
+    <ul class="side-nav">
+      <li>placeholder filter</li>
+      <li>placeholder filter</li>
+      <li>placeholder filter</li>
+      <li>placeholder filter</li>
+      <li>placeholder filter</li>
+      <li>placeholder filter</li>
+      <li>placeholder filter</li>
+      <li>placeholder filter</li>
+    </ul>
+  </div>
+  <div id="search-results" class="small-12 medium-8 columns"/></div>
 </div>
 
 <div class="main-photo-credit">
@@ -120,22 +132,16 @@
 
 <script type="text/template" id="result-template">
   <div class="result row" id="<%= data.MatterId %>">
-    <div class="small-12 medium-10 medium-offset-1 columns">
-      <div class="row">
-        <div class="small-2 columns">
-          <img class="result-thumb"  src="<%= resources.thumbnail %>" />
-        </div>
-        <div class="small-10 columns">
-          <a href="documents/<%= data.MatterAttachmentId %>">
-            <p class="updated-date"><%= updated_at %></p>
-            <h4><%= data.MatterTitle %></h4>
-          </a>
-          <div class="more-info">
-            <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
-            <a class="download-pdf" href="<%= source %>">Download PDF</a>
-          </div>
-        </div>
-      </div>    </div>
+    <div class="small-8 columns">
+      <a href="documents/<%= data.MatterAttachmentId %>">
+        <p class="updated-date"><%= updated_at %></p>
+        <h5><%= data.MatterTitle %></h5>
+      </a>
+    </div>
+    <div class="more-info small-4 columns">
+      <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
+      <a class="download-pdf" href="<%= source %>">Download PDF</a>
+    </div>
     <hr />
   </div>
 </script>

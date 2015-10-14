@@ -61,10 +61,6 @@ body {
 .custom-date-end {
   display: none; }
 
-.datepicker form,
-#date > select {
-  margin-bottom: 0; }
-
 .datepicker label {
   text-align: right;
   margin-top: 8px; }
@@ -84,6 +80,10 @@ body {
 
 #search-form {
   margin-top: 40px; }
+
+select:focus {
+  border-color: #999;
+  outline: none; }
 
 /* Email sub box */
 #search-subscribe-form {

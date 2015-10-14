@@ -1,12 +1,10 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 
-_email_subject = 'City Hall Monitor Test'
+EMAIL_SUBJECT = 'City Hall Monitor Email Test'
 
-_email_from = 'KnightLab@northwestern.edu'
-
-_email_message = 'This is a test of City Hall Monitor email.'
+EMAIL_MESSAGE = 'This is a test of City Hall Monitor email.'
 
 
 class Command(BaseCommand):
@@ -27,10 +25,17 @@ class Command(BaseCommand):
         if not recipient:
             raise CommandError('You must specify a recipient')
            
-        self.stdout.write('Sending email to "%s"...' % recipient)
-                 
-        send_mail(_email_subject, _email_message, _email_from, 
-            [recipient], fail_silently=False)
+        self.stdout.write('Sending email to "%s"' % recipient)
+
+        msg = EmailMessage(
+            EMAIL_SUBJECT,
+            EMAIL_MESSAGE,
+            settings.DEFAULT_FROM_EMAIL,
+            [recipient],
+            [],
+            reply_to=['do-not-reply@knightlab.com'])
+        msg.content_subtype = 'html'
+        msg.send()
                     
         self.stdout.write('Done')
         

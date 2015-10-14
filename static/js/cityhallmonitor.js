@@ -61,10 +61,11 @@ $(function() {
     };
 
     var doSearch = function() {
+        var loading = $('<i>',{ class: "fa fa-spinner fa-pulse fa-4x" });
         $('#results-summary, #search-results').html('');
-        $('input, select').prop('disabled', true);
-        $("#search-submit").val("Loading...")
-        //$('#results-progress').show();
+        $('#results-summary').append(loading);
+        $('input, button, select').prop('disabled', true);
+        $("#search-submit").html("Loading");
 
         var q = $('#search-input').val();
         q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
@@ -97,9 +98,9 @@ $(function() {
                     addResult(g);
                 });
             }
-            //$('#results-progress').hide();
-          $("#search-submit").val("Go")
-          $('input, select').prop('disabled', false);
+          $("#search-submit").html("Search");
+          $("#facets").removeClass('hide');
+          $('input, button, select').prop('disabled', false);
         });
     };
 

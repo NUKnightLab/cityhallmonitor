@@ -12,11 +12,11 @@
     <div id="search-block" class="small-12 columns">
       <div class="row">
         <form action="#" id="search-form">
-          <div class="small-12 medium-8 medium-offset-1 columns">
+          <div class="small-12 medium-7 medium-offset-1 columns">
             <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input" tabindex=1 />
             <p class="help">Examples: "<a href="" class="example-search">sale of city-owned property</a>" or "<a href="" class="example-search">Patrick O'Connor</a>."</p>
           </div>
-          <div class="small-12 medium-3 columns" id="date">
+          <div class="small-12 medium-3 end columns" id="date">
             <div class="row">
               <label>Only show items with action taken in...</label>
               <select>
@@ -80,54 +80,47 @@
       </div><!--row-->
       <div class="row">
         <div class="small-2 medium-4 medium-offset-4 columns">
-          <input type="submit" value="Go" id="search-submit" class="button postfix alert small" tabindex=2 />
+          <button type="submit" value="Search" id="search-submit" class="button postfix alert small" tabindex=2>Search</button>
         </div>
       </div>
     </form>
   </div>
-<p id="results-progress" class="text-center hide">
-    <i class="fa fa-spinner fa-pulse fa-2x"></i> <span>Searching documents...</span>
-</p>
-<div id="results-summary" class="text-center">
-</div>
+
+<div id="results-summary" class="row"></div>
 
 <div id="results-block" class="row">
-  <div id="facets" class="small-12 medium-4 columns">
+  <div id="facets" class="small-12 medium-3 columns hide">
     <ul class="side-nav">
-      <li>placeholder filter</li>
-      <li>placeholder filter</li>
-      <li>placeholder filter</li>
-      <li>placeholder filter</li>
-      <li>placeholder filter</li>
-      <li>placeholder filter</li>
-      <li>placeholder filter</li>
-      <li>placeholder filter</li>
+      <li>FILTER RESULTS</li>
+      <li class="divider"></li>
+      <li role="navigation"><a>placeholder filter</a></li>
+      <li role="navigation"><a>placeholder filter</a></li>
+      <li role="navigation"><a>placeholder filter</a></li>
+      <li role="navigation"><a>placeholder filter</a></li>
     </ul>
   </div>
-  <div id="search-results" class="small-12 medium-8 columns"/></div>
+  <div id="search-results" class="small-12 medium-9 columns"/></div>
 </div>
 
 <div class="main-photo-credit">
   <p>Photo: <a href="https://www.flickr.com/photos/juggernautco/16179217449">Dan X. O'Neil</a>. Used under <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons license 2.0</a>.</p>
 </div>
 <script type="text/template" id="summary-template">
-  <h5>We found <%= total %> results for your search.</h5>
-  <form>
-    <input type="checkbox" value="Email me when these results change" id="email-checkbox"/><label for="email-checkbox">Email me when these results change</label>
-  </form>
-  <div class="row">
-    <div class="small-12 columns">
-      <form action="#" id="search-subscribe-form">
-        <div class="row collapse">
-          <div class="small-4 small-offset-3 columns">
-             <input type="text" id="search-subscribe-email" placeholder="enter email address">
-          </div>
-          <div class="small-2 columns end">
-            <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
-          </div>
+<div class="small-12 columns">
+  <h5>We found <span class="num-of-results"><%= total %> results</span> for your search.</h5>
+    <form>
+      <input type="checkbox" value="Email me when these results change" id="email-checkbox"/><label for="email-checkbox">Email me when these results change</label>
+    </form>
+    <form action="#" id="search-subscribe-form">
+      <div class="row collapse">
+        <div class="small-4 small-offset-3 columns">
+           <input type="text" id="search-subscribe-email" placeholder="enter email address">
         </div>
-      </form>
-    </div>
+        <div class="small-2 columns end">
+          <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+        </div>
+    </form>
+</div>
 </script>
 
 <script type="text/template" id="result-template">

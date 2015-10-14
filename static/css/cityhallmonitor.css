@@ -81,10 +81,23 @@ body {
 #search-form {
   margin-top: 40px; }
 
+#results-summary {
+  text-align: center; }
+
+#results-summary i,
+.num-of-results {
+  color: #ce4d28; }
+
+/* purpleline additions to make*/
 select:focus {
   border-color: #999;
   outline: none; }
 
+.side-nav {
+  background: #f2f2f2;
+  /*border: 1px solid #d8d8d8;*/ }
+
+/* end purpleline fixes */
 /* Email sub box */
 #search-subscribe-form {
   display: none; }

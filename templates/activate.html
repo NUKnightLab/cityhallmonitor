@@ -5,14 +5,16 @@
 {% if error %}
 
 <div data-alert class="alert-box alert">
-Error deleting subscription: <em>{{ error }}</em>
+Error activating subscription [{{ error }}]</em>
 </div>
 
 {% else %}
 
 <div data-alert class="alert-box success">
-Your subscription has been successfully deleted.
+Your subscription has been activated!
 </div>
+
+<p><a href="{{ notifications_url }}">Manage your notifications</a></p>
 
 {% endif %}
 

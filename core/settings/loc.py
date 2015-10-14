@@ -77,6 +77,10 @@ LOGGING['loggers'].update({
         'handlers': ['console'],
         'level': 'DEBUG'
     },
+    'cityhallmonitor.management.commands.process_alerts': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
+    },
     'cityhallmonitor.management.commands.update_dc_data': {
         'handlers': ['console'],
         'level': 'DEBUG'

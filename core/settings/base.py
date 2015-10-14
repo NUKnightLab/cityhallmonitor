@@ -123,6 +123,7 @@ LOGGING = {
         # pull_attachments
         # pull_pdfs
         # get_descriptions
+        # process_alerts
     },
     'loggers': {
         'django': {
@@ -134,7 +135,8 @@ LOGGING = {
         # cityhallmonitor.management.commands.pull_data
         # cityhallmonitor.management.commands.pull_attachments
         # cityhallmonitor.management.commands.pull_pdfs
-        # cityhallmonitor.management.commands.get_descriptions        
+        # cityhallmonitor.management.commands.get_descriptions 
+        # cityhallmonitor.management.commands.process_alerts        
     }
 }
 

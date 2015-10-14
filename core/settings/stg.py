@@ -50,6 +50,9 @@ DATABASES = {
 
 STATIC_URL = '//media.knilab.com/cityhallmonitor/'
 
+# Domain for links sent in emails from management commands
+
+DOMAIN_URL = 'http://cityhallmonitor.knilab.com'
 
 # Logging overrides
 
@@ -84,6 +87,12 @@ LOGGING['handlers'].update({
         'formatter': 'verbose',
         'filename': '/home/apps/log/cityhallmonitor/get_descriptions.log'
     },
+    'process_alerts': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/process_alerts.log'
+    },
     'update_dc_data': {
         'level': 'DEBUG',
         'class': 'logging.FileHandler',
@@ -111,6 +120,10 @@ LOGGING['loggers'].update({
     },
     'cityhallmonitor.management.commands.get_descriptions': {
         'handlers': ['get_descriptions'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.process_alerts': {
+        'handlers': ['process_alerts'],
         'level': 'DEBUG'
     },
     'cityhallmonitor.management.commands.update_dc_data': {

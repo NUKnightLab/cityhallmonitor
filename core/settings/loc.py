@@ -50,6 +50,9 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 
+# Domain for links sent in emails from management commands
+
+DOMAIN_URL = 'http://127.0.0.1:8000'
 
 # Logging overrides
 
@@ -71,6 +74,10 @@ LOGGING['loggers'].update({
         'level': 'DEBUG'
     },
     'cityhallmonitor.management.commands.get_descriptions': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.process_alerts': {
         'handlers': ['console'],
         'level': 'DEBUG'
     },

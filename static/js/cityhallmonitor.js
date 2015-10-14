@@ -43,6 +43,7 @@ function buildDateUI(){
 }
 
 $(function() {
+    $(document).foundation();
     $('#results-summary').on('change', '#email-checkbox', function(){
       if ($(this).is(':checked')){
         $('#search-subscribe-form').show();
@@ -60,13 +61,17 @@ $(function() {
         });
     };
 
-    var doSearch = function() {
+    var showLoadingState = function(){
         var loading = $('<i>',{ class: "fa fa-spinner fa-pulse fa-4x" });
         $('#results-summary, #search-results').html('');
         $('#results-summary').append(loading);
         $('input, button, select').prop('disabled', true);
         $("#search-submit").html("Loading");
+        $('#big-hed').slideUp();
+    };
 
+    var doSearch = function() {
+        showLoadingState();
         var q = $('#search-input').val();
         q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
         $.ajax({

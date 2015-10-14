@@ -11,6 +11,9 @@ h1,
 h2.intro {
     text-align: center;
 }
+#big-hed {
+    margin-bottom: 40px;
+}
 span.secondary { display: block; }
 span.logo-mark.xxl { margin-top: 0; }
 
@@ -82,10 +85,6 @@ body {
 }
 #search-form input {
     margin-top: 20px;
-}
-
-#search-form {
-    margin-top: 40px;
 }
 #results-summary {
     text-align: center;

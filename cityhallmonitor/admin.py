@@ -88,7 +88,7 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(EventItem)
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('email', 'query', 'last_check')
+    list_display = ('email', 'query', 'last_check', 'active')
     search_fields = ('email', 'query')    
 admin.site.register(Subscription, SubscriptionAdmin)
 

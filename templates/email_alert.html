@@ -1,5 +1,5 @@
 <p>
-Your search alert on City Hall Monitor:
+Your search notification on City Hall Monitor:
 </p>
 <p>
 {{ query }}
@@ -14,3 +14,7 @@ Matched {{ documents|length }} new documents:
 <a href="{{ doc.published_url }}">{{ doc.title }}</a>
 </p>
 {% endfor %}
+
+<hr>
+
+<a href="{{ notifications_url }}">Manage your notifications</a>

@@ -510,6 +510,7 @@ class Subscription(models.Model):
     email = models.EmailField()
     query = models.TextField()
     last_check = models.DateTimeField(null=True)
+    active = models.BooleanField(default=False)
     
     def __str__(self):
         return 'id=%d, email=%s, query="%s"' % \

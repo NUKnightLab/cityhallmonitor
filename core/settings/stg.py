@@ -50,6 +50,9 @@ DATABASES = {
 
 STATIC_URL = '//media.knilab.com/cityhallmonitor/'
 
+# Domain for links sent in emails from management commands
+
+DOMAIN_URL = 'http://cityhallmonitor.knilab.com'
 
 # Logging overrides
 

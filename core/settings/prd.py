@@ -50,6 +50,9 @@ DATABASES = {
 
 STATIC_URL = '//media.knightlab.com/cityhallmonitor/'
 
+# Domain for links sent in emails from management commands
+
+DOMAIN_URL = 'http://cityhallmonitor.knightlab.com'
 
 # Logging overrides
 

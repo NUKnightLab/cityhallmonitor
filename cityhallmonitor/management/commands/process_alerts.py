@@ -1,9 +1,11 @@
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand, CommandError
+from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils import timezone
 from cityhallmonitor.models import Subscription
+from cityhallmonitor.views import _make_subscription_sid
 from documentcloud import DocumentCloud
 from smtplib import SMTPException
 
@@ -16,8 +18,9 @@ EMAIL_TEMPLATE = 'email_alert.html'
 
 
 class Command(BaseCommand):
-    help = 'Process user alert subscriptions.'
+    help = 'Process user subscriptions.'
     _client = None
+    _notifications_url = ''
 
     def client(self):
         """Using un-authenticated client..."""
@@ -37,23 +40,32 @@ class Command(BaseCommand):
         
         html_message = email_template.render({
             'query': subscription.query,
+            'notifications_url': '%s?sid=%s' % ( \
+                self._notifications_url,
+                _make_subscription_sid(subscription.id, subscription.email)
+            ),
             'documents': document_list
         })               
         
-        print('Sending alert for %d documents [%s]' % (
-            len(document_list), subscription))      
-        send_mail(EMAIL_SUBJECT, '', '',
+        self.stdout.write('Sending alert for %d documents [%s]' % \
+            (len(document_list), subscription))  
+                               
+        msg = EmailMessage(
+            EMAIL_SUBJECT,
+            html_message,
+            settings.DEFAULT_FROM_EMAIL,
             [subscription.email],
-            fail_silently=False,
-            html_message=html_message)
-       
+            [],
+            reply_to=['do-not-reply@knightlab.com'])
+        msg.content_subtype = 'html'
+        msg.send()
+
     def process_subscription(self, subscription):
         """Process subscription"""
         query = 'account:%s project:"%s" %s' % (
             settings.DOCUMENT_CLOUD_ACCOUNT, 
             DEFAULT_PROJECT, 
             subscription.query)
-        print(query)
  
         r = self.search(query)
         if subscription.last_check:
@@ -71,9 +83,13 @@ class Command(BaseCommand):
                 (subscription.id, str(se)))                             
         
     def handle(self, *args, **options):
-        """Process subscriptions"""
-        subscription_list = Subscription.objects.all()
-        print('Processing %d subscriptions' % len(subscription_list))
+        """Process subscriptions"""       
+        self._notifications_url = \
+            settings.DOMAIN_URL + reverse('notifications')
+        self.stdout.write('Notifications URL = %s' % self._notifications_url)
+        
+        subscription_list = Subscription.objects.filter(active=True)
+        self.stdout.write('Processing %d subscriptions' % len(subscription_list))
 
         for subscription in subscription_list:  
             self.process_subscription(subscription)         

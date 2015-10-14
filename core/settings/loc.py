@@ -50,6 +50,9 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 
+# Domain for links sent in emails from management commands
+
+DOMAIN_URL = 'http://127.0.0.1:8000'
 
 # Logging overrides
 

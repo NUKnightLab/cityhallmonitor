@@ -118,11 +118,11 @@ def subscribe(request):
         query = request.GET.get('query')
         if not query:
             raise Exception('Expected "query" parameter')
-                      
+ 
         r = Subscription(email=email, query=query, 
             last_check=timezone.now())
         r.save()
-    
+     
         email_template = get_template('email_subscribe.html')
         html_message = email_template.render({
             'query': query,

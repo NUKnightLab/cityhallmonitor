@@ -103,6 +103,7 @@ $(function() {
                     addResult(g);
                 });
             }
+          $("#search-results").foundation('reveal', 'reflow');
           $("#search-submit").html("Search");
           $("#facets").removeClass('hide');
           $('input, button, select').prop('disabled', false);

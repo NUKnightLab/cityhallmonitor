@@ -123,4 +123,15 @@ $(function() {
     });
 
     buildDateUI();
+
+    $('#search-results').on('click', 'a.read-more', function(evt) {
+        evt.preventDefault();
+        $('#document-modal-view').html('');
+        var documentId = $(this).attr('data-document');
+        $('#document-modal').foundation('reveal', 'open');
+        DV.load('https://www.documentcloud.org/documents/'+documentId+'.js', {
+            container : '#document-modal-view',
+            responsive: true
+        });
+    });
 });

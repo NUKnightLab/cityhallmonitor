@@ -5,16 +5,21 @@
 {% if error %}
 
 <div data-alert class="alert-box alert">
-    Error managing notifications [{{ error }}]</em>
+    Error managing notifications [{{ error }}]
 </div>
 
 {% else %}
 
-<div id="alert_no_subscriptions" data-alert class="alert-box info" style="display: none;">
+<div id="notifications-alert" data-alert class="alert-box alert" style="display: none;">
+  <span></span>
+  <a href="#" class="close">&times;</a>  
+</div>
+
+<div id="notifications-alert-empty" data-alert class="alert-box info" style="display: none;">
     No subscriptions found.
 </div>
 
-<div id="notifications_list" class="row">
+<div id="notifications-list" class="row">
     <div class="medium-12 columns">
         <div class="row">
             <p>Managing notifications for {{ email }}</p>
@@ -33,18 +38,14 @@
                 &ldquo;{{ r.query }}&rdquo;
             </div>
             <div class="medium-6 columns">
-                {% ifequal r.sid sid %}
-                <input id="cb_{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}">
-                {% else %}
-                <input id="cb_{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
-                {% endifequal %}
-                <label for="cb_{{ r.sid }}">Notify me</label>
+                <input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
+                <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>
             </div>
         </div>
         {% endfor %}           
         <div class="row">
             <div class="medium-6 medium-offset-6 columns">
-                <a id="button_save" href="javascript:" class="button info" role="button"><span>Save</span></a>
+                <button type="submit" value="Save" id="notifications-save" class="button alert">Save</button>
             </div>
         </div>        
     </div>
@@ -56,18 +57,28 @@
 
 {% block extra_scripts %}
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+<script type="text/javascript" src="//cdn.knightlab.com/libs/purpleline/latest/js/foundation.alert.js"></script>
 <script type="text/javascript">
 
+function notifications_alert(error, detail) {
+    $('#notifications-alert > span').html(error + (detail ? ' ['+detail+']' : ''));
+    $('#notifications-alert').show();
+}
+
 $(function() {
-    $('#button_save').click(function(e) {
+    $(document).foundation();
+    
+    $('#notifications-save').click(function(e) {
         var sids = [];
-        var $checkboxes = $("input[type=checkbox]:not(:checked)");
-        
-        $checkboxes.each(function(index, el) {
-            sids.push($(el).attr('data-sid'));
-        });
+        var $checkboxes = $("input[type=checkbox]:not(:checked)")
+            .each(function(index, el) {
+                sids.push($(el).attr('data-sid'));
+            });
                 
         if(sids.length) {
+            $('#notifications-save').prop('disabled', true);
+                       
             $.ajax({
                 url: '{% url "unsubscribe" %}',
                 type: 'GET',
@@ -78,19 +89,24 @@ $(function() {
                 dataType: 'json',
                 timeout: 20000,
                 error: function(xhr, status, err) {
-                    alert('Error saving changes to notifications ['+err+']');
+                    notifications_alert('Error saving changes to notifications', err);
                 },
                 success: function(data) {
                     if(data.error) {
-                        alert('Error saving changes to notifications ['+data.error+']');
-                    } else {                    
+                        notifications_alert('Error saving changes to notifications', data.error);
+                    } else {               
+                        $('#notifications-alert').hide();
+                             
                         $checkboxes.closest('div.row').remove();                            
 
                         if(!$("input[type=checkbox]").length) {
-                            $('#alert_no_subscriptions').show();
-                            $('#notifications_list').hide();
+                            $('#notifications-alert-empty').show();
+                            $('#notifications-list').hide();
                         }
                     }
+                },
+                complete: function() {
+                    $('#notifications-save').prop('disabled', false);                
                 }
             });       
         }  
@@ -98,4 +114,5 @@ $(function() {
 });
 
 </script>
+
 {% endblock %}

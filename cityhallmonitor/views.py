@@ -98,7 +98,6 @@ def notifications(request):
             
         return render(request, 'notifications.html', context={
             'email': r.email,
-            'sid': sid, 
             'subscriptions': subscriptions
         })
     except Exception as e:
@@ -106,8 +105,8 @@ def notifications(request):
         return render(request, 'notifications.html', context={
             'error': str(e)
         })
-
         
+              
 def subscribe(request):
     """Save user search subscription and send email"""
     try:        
@@ -186,8 +185,7 @@ def unsubscribe(request):
         
         for sid in sid_list:
             r = _get_subscription(sid)                
-            #r.delete()   
-            print('fake delete', r.id) 
+            r.delete()   
  
         return JsonResponse({})
     except Exception as e:

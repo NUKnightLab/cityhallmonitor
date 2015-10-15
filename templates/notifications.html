@@ -1,60 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row">
+  {% if error %}
 
-{% if error %}
+  <div data-alert class="alert-box alert">
+      Error managing notifications [{{ error }}]
+  </div>
 
-<div data-alert class="alert-box alert">
-    Error managing notifications [{{ error }}]
-</div>
+  {% else %}
 
-{% else %}
+  <div id="notifications-alert" data-alert class="alert-box alert" style="display: none;">
+    <span></span>
+    <a href="#" class="close">&times;</a>
+  </div>
 
-<div id="notifications-alert" data-alert class="alert-box alert" style="display: none;">
-  <span></span>
-  <a href="#" class="close">&times;</a>  
-</div>
+  <div id="notifications-alert-empty" data-alert class="alert-box info" style="display: none;">
+      No subscriptions found.
+  </div>
 
-<div id="notifications-alert-empty" data-alert class="alert-box info" style="display: none;">
-    No subscriptions found.
-</div>
-
-<div id="notifications-list" class="row">
-    <div class="medium-12 columns">
-        <div class="row">
-            <p>Managing notifications for {{ email }}</p>
-        </div>   
-        <div class="row">
-            <div class="medium-6 columns">
-                Your watched searches
-            </div>
-            <div class="medium-6 columns">
-                Email when results change?
-            </div>
-        </div>
-        {% for r in subscriptions %}
-        <div class="row">
-            <div class="medium-6 columns">
-                &ldquo;{{ r.query }}&rdquo;
-            </div>
-            <div class="medium-6 columns">
-                <input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
-                <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>
-            </div>
-        </div>
-        {% endfor %}           
-        <div class="row">
-            <div class="medium-6 medium-offset-6 columns">
-                <button type="submit" value="Save" id="notifications-save" class="button alert">Save</button>
-            </div>
-        </div>        
-    </div>
-</div>
+  <div id="notifications-list" class="row">
+      <div class="medium-12 columns">
+          <div class="row">
+              <h2>Notifications</h2>
+              <p class="subscription-email">Managing notifications for <span>{{ email }}</span></p>
+          </div>
+          <div class="row">
+              <div class="medium-6 columns">
+                  <h4>Your watched searches</h4>
+              </div>
+              <div class="medium-6 columns">
+                  <h4>Email when results change?</h4>
+              </div>
+          </div>
+          {% for r in subscriptions %}
+          <div class="row">
+              <div class="medium-6 columns">
+                  &ldquo;{{ r.query }}&rdquo;
+              </div>
+              <div class="medium-6 columns">
+                  <input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
+                  <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>
+              </div>
+          </div>
+          {% endfor %}
+          <div class="row">
+              <div class="medium-6 medium-offset-6 columns">
+                  <button type="submit" value="Save" id="notifications-save" class="button small alert">Save</button>
+              </div>
+          </div>
+      </div>
+  </div>
 
 {% endif %}
 
+</div>
 {% endblock content %}
-
 {% block extra_scripts %}
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>

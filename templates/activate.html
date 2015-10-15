@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row">
+  {% if error %}
 
-{% if error %}
+  <div data-alert class="alert-box alert">
+  Error activating subscription [{{ error }}]</em>
+  </div>
 
-<div data-alert class="alert-box alert">
-Error activating subscription [{{ error }}]</em>
+  {% else %}
+
+  <div data-alert class="alert-box success">
+  Your subscription has been activated!
+  </div>
+
+  <p><a href="{{ notifications_url }}">Manage your notifications</a></p>
+
+  {% endif %}
 </div>
-
-{% else %}
-
-<div data-alert class="alert-box success">
-Your subscription has been activated!
-</div>
-
-<p><a href="{{ notifications_url }}">Manage your notifications</a></p>
-
-{% endif %}
-
 {% endblock content %}

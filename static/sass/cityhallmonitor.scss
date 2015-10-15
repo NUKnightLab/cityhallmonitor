@@ -110,7 +110,14 @@ select:focus {
 /* end purpleline fixes */
 
 /* Email sub box */
-#search-subscribe-form { display: none; }
+#search-subscribe-form { display:none; }
+
+.subscription-email span { color: $orange; }
+#notifications-save {
+    margin-top: 40px;
+    float: right;
+    clear: both;
+}
 
 /* Search results list */
 .result {

@@ -105,6 +105,14 @@ select:focus {
 #search-subscribe-form {
   display: none; }
 
+.subscription-email span {
+  color: #ce4d28; }
+
+#notifications-save {
+  margin-top: 40px;
+  float: right;
+  clear: both; }
+
 /* Search results list */
 .result {
   margin-bottom: 2em; }

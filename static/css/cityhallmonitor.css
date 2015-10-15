@@ -88,6 +88,9 @@ body {
 .num-of-results {
   color: #ce4d28; }
 
+#results-block {
+  min-height: 400px; }
+
 /* purpleline additions to make*/
 select:focus {
   border-color: #999;

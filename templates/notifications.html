@@ -69,7 +69,7 @@ function notifications_alert(error, detail) {
 $(function() {
     $(document).foundation();
     
-    $('#notifications-save').click(function(e) {
+    $('#notifications-save').click(function(event) {
         var sids = [];
         var $checkboxes = $("input[type=checkbox]:not(:checked)")
             .each(function(index, el) {

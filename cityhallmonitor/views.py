@@ -80,6 +80,47 @@ def _get_subscription(sid):
         raise Exception('Subscription not found')
 
 
+def send_notifications_link(request):
+    """
+    Send user email with link to notifications page
+    """
+    try:
+        email = request.GET.get('email')
+        if not email:
+            raise Exception('Expected "email" parameter')
+        
+        qs = Subscription.objects.filter(email=email, active=True)
+        if not len(qs):
+            raise Exception('No active subscriptions found')        
+        r = qs[0]
+        
+        email_template = get_template('email_notifications_link.html')
+        html_message = email_template.render({
+            'notifications_url': '%s?sid=%s' % ( \
+                request.build_absolute_uri(reverse(notifications)),
+                _make_subscription_sid(r.id, r.email)
+            )
+        })
+        
+        msg = EmailMessage(
+            'City Hall Monitor Manage Notifications', 
+            html_message,
+            settings.DEFAULT_FROM_EMAIL, 
+            [email], 
+            [],
+            reply_to=['do-not-reply@knightlab.com'])
+        msg.content_subtype = 'html'
+        msg.send()
+                    
+        return JsonResponse({})
+    except SMTPException as se:
+        traceback.print_exc()
+        return JsonResponse({'error': str(se)})
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse({'error': str(e)})
+
+
 def notifications(request):
     """
     Manage notifications view
@@ -98,7 +139,6 @@ def notifications(request):
             
         return render(request, 'notifications.html', context={
             'email': r.email,
-            'sid': sid, 
             'subscriptions': subscriptions
         })
     except Exception as e:
@@ -106,8 +146,8 @@ def notifications(request):
         return render(request, 'notifications.html', context={
             'error': str(e)
         })
-
         
+              
 def subscribe(request):
     """Save user search subscription and send email"""
     try:        
@@ -148,8 +188,10 @@ def subscribe(request):
                     
         return JsonResponse({})
     except SMTPException as se:
+        traceback.print_exc()
         return JsonResponse({'error': str(se)})
     except Exception as e:
+        traceback.print_exc()
         return JsonResponse({'error': str(e)})
 
 
@@ -186,10 +228,10 @@ def unsubscribe(request):
         
         for sid in sid_list:
             r = _get_subscription(sid)                
-            #r.delete()   
-            print('fake delete', r.id) 
+            r.delete()   
  
         return JsonResponse({})
     except Exception as e:
+        traceback.print_exc()
         return JsonResponse({'error': str(e)})
        

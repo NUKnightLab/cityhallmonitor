@@ -88,5 +88,6 @@ LOGGING['loggers'].update({
 
 })
     
-    
+# For testing
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

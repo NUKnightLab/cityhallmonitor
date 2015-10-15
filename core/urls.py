@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^facet$', 'cityhallmonitor.views.facet', name='facet'),
     url(r'^documents/(?P<id>[0-9]+)$', 
         'cityhallmonitor.views.documents', name='documents'),   
+    url(r'^send_notifications_link', 'cityhallmonitor.views.send_notifications_link', name='send_notifications_link'),
     url(r'^notifications$', 'cityhallmonitor.views.notifications', name='notifications'),
     url(r'^subscribe$', 'cityhallmonitor.views.subscribe', name='subscribe'),
     url(r'^activate$', 'cityhallmonitor.views.activate', name='activate'),

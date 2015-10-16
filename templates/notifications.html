@@ -69,17 +69,17 @@ function notifications_alert(error, detail) {
 
 $(function() {
     $(document).foundation();
-    
+
     $('#notifications-save').click(function(event) {
         var sids = [];
         var $checkboxes = $("input[type=checkbox]:not(:checked)")
             .each(function(index, el) {
                 sids.push($(el).attr('data-sid'));
             });
-                
+
         if(sids.length) {
             $('#notifications-save').prop('disabled', true);
-                       
+
             $.ajax({
                 url: '{% url "unsubscribe" %}',
                 type: 'GET',
@@ -95,10 +95,10 @@ $(function() {
                 success: function(data) {
                     if(data.error) {
                         notifications_alert('Error saving changes to notifications', data.error);
-                    } else {               
+                    } else {
                         $('#notifications-alert').hide();
-                             
-                        $checkboxes.closest('div.row').remove();                            
+
+                        $checkboxes.closest('div.row').remove();
 
                         if(!$("input[type=checkbox]").length) {
                             $('#notifications-alert-empty').show();
@@ -107,10 +107,10 @@ $(function() {
                     }
                 },
                 complete: function() {
-                    $('#notifications-save').prop('disabled', false);                
+                    $('#notifications-save').prop('disabled', false);
                 }
-            });       
-        }  
+            });
+        }
     });
 });
 

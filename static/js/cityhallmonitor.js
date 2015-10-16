@@ -44,6 +44,7 @@ function buildDateUI(){
 
 $(function() {
     $(document).foundation();
+    
     $('#results-summary').on('change', '#email-checkbox', function(){
       if ($(this).is(':checked')){
         $('#search-subscribe-form').show();
@@ -124,14 +125,33 @@ $(function() {
 
     buildDateUI();
 
-    $('#search-results').on('click', 'a.read-more', function(evt) {
-        evt.preventDefault();
-        $('#document-modal-view').html('');
-        var documentId = $(this).attr('data-document');
-        $('#document-modal').foundation('reveal', 'open');
+
+    // Load DC viewer into modal after opened   
+    $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
+        var documentId = $('#document-modal').data('chm-doc-id');
+     
+        // Force inline top style to override dynamically set value!
+        $('#document-modal').css('top', '6px');
+  
         DV.load('https://www.documentcloud.org/documents/'+documentId+'.js', {
             container : '#document-modal-view',
             responsive: true
         });
+    });
+
+    // Unload DC viewer when modal is closing
+    $(document).on('close.fndtn.reveal', '[data-reveal]', function () {
+        for(var key in DV.viewers) {
+            DV.viewers[key].api.unload();
+        }
+    });
+
+    $('#search-results').on('click', 'a.read-more', function(evt) {
+        evt.preventDefault();
+        $('#document-modal-view').html('');
+         
+        $('#document-modal').foundation('reveal', 'open')
+            // Store document id in modal data for DV.load
+            .data('chm-doc-id', $(this).attr('data-document'));        
     });
 });

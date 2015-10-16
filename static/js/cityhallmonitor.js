@@ -1,6 +1,6 @@
 $ = jQuery;
 
-function handle_subscribe(event) {
+var handle_subscribe = function(event, url) {
     var email = $('#search-subscribe-email').val().trim();
     if(!email) {
         alert('You must enter your email address');
@@ -8,12 +8,12 @@ function handle_subscribe(event) {
     }
     var query = $('#search-input').val().trim();
     if(!query) {
-        alert('YOu must enter a search query');
+        alert('You must enter a search query');
         return;
     }
 
     $.ajax({
-        url: '{% url "subscribe" %}',
+        url: url,
         type: 'GET',
         data: {email: email, query: query},
         cache: false,
@@ -32,7 +32,7 @@ function handle_subscribe(event) {
     });
 }
 
-function buildDateUI(){
+var buildDateUI = function(){
   $('#date').on('change', 'select', function(){
     if ($('#date option:selected').val() == 'date-range'){
       $('.custom-date-start, .custom-date-end').slideDown();
@@ -42,85 +42,31 @@ function buildDateUI(){
   });
 }
 
-$(function() {
-    $(document).foundation();
-    $('#results-summary').on('change', '#email-checkbox', function(){
+var showHideEmail = function(){
+  $('#results-summary').on('change', '#email-checkbox', function(){
       if ($(this).is(':checked')){
         $('#search-subscribe-form').show();
       } else {
         $('#search-subscribe-form').hide();
       }
     });
-    var summaryTemplate = _.template($("#summary-template").html());
-    var resultTemplate = _.template($("#result-template").html());
+};
 
+var showLoadingState = function(){
+    var loading = $('<i>',{ class: "fa fa-spinner fa-pulse fa-4x" });
+    $('#results-summary, #search-results').html('');
+    $('#results-summary').append(loading);
+    $('input, button, select').prop('disabled', true);
+    $("#search-submit").html("Loading");
+    $('#big-hed').slideUp();
+};
 
-    var addResult = function(obj) {
-        $.each(obj.docs, function(i, doc) {
-            $(resultTemplate(doc)).appendTo('#search-results');
-        });
-    };
+var hideLoadingState = function(){
+    $("#search-submit").html("Search");
+    $("#facets").removeClass('hide');
+    $('input, button, select').prop('disabled', false);
+};
 
-    var showLoadingState = function(){
-        var loading = $('<i>',{ class: "fa fa-spinner fa-pulse fa-4x" });
-        $('#results-summary, #search-results').html('');
-        $('#results-summary').append(loading);
-        $('input, button, select').prop('disabled', true);
-        $("#search-submit").html("Loading");
-        $('#big-hed').slideUp();
-    };
-
-    var doSearch = function() {
-        showLoadingState();
-        var q = $('#search-input').val();
-        q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
-        $.ajax({
-            url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
-        })
-        .success(function(data) {
-            var groups = {};
-
-            $.each(data.documents, function(i, doc) {
-                if(doc.data.MatterId in groups) {
-                    groups[doc.data.MatterId]['docs'].push(doc);
-                } else {
-                    groups[doc.data.MatterId] = {
-                        'data': doc.data,
-                        'docs': [doc]
-                    };
-                }
-            });
-
-            $('#results-summary').html($(summaryTemplate(data)));
-
-            $('#search-subscribe-form').submit(function(event) {
-                handle_subscribe(event);
-                return false;
-            });
-
-             if(data.documents.length) {
-                $.each(groups, function(i, g) {
-                    addResult(g);
-                });
-            }
-          $("#search-results").foundation('reveal', 'reflow');
-          $("#search-submit").html("Search");
-          $("#facets").removeClass('hide');
-          $('input, button, select').prop('disabled', false);
-        });
-    };
-
-    $('#search-form').submit(function() {
-        doSearch();
-        return false;
-    });
-
-    $('.example-search').click(function() {
-        console.log($(this).text());
-        $('#search-input').val($(this).text());
-        $('#search-submit').click();
-        return false;
-    });
-
-    buildDateUI();
+$(function() {
+    $(document).foundation();
 });

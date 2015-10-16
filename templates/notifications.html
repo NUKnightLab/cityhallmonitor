@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
   {% if error %}
-
-  <div data-alert class="alert-box alert">
-      Error managing notifications [{{ error }}]
+  <div class="row">
+    <div data-alert class="alert-box alert small-10 small-offset-1 columns">
+        Error managing notifications [{{ error }}]
+    </div>
   </div>
-
   {% else %}
+  <div class="row">
 
-  <div id="notifications-alert" data-alert class="alert-box alert" style="display: none;">
-    <span></span>
-    <a href="#" class="close">&times;</a>
+    <div id="notifications-alert" data-alert class="alert-box alert small-10 small-offset-1 columns" style="display: none;">
+      <span></span>
+      <a href="#" class="close">&times;</a>
+    </div>
+
+    <div id="notifications-alert-empty" data-alert class="alert-box info small-10 small-offset-1 columns" style="display: none;">
+        No subscriptions found.
+    </div>
   </div>
-
-  <div id="notifications-alert-empty" data-alert class="alert-box info" style="display: none;">
-      No subscriptions found.
-  </div>
-
   <div id="notifications-list" class="row">
       <div class="medium-12 columns">
           <div class="row">
@@ -50,11 +50,11 @@
               </div>
           </div>
       </div>
+    </div>
   </div>
 
 {% endif %}
 
-</div>
 {% endblock content %}
 {% block extra_scripts %}
 

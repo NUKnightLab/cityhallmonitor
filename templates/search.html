@@ -2,212 +2,154 @@
 {% load staticfiles %}
 
 {% block content %}
-<!--<div class="panel" id="hero-unit">-->
+
+<div class='reveal-modal' id='document-modal' data-reveal>
+    <div id="document-modal-view"></div>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
 <div class="panel">
-  <div class="row" id="big-hed">
-    <h1><span class="secondary">City Hall</span> <span class="logo-mark xxl">Monitor</span></h1>
-    <h2 class="intro">We've got some city hall documents.</h2>
-  </div>
-  <div class="row">
-    <div id="search-block" class="small-12 columns">
-      <div class="row">
-        <form action="#" id="search-form">
-          <div class="small-12 medium-7 medium-offset-1 columns">
-            <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input" tabindex=1 />
-            <p class="help">Examples: "<a href="" class="example-search">sale of city-owned property</a>" or "<a href="" class="example-search">Patrick O'Connor</a>."</p>
-          </div>
-          <div class="small-12 medium-3 end columns" id="date">
-            <div class="row">
-              <label>Only show items with action taken in...</label>
-              <select>
-                <option value="past-year">Past year</option>
-                <option value="past-month">Past month</option>
-                <option value="any">Any time</option>
-                <option value="date-range">Date range...</option>
-              </select>
-              </div>
-              <div class="row datepicker custom-date-start">
-                    <label class="small-3 columns">from</label>
-                    <div class="small-5 columns">
-                        <select>
-                          <option value="jan">January</option>
-                          <option value="feb">February</option>
-                          <option value="march">March</option>
-                          <option value="april">April</option>
-                          <option value="may">May</option>
-                          <option value="june">June</option>
-                          <option value="july">July</option>
-                          <option value="aug">August</option>
-                          <option value="sept">September</option>
-                          <option value="oct">October</option>
-                          <option value="nov">November</option>
-                          <option value="dec">December</option>
-                        </select>
-                    </div>
-                    <div class="small-4 columns">
-                        <select>
-                          <option value="2013">2013</option>
-                        </select>
-                    </div>
-              </div>
-              <div class="row datepicker custom-date-end">
-                    <label class="small-3 columns">to</label>
-                    <div class="small-5 columns">
-                        <select>
-                          <option value="jan">January</option>
-                          <option value="feb">February</option>
-                          <option value="march">March</option>
-                          <option value="april">April</option>
-                          <option value="may">May</option>
-                          <option value="june">June</option>
-                          <option value="july">July</option>
-                          <option value="aug">August</option>
-                          <option value="sept">September</option>
-                          <option value="oct">October</option>
-                          <option value="nov">November</option>
-                          <option value="dec">December</option>
-                        </select>
-                    </div>
-                    <div class="small-4 columns">
-                        <select>
-                          <option value="2014">2014</option>
-                        </select>
-                    </div>
-              </div><!--datepicker-->
-            </div><!--small-12 medium-3 columns-->
-          </div><!--row-->
-        </div><!--search-block-->
-      </div><!--row-->
-      <div class="row">
-        <div class="small-2 medium-4 medium-offset-4 columns">
-          <button type="submit" value="Search" id="search-submit" class="button postfix alert small" tabindex=2>Search</button>
+    <div class="row" id="big-hed">
+        <h1><span class="secondary">City Hall</span> <span class="logo-mark xxl">Monitor</span></h1>
+        <h2 class="intro">We've got some city hall documents.</h2>
+    </div>
+    {% include "search_form.html" %}
+</div> <!-- .panel -->
+        <div id="results-summary" class="row"></div>
+
+        <div id="results-block" class="row">
+            <!--<div id="facets" class="small-12 medium-3 columns hide">
+                <ul class="side-nav">
+                    <li>FILTER RESULTS</li>
+                    <li class="divider"></li>
+                    <li role="navigation"><a>placeholder filter</a></li>
+                    <li role="navigation"><a>placeholder filter</a></li>
+                    <li role="navigation"><a>placeholder filter</a></li>
+                    <li role="navigation"><a>placeholder filter</a></li>
+                </ul>
+            </div>-->
+            <div id="search-results" class="small-12 medium-10 medium-offset-1 columns"/></div>
+        </div> <!-- #results-block -->
+
+        <div class="main-photo-credit">
+            <p>Photo: <a href="https://www.flickr.com/photos/juggernautco/16179217449">Dan X. O'Neil</a>. Used under <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons license 2.0</a>.</p>
         </div>
       </div>
-    </form>
-  </div>
-
-
-
-
-<div id="results-summary" class="row"></div>
-
-<div id="results-block" class="row">
-  <div id="facets" class="small-12 medium-3 columns hide">
-    <ul class="side-nav">
-      <li>FILTER RESULTS</li>
-      <li class="divider"></li>
-      <li role="navigation"><a>placeholder filter</a></li>
-      <li role="navigation"><a>placeholder filter</a></li>
-      <li role="navigation"><a>placeholder filter</a></li>
-      <li role="navigation"><a>placeholder filter</a></li>
-    </ul>
-  </div>
-  <div id="search-results" class="small-12 medium-9 columns"/></div>
-</div>
-
-<div class="main-photo-credit">
-  <p>Photo: <a href="https://www.flickr.com/photos/juggernautco/16179217449">Dan X. O'Neil</a>. Used under <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons license 2.0</a>.</p>
-</div>
-<script type="text/template" id="summary-template">
-<div class="small-12 columns">
-  <h5>We found <span class="num-of-results"><%= total %> results</span> for your search.</h5>
-    <form>
-      <input type="checkbox" value="Email me when these results change" id="email-checkbox"/><label for="email-checkbox">Email me when these results change</label>
-    </form>
-    <form action="/subscribe" method="get" id="search-subscribe-form">
-      <div class="row collapse">
-        <div class="small-4 small-offset-3 columns">
-           <input type="text" id="search-subscribe-email" name="email" placeholder="enter email address"/>
-        </div>
-        <div class="small-2 columns end">
-          <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
-        </div>
-    </form>
-</div>
-</script>
-
-<script type="text/template" id="result-template">
-  <div class="result row" id="<%= data.MatterId %>">
-    <div class="small-8 columns">
-      <a href="documents/<%= data.MatterAttachmentId %>">
-        <p class="updated-date"><%= updated_at %></p>
-        <h5><%= data.MatterTitle %></h5>
-      </a>
-    </div>
-    <div class="more-info small-4 columns">
-      <a class="read-more button info tiny" href="documents/<%= data.MatterAttachmentId %>">Read</a>
-      <a class="download-pdf" href="<%= source %>">Download PDF</a>
-    </div>
-    <hr />
-  </div>
-</script>
 
 {% endblock content %}
 {% block extra_scripts %}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="{% static 'js/cityhallmonitor.js' %}"></script>
-  <script type="text/javascript">
-    /* This is here to allow use of Django template tags in AJAX call*/
-    $(function() {
-        showHideEmail();
-        var summaryTemplate = _.template($("#summary-template").html());
-        var resultTemplate = _.template($("#result-template").html());
-        var addResult = function(obj) {
-            $.each(obj.docs, function(i, doc) {
-                $(resultTemplate(doc)).appendTo('#search-results');
+
+    <script type="text/template" id="summary-template">
+        <div class="small-12 columns">
+            <h5>We found <span class="num-of-results"><%= total %> results</span> for your search.</h5>
+            <form>
+                <input type="checkbox" value="Email me when these results change" id="email-checkbox"/><label for="email-checkbox">Email me when these results change</label>
+            </form>
+            <form action="#" id="search-subscribe-form">
+                <div class="row collapse">
+                    <div class="small-4 small-offset-3 columns">
+                        <input type="text" id="search-subscribe-email" placeholder="enter email address">
+                    </div>
+                    <div class="small-2 columns end">
+                        <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </script>
+
+    <script type="text/template" id="result-template">
+        <div class="result row" id="<%= data.MatterId %>">
+            <div class="small-8 columns">
+                <a href="documents/<%= data.MatterAttachmentId %>">
+                <p class="updated-date"><%= updated_at %></p>
+                <h5><%= data.MatterTitle %></h5>
+                </a>
+            </div>
+            <div class="more-info small-4 columns">
+                <a href="/documents/<%= data.MatterAttachmentId %>" data-document="<%= id %>" class="read-more button info tiny">Read</a>
+                <a class="download-pdf" href="<%= source %>">Download PDF</a>
+            </div>
+            <hr />
+        </div>
+    </script>
+
+    <script src="//s3.amazonaws.com/s3.documentcloud.org/viewer/loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="{% static 'js/cityhallmonitor.js' %}"></script>
+    <script type="text/javascript">
+      /* This is here to allow use of Django template tags in AJAX call*/
+      $(function() {
+          showHideEmail();
+          var summaryTemplate = _.template($("#summary-template").html());
+          var resultTemplate = _.template($("#result-template").html());
+          var addResult = function(obj) {
+              $.each(obj.docs, function(i, doc) {
+                  $(resultTemplate(doc)).appendTo('#search-results');
+              });
+          };
+          var doSearch = function() {
+              showLoadingState();
+              var q = $('#search-input').val();
+              q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
+              $.ajax({
+                  url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
+              })
+              .success(function(data) {
+                  var groups = {};
+
+                  $.each(data.documents, function(i, doc) {
+                      if(doc.data.MatterId in groups) {
+                          groups[doc.data.MatterId]['docs'].push(doc);
+                      } else {
+                          groups[doc.data.MatterId] = {
+                              'data': doc.data,
+                              'docs': [doc]
+                          };
+                      }
+                  });
+
+                  $('#results-summary').html($(summaryTemplate(data)));
+
+                  $('#search-subscribe-form').submit(function(event) {
+                      handle_subscribe(event, '{% url "subscribe" %}');
+                      return false;
+                  });
+
+                   if(data.documents.length) {
+                      $.each(groups, function(i, g) {
+                          addResult(g);
+                      });
+                  }
+                $("#search-results").foundation('reveal', 'reflow');
+                hideLoadingState();
+              });
+          };
+
+          $('#search-form').submit(function() {
+              doSearch();
+              return false;
+          });
+
+          $('.example-search').click(function() {
+              $('#search-input').val($(this).text());
+              $('#search-submit').click();
+              return false;
+          });
+
+          buildDateUI();
+          $('#search-results').on('click', 'a.read-more', function(evt) {
+            evt.preventDefault();
+            $('#document-modal-view').html('');
+            var documentId = $(this).attr('data-document');
+            $('#document-modal').foundation('reveal', 'open');
+            DV.load('https://www.documentcloud.org/documents/'+documentId+'.js', {
+                container : '#document-modal-view',
+                responsive: true
             });
-        };
-        var doSearch = function() {
-            showLoadingState();
-            var q = $('#search-input').val();
-            q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
-            $.ajax({
-                url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
-            })
-            .success(function(data) {
-                var groups = {};
-
-                $.each(data.documents, function(i, doc) {
-                    if(doc.data.MatterId in groups) {
-                        groups[doc.data.MatterId]['docs'].push(doc);
-                    } else {
-                        groups[doc.data.MatterId] = {
-                            'data': doc.data,
-                            'docs': [doc]
-                        };
-                    }
-                });
-
-                $('#results-summary').html($(summaryTemplate(data)));
-
-                $('#search-subscribe-form').submit(function(event) {
-                    handle_subscribe(event, '{% url "subscribe" %}');
-                    return false;
-                });
-
-                 if(data.documents.length) {
-                    $.each(groups, function(i, g) {
-                        addResult(g);
-                    });
-                }
-              $("#search-results").foundation('reveal', 'reflow');
-              hideLoadingState();
-            });
-        };
-
-        $('#search-form').submit(function() {
-            doSearch();
-            return false;
         });
+      });
+    </script>
 
-        $('.example-search').click(function() {
-            $('#search-input').val($(this).text());
-            $('#search-submit').click();
-            return false;
-        });
-
-        buildDateUI();
-    });
-  </script>
-{% endblock %}
+{% endblock extra_scripts %}
 

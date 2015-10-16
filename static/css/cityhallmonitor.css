@@ -81,10 +81,10 @@ body {
 #search-form input {
   margin-top: 20px; }
 
-#results-summary {
+#spinner-holder {
   text-align: center; }
 
-#results-summary i,
+#spinner-holder i,
 .num-of-results {
   color: #ce4d28; }
 
@@ -102,11 +102,13 @@ select:focus {
 
 /* end purpleline fixes */
 /* Email sub box */
-#search-subscribe-form {
-  display: none; }
-
 .subscription-email span {
   color: #ce4d28; }
+
+#search-subscribe,
+#post-subscribe-msg,
+#search-submit {
+  margin-top: 21px; }
 
 #notifications-save {
   margin-top: 40px;
@@ -115,6 +117,14 @@ select:focus {
 
 .alert-box {
   margin: 40px auto; }
+
+#post-subscribe-msg {
+  text-align: left;
+  padding: 0 0 0 10px;
+  font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #ce4d28;
+  line-height: 1.4em; }
 
 /* Search results list */
 .result {
@@ -145,37 +155,5 @@ select:focus {
 
 .download-pdf {
   margin-left: 20px; }
-
-
-/* OVERRIDE reveal-modal CSS to use fixed instead of absolute position 
-*/
-.reveal-modal {
-  border-radius: 2px;
-  display: none;
-  position: fixed;
-  top: 0;
-  visibility: hidden;
-  width: 100%;
-  z-index: 1005;
-  left: 0;
-  background-color: #FFFFFF;
-  padding: 1.875rem;
-  border: solid 1px #666666;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-}
-
-/* OVERRIDE reveal-modal.open CSS to set top
-*/
-.reveal-modal.open {
-  position: fixed;
-  top: 6px !important; /* override inline style injected from JS */
-}
-
-/* Move viewer down so it doesn't cover the modal close button
-*/
-#document-modal-view {
-    margin-top: 30px;
-}
-
 
 /*# sourceMappingURL=cityhallmonitor.css.map */

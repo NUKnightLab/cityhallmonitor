@@ -3,7 +3,8 @@ $ = jQuery;
 var handle_subscribe = function(event, url) {
     var email = $('#search-subscribe-email').val().trim();
     if(!email) {
-        alert('You must enter your email address');
+        $('#post-subscribe-msg').fadeIn('slow')
+                                .text('You must enter your email address.');
         return;
     }
     var query = $('#search-input').val().trim();
@@ -24,9 +25,11 @@ var handle_subscribe = function(event, url) {
         },
         success: function(data) {
             if(data.error) {
-                alert('Error making subscription: '+data.error);
+                $('#post-subscribe-msg').fadeIn('slow')
+                                        .text('Error making subscription: '+ data.error);
             } else {
-                alert('Ok, you should get an email');
+                $('#post-subscribe-msg').fadeIn('slow')
+                                        .text('We sent you an email. Click the link in it to confirm your subscription.');
             }
         }
     });
@@ -42,34 +45,24 @@ var buildDateUI = function(){
   });
 }
 
-var showHideEmail = function(){
-  $('#results-summary').on('change', '#email-checkbox', function(){
-      if ($(this).is(':checked')){
-        $('#search-subscribe-form').show();
-      } else {
-        $('#search-subscribe-form').hide();
-      }
-    });
-};
-
 var showLoadingState = function(){
-    var loading = $('<i>',{ class: "fa fa-spinner fa-pulse fa-4x" });
+    $('#spinner-holder').show();
     $('#results-summary, #search-results').html('');
-    $('#results-summary').append(loading);
     $('input, button, select').prop('disabled', true);
     $("#search-submit").html("Loading");
-    $('#big-hed').slideUp();
+    //$('#big-hed').slideUp();
 };
 
 var hideLoadingState = function(){
+    $('#spinner-holder').hide();
     $("#search-submit").html("Search");
-    $("#facets").removeClass('hide');
+    //$("#facets").removeClass('hide');
     $('input, button, select').prop('disabled', false);
 };
 
 $(function() {
     $(document).foundation();
-    
+
     // Load DC viewer into modal after opened, else positioned incorrectly
     $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
         var documentId = $('#document-modal').data('chm-doc-id');
@@ -89,7 +82,7 @@ $(function() {
 
     $('#search-results').on('click', 'a.read-more', function(evt) {
         evt.preventDefault();
-        
+
         $('#document-modal-view').html('');
 
         $('#document-modal').foundation('reveal', 'open')

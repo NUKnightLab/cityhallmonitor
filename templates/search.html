@@ -15,35 +15,35 @@
     </div>
     {% include "search_form.html" %}
 </div> <!-- .panel -->
+        <div id="spinner-holder" class="row hide">
+            <i class="fa fa-spinner fa-pulse fa-4x"></i>
+        </div>
         <div id="results-summary" class="row"></div>
 
         <div id="results-block" class="row">
             {# include "_filters.html" #}
             <div id="search-results" class="small-12 medium-10 medium-offset-1 columns"/></div>
         </div> <!-- #results-block -->
-
-        <div class="main-photo-credit">
-            <p>Photo: <a href="https://www.flickr.com/photos/juggernautco/16179217449">Dan X. O'Neil</a>. Used under <a href="https://creativecommons.org/licenses/by/2.0/">Creative Commons license 2.0</a>.</p>
-        </div>
       </div>
 
 {% endblock content %}
 {% block extra_scripts %}
 
     <script type="text/template" id="summary-template">
-        <div class="small-12 columns">
+        <div class="small-12 medium-10 medium-offset-1 columns">
             <h5>We found <span class="num-of-results"><%= total %> results</span> matching <em><%= q %>.</em></h5>
-            <form>
-                <input type="checkbox" value="Email me when these results change" id="email-checkbox"/><label for="email-checkbox">Email me when these results change</label>
-            </form>
             <form action="#" id="search-subscribe-form">
                 <div class="row collapse">
-                    <div class="small-4 small-offset-3 columns">
+                    <div class="small-6 columns">
+                        <label for="search-subscribe-email">Email me when these results change</label>
                         <input type="text" id="search-subscribe-email" placeholder="enter email address" />
                         <input type="hidden" id="search-term" value="<%= q %>" />
                     </div>
-                    <div class="small-2 columns end">
+                    <div class="small-2 columns">
                         <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+                    </div>
+                    <div class="small-4 columns">
+                      <p id="post-subscribe-msg"></p>
                     </div>
                 </div>
             </form>
@@ -72,7 +72,6 @@
     <script type="text/javascript">
       /* This is here to allow use of Django template tags in AJAX call*/
       $(function() {
-          showHideEmail();
           var summaryTemplate = _.template($("#summary-template").html());
           var resultTemplate = _.template($("#result-template").html());
           var addResult = function(obj) {

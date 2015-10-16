@@ -4,8 +4,8 @@
 {% block content %}
 
 <div class='reveal-modal' id='document-modal' data-reveal>
-    <div id="document-modal-view"></div>
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    <div id="document-modal-view"></div>
 </div>
 
 <div class="panel">
@@ -129,16 +129,6 @@
           });
 
           buildDateUI();
-          $('#search-results').on('click', 'a.read-more', function(evt) {
-            evt.preventDefault();
-            $('#document-modal-view').html('');
-            var documentId = $(this).attr('data-document');
-            $('#document-modal').foundation('reveal', 'open');
-            DV.load('https://www.documentcloud.org/documents/'+documentId+'.js', {
-                container : '#document-modal-view',
-                responsive: true
-            });
-        });
       });
     </script>
 

@@ -146,4 +146,29 @@ select:focus {
 .download-pdf {
   margin-left: 20px; }
 
+
+/* OVERRIDE reveal-modal CSS to use fixed instead of absolute position 
+*/
+.reveal-modal {
+  border-radius: 2px;
+  display: none;
+  position: fixed;
+  top: 0;
+  visibility: hidden;
+  width: 100%;
+  z-index: 1005;
+  left: 0;
+  background-color: #FFFFFF;
+  padding: 1.875rem;
+  border: solid 1px #666666;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Move it down so it doesn't cover the 'X' modal close button
+*/
+#document-modal-view {
+    margin-top: 30px;
+}
+
+
 /*# sourceMappingURL=cityhallmonitor.css.map */

@@ -164,7 +164,14 @@ select:focus {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
-/* Move it down so it doesn't cover the 'X' modal close button
+/* OVERRIDE reveal-modal.open CSS to set top
+*/
+.reveal-modal.open {
+  position: fixed;
+  top: 6px !important; /* override inline style injected from JS */
+}
+
+/* Move viewer down so it doesn't cover the modal close button
 */
 #document-modal-view {
     margin-top: 30px;

@@ -69,12 +69,10 @@ var hideLoadingState = function(){
 
 $(function() {
     $(document).foundation();
-    // Load DC viewer into modal after opened
+    
+    // Load DC viewer into modal after opened, else positioned incorrectly
     $(document).on('opened.fndtn.reveal', '[data-reveal]', function () {
         var documentId = $('#document-modal').data('chm-doc-id');
-
-        // Force inline top style to override dynamically set value!
-        $('#document-modal').css('top', '6px');
 
         DV.load('https://www.documentcloud.org/documents/'+documentId+'.js', {
             container : '#document-modal-view',
@@ -91,6 +89,7 @@ $(function() {
 
     $('#search-results').on('click', 'a.read-more', function(evt) {
         evt.preventDefault();
+        
         $('#document-modal-view').html('');
 
         $('#document-modal').foundation('reveal', 'open')

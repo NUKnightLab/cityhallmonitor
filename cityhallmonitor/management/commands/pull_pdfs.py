@@ -132,7 +132,9 @@ class Command(BaseCommand):
             'MatterEnactmentNumber': str(matter.enactment_number),
             'MatterRequester': matter.requester,
             'MatterNotes': matter.notes,
-            'MatterSortDate': str(sort_date)
+            'MatterSortDate': str(sort_date),
+            'MatterSortMonth': sort_date.strftime('%Y-%m'),
+            'MatterSortYear': sort_date.strftime('%Y')
         }
         r = self.search('account:%s source: "%s"' % (
             DOCUMENT_CLOUD_ACCOUNT, attachment.hyperlink))

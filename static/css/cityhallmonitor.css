@@ -126,6 +126,14 @@ select:focus {
   color: #ce4d28;
   line-height: 1.4em; }
 
+/* notifications.html */
+#notifications-list {
+  margin: 40px auto; }
+  #notifications-list table.columns {
+    padding: 0; }
+  #notifications-list td, #notifications-list th {
+    padding: 1em; }
+
 /* Search results list */
 .result {
   margin-bottom: 2em; }

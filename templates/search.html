@@ -80,9 +80,27 @@
               });
           };
           var doSearch = function() {
-              showLoadingState();
+              //showLoadingState();
+              console.log('dosearch');
+              var fromYear = $('#from-year').val();
+              console.log(fromYear);
+              var dateRangeType = $('#date-range-type').val()
+              console.log(dateRangeType);
+              if (dateRangeType === 'past-year') {
+                console.log('search past year');
+                fromYear = 2014;
+                fromMonth = 'October';
+              } else if (dateRangeType === 'past-month') {
+                console.log('search past month');
+              } else if (dateRangeType === 'any') {
+                console.log('search all dates');
+              } else if (dateRangeType ==='date-range') {
+                console.log('search date range');
+              }
               var q = $('#search-input').val();
               q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
+              q = q + ' MatterSortDate: 2015-09-*';
+              console.log(q);
               $.ajax({
                   url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
               })

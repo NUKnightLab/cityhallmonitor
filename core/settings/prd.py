@@ -98,6 +98,12 @@ LOGGING['handlers'].update({
         'class': 'logging.FileHandler',
         'formatter': 'verbose',
         'filename': '/home/apps/log/cityhallmonitor/update_dc_data.log'
+    },
+    'audit_db': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/audit_db.log'
     }
 })
 
@@ -128,6 +134,10 @@ LOGGING['loggers'].update({
     },
     'cityhallmonitor.management.commands.update_dc_data': {
         'handlers': ['update_dc_data'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.audit_db': {
+        'handlers': ['audit_db'],
         'level': 'DEBUG'
     }    
 })

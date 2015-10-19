@@ -84,8 +84,11 @@ LOGGING['loggers'].update({
     'cityhallmonitor.management.commands.update_dc_data': {
         'handlers': ['console'],
         'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.audit_db': {
+        'handlers': ['console'],
+        'level': 'DEBUG'
     }
-
 })
     
 # For testing

@@ -132,6 +132,17 @@ select:focus {
     line-height: 1.4em;
 }
 
+/* notifications.html */
+#notifications-list {
+    margin: 40px auto;
+    table.columns {
+        padding: 0;
+    }
+    td, th {
+        padding: 1em;
+    }
+}
+
 /* Search results list */
 .result {
     margin-bottom: 2em;

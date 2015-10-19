@@ -20,34 +20,28 @@
     </div>
   </div>
   <div id="notifications-list" class="row">
-      <div class="medium-12 columns">
+      <div class="small-12 medium-8 medium-offset-1 columns">
           <div class="row">
-              <h2>Notifications</h2>
-              <p class="subscription-email">Managing notifications for <span>{{ email }}</span></p>
-          </div>
-          <div class="row">
-              <div class="medium-6 columns">
-                  <h4>Your watched searches</h4>
-              </div>
-              <div class="medium-6 columns">
-                  <h4>Email when results change?</h4>
-              </div>
-          </div>
-          {% for r in subscriptions %}
-          <div class="row">
-              <div class="medium-6 columns">
-                  &ldquo;{{ r.query }}&rdquo;
-              </div>
-              <div class="medium-6 columns">
-                  <input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
-                  <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>
-              </div>
-          </div>
-          {% endfor %}
-          <div class="row">
-              <div class="medium-6 medium-offset-6 columns">
-                  <button type="submit" value="Save" id="notifications-save" class="button small alert">Save</button>
-              </div>
+              <h2>Manage subscriptions</h2>
+              <p class="subscription-email alert-box secondary">When we find new data matching your subscriptions, we'll send a notification to <span>{{ email }}</span>.</p>
+              <table class="small-12 columns">
+                <tr>
+                  <th>Your subscriptions</th>
+                  <th>Your notifications</th>
+                </tr>
+                {% for r in subscriptions %}
+                <tr>
+                    <td>
+                        &ldquo;{{ r.query }}&rdquo;
+                    </td>
+                    <td>
+                        <input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
+                        <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>
+                    </td>
+                </tr>
+                {% endfor %}
+              </table>
+          <button type="submit" value="Save" id="notifications-save" class="button expand alert">Save</button>
           </div>
       </div>
     </div>

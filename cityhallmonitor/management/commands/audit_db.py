@@ -2,13 +2,12 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 import logging
+import pprint
 from cityhallmonitor.models import Matter, MatterAttachment
 from documentcloud import DocumentCloud
 from smtplib import SMTPException
 
-import pprint
- 
- 
+
 logger = logging.getLogger(__name__)
 
 
@@ -41,10 +40,17 @@ class Command(BaseCommand):
         return r
 
     def datadiff(self, d1, d2):
-        """Return differences between two dictionaries"""
+        """
+        Return differences between two dictionaries
+        **Only looks at keys in d1, in case of field additions.**
+        """
+        ks = d1.keys()
         return set(
-            [ (k,v) for k,v in d1.items() ]).symmetric_difference(
-            set([ (k,v) for k,v in d2.items() ]))
+            [ (k, d1.get(k)) for k in ks ]).symmetric_difference(
+            set([ (k, d2.get(k)) for k in ks ]))       
+        #return set(
+        #    [ (k,v) for k,v in d1.items() ]).symmetric_difference(
+        #    set([ (k,v) for k,v in d2.items() ]))
 
     def compose_data(self, attachment):
         """
@@ -107,7 +113,7 @@ class Command(BaseCommand):
             delta = self.diff_data(attachment, r[0])    
             if delta:
                 logger.error('Data mismatch by source [id=%d, source=%s]\n%s' % (
-                    attachment.id, attachment.hyperlink, pprint.pformat(delta))
+                    attachment.id, attachment.hyperlink, pprint.pformat(delta, width=100))
                 )                      
            
         # Search DC by MatterAttachmentId
@@ -127,7 +133,7 @@ class Command(BaseCommand):
             delta = self.diff_data(attachment, r[0])    
             if delta:
                 logger.error('Data mismatch by MatterAttachmentId [id=%d, source=%s]\n%s' % (
-                    attachment.id, attachment.hyperlink, pprint.pformat(delta))
+                    attachment.id, attachment.hyperlink, pprint.pformat(delta, width=100))
                 )                      
         
                                                                

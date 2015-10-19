@@ -2,20 +2,21 @@
 
 {% block content %}
 <div class="row">
-  {% if error %}
+  <div class="small-12 medium-10 medium-offset-1 columns">
+    {% if error %}
+    <h2>Uh-oh.</h2>
+    <p>We encountered an issue activating your subscription. Details below.</p>
+    <div data-alert class="alert-box alert">
+    Error: {{ error }}</em>
+    </div>
 
-  <div data-alert class="alert-box alert small-10 small-offset-1 columns">
-  Error activating subscription [{{ error }}]</em>
-  </div>
+    {% else %}
 
-  {% else %}
+    <h2>Success!</h2>
 
-  <div data-alert class="alert-box success small-10 small-offset-1 columns">
-  Your subscription has been activated!
-  </div>
+    <p>Your subscription has been activated! You can <a href="{{ notifications_url }}">manage your notifications</a> any time you want to stop getting updates.</p>
 
-  <p><a href="{{ notifications_url }}">Manage your notifications</a></p>
-
-  {% endif %}
+    {% endif %}
+    </div>
 </div>
 {% endblock content %}

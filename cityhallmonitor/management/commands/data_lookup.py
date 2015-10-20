@@ -97,8 +97,10 @@ class Command(BaseCommand):
         """
         Compare attachment and DocumentCloud doc
         """
+        print(dir(doc))
         print('- source', doc.source)
         print('- created_at', doc.created_at)
+        print('- updated_at', doc.updated_at)
         
         att_data = self.attachment_data(attachment)
         doc_data = self.doc_data(doc, key_list=att_data.keys())
@@ -116,10 +118,12 @@ class Command(BaseCommand):
         print('Document 1')
         print('- source', doc1.source)
         print('- created_at', doc1.created_at)
+        print('- updated_at', doc1.created_at)
 
         print('Document 2')
         print('- source', doc2.source)
         print('- created_at', doc2.created_at)
+        print('- updated_at', doc2.created_at)
        
         dd = DictDiffer(doc1.data, doc2.data)
         print('* data added:', dd.added())

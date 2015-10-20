@@ -29,15 +29,16 @@
 {% endblock content %}
 {% block extra_scripts %}
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script type="text/template" id="summary-template">
         <div class="small-12 medium-10 medium-offset-1 columns">
-            <h5>We found <span class="num-of-results"><%= total %> results</span> matching <em><%= q %>.</em></h5>
+            <h5>We found <span class="num-of-results"><%= total %> results</span> matching <em><%= query %></em><%= qualifier %>.</h5>
             <form action="#" id="search-subscribe-form">
                 <div class="row collapse">
                     <div class="small-6 columns">
                         <label for="search-subscribe-email">Email me when these results change</label>
                         <input type="text" id="search-subscribe-email" placeholder="enter email address" />
-                        <input type="hidden" id="search-term" value="<%= q %>" />
+                        <input type="hidden" id="search-term" value="<%= query %>" />
                     </div>
                     <div class="small-2 columns">
                         <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
@@ -54,7 +55,7 @@
         <div class="result row" id="<%= data.MatterId %>">
             <div class="small-8 columns">
                 <a href="documents/<%= data.MatterAttachmentId %>">
-                <p class="updated-date"><%= updated_at %></p>
+                <p class="updated-date"><%= data.MatterSortDate.substring(0,10) %></p>
                 <h5><%= data.MatterTitle %></h5>
                 </a>
             </div>
@@ -69,66 +70,13 @@
     <script src="//s3.amazonaws.com/s3.documentcloud.org/viewer/loader.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="{% static 'js/cityhallmonitor.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
     <script type="text/javascript">
-      /* This is here to allow use of Django template tags in AJAX call*/
       $(function() {
-          var summaryTemplate = _.template($("#summary-template").html());
-          var resultTemplate = _.template($("#result-template").html());
-          var addResult = function(obj) {
-              $.each(obj.docs, function(i, doc) {
-                  $(resultTemplate(doc)).appendTo('#search-results');
-              });
-          };
-          var doSearch = function() {
-              showLoadingState();
-              var q = $('#search-input').val();
-              q = q + ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
-              $.ajax({
-                  url: 'https://www.documentcloud.org/api/search.json?q=' + q + '&per_page=1000&data=true'
-              })
-              .success(function(data) {
-                  var groups = {};
-
-                  $.each(data.documents, function(i, doc) {
-                      if(doc.data.MatterId in groups) {
-                          groups[doc.data.MatterId]['docs'].push(doc);
-                      } else {
-                          groups[doc.data.MatterId] = {
-                              'data': doc.data,
-                              'docs': [doc]
-                          };
-                      }
-                  });
-
-                  $('#results-summary').html($(summaryTemplate({total:data.total, q: $('#search-input').val()})));
-
-                  $('#search-subscribe-form').submit(function(event) {
-                      handle_subscribe(event, '{% url "subscribe" %}');
-                      return false;
-                  });
-
-                   if(data.documents.length) {
-                      $.each(groups, function(i, g) {
-                          addResult(g);
-                      });
-                  }
-                $("#search-results").foundation('reveal', 'reflow');
-                hideLoadingState();
-              });
-          };
-
           $('#search-form').submit(function() {
-              doSearch();
+              doSearch('{% url "subscribe" %}');
               return false;
           });
-
-          $('.example-search').click(function() {
-              $('#search-input').val($(this).text());
-              $('#search-submit').click();
-              return false;
-          });
-
-          buildDateUI();
       });
     </script>
 

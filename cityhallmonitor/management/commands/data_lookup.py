@@ -97,7 +97,6 @@ class Command(BaseCommand):
         """
         Compare attachment and DocumentCloud doc
         """
-        print(dir(doc))
         print('- source', doc.source)
         print('- created_at', doc.created_at)
         print('- updated_at', doc.updated_at)

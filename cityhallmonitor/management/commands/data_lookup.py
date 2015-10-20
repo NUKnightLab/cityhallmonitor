@@ -154,6 +154,7 @@ class Command(BaseCommand):
                    
                     print('\nDatabase record')
                     print('- hyperlink', attachment.hyperlink) 
+                    print('- matter.last_modified', attachment.matter.last_modified)
                 except MatterAttachment.DoesNotExist:
                     print('\nMatterAttachment does not exist in database')
             else:
@@ -165,6 +166,7 @@ class Command(BaseCommand):
                     
                     print('\nDatabase record')
                     print('- id', attachment.id) 
+                    print('- matter.last_modified', attachment.matter.last_modified)
                 except MatterAttachment.DoesNotExist:
                     print('\nMatterAttachment does not exist in database')
                           

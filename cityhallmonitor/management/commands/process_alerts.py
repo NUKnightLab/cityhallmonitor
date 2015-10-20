@@ -62,7 +62,7 @@ class Command(BaseCommand):
 
     def process_subscription(self, subscription):
         """Process subscription"""
-        query = 'account:%s project:"%s" %s' % (
+        query = 'account:%s project:"%s" access:public %s' % (
             settings.DOCUMENT_CLOUD_ACCOUNT, 
             DEFAULT_PROJECT, 
             subscription.query)

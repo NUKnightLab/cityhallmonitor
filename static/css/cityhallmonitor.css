@@ -93,7 +93,7 @@ body {
 
 /* purpleline additions to make*/
 select:focus {
-  border-color: #999;
+  border-color: #888;
   outline: none; }
 
 .side-nav {
@@ -133,6 +133,22 @@ select:focus {
     padding: 0; }
   #notifications-list td, #notifications-list th {
     padding: 1em; }
+  #notifications-list table p {
+    margin-bottom: 0; }
+    #notifications-list table p.deleted {
+      color: #888;
+      text-decoration: line-through; }
+
+a.delete-subscription {
+  color: #ce4d28;
+  text-decoration: underline; }
+  a.delete-subscription:hover, a.delete-subscription:active, a.delete-subscription:focus {
+    color: #792d17; }
+  a.delete-subscription.deleted {
+    color: #888;
+    text-decoration: none;
+    font-style: italic;
+    cursor: default; }
 
 /* Search results list */
 .result {

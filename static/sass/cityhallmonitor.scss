@@ -91,7 +91,7 @@ body {
 }
 #spinner-holder i,
 .num-of-results {
-    color: #ce4d28;
+    color: $orange;
 }
 #results-block {
     min-height: 400px;
@@ -99,7 +99,7 @@ body {
 
 /* purpleline additions to make*/
 select:focus {
-    border-color: #999;
+    border-color: $jumbo;
     outline: none;
 }
 
@@ -128,7 +128,7 @@ select:focus {
     padding: 0 0 0 10px;
     font-family: $font-family-sans-serif;
     font-size: 14px;
-    color: #ce4d28;
+    color: $orange;
     line-height: 1.4em;
 }
 
@@ -141,7 +141,30 @@ select:focus {
     td, th {
         padding: 1em;
     }
+    table p {
+        margin-bottom: 0;
+        &.deleted {
+            color: $jumbo;
+            text-decoration: line-through;
+        }
+    }
 }
+a.delete-subscription {
+    color: $orange;
+    text-decoration: underline;
+    &:hover,
+    &:active,
+    &:focus {
+        color: darken($orange, 20%);;
+    }
+    &.deleted {
+        color: $jumbo;
+        text-decoration: none;
+        font-style: italic;
+        cursor: default;
+    }
+}
+
 
 /* Search results list */
 .result {

@@ -23,25 +23,25 @@
       <div class="small-12 medium-8 medium-offset-1 columns">
           <div class="row">
               <h2>Manage subscriptions</h2>
-              <p class="subscription-email alert-box secondary">When we find new data matching your subscriptions, we'll send a notification to <span>{{ email }}</span>.</p>
+              <p class="subscription-email">When we find new data matching your subscriptions, we'll send a notification to <span>{{ email }}</span>.</p>
               <table class="small-12 columns">
                 <tr>
                   <th>Your subscriptions</th>
-                  <th>Your notifications</th>
+                  <th></th>
                 </tr>
                 {% for r in subscriptions %}
                 <tr>
                     <td>
-                        &ldquo;{{ r.query }}&rdquo;
+                        <p class="subscription-desc">&ldquo;{{ r.query }}&rdquo;</p>
                     </td>
                     <td>
-                        <input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
-                        <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>
+                        <p><a class="delete-subscription" data-sid="{{ r.sid }}" id="notifications-checkbox-{{ r.sid }}">delete</a></p>
+                        <!--<input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
+                        <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>-->
                     </td>
                 </tr>
                 {% endfor %}
               </table>
-          <button type="submit" value="Save" id="notifications-save" class="button expand alert">Save</button>
           </div>
       </div>
     </div>
@@ -64,47 +64,36 @@ function notifications_alert(error, detail) {
 $(function() {
     $(document).foundation();
 
-    $('#notifications-save').click(function(event) {
-        var sids = [];
-        var $checkboxes = $("input[type=checkbox]:not(:checked)")
-            .each(function(index, el) {
-                sids.push($(el).attr('data-sid'));
-            });
-
-        if(sids.length) {
-            $('#notifications-save').prop('disabled', true);
-
-            $.ajax({
-                url: '{% url "unsubscribe" %}',
-                type: 'GET',
-                data: {
-                    sids: sids
-                },
-                cache: false,
-                dataType: 'json',
-                timeout: 20000,
-                error: function(xhr, status, err) {
-                    notifications_alert('Error saving changes to notifications', err);
-                },
-                success: function(data) {
-                    if(data.error) {
-                        notifications_alert('Error saving changes to notifications', data.error);
-                    } else {
-                        $('#notifications-alert').hide();
-
-                        $checkboxes.closest('div.row').remove();
-
-                        if(!$("input[type=checkbox]").length) {
-                            $('#notifications-alert-empty').show();
-                            $('#notifications-list').hide();
-                        }
-                    }
-                },
-                complete: function() {
-                    $('#notifications-save').prop('disabled', false);
-                }
-            });
-        }
+    $('.delete-subscription').click(function(event){
+      var self = this;
+      // Server-side code expects an array
+      var sid = [$(this).attr("data-sid")];
+      // TODO: add visible state indication for loading and deleted searches
+      $.ajax({
+          url: '{% url "unsubscribe" %}',
+          type: 'GET',
+          data: {
+              sids: sid
+          },
+          cache: false,
+          dataType: 'json',
+          timeout: 20000,
+          error: function(xhr, status, err) {
+              notifications_alert('Error saving changes to notifications', err);
+          },
+          success: function(data) {
+              if(data.error) {
+                  notifications_alert('Error saving changes to notifications', data.error);
+              } else {
+                $(self).addClass("deleted")
+                       .text("deleted!");
+                $(self).closest('tr').children(".subscription-desc").addClass("deleted");
+              }
+          },
+          complete: function() {
+              $('#notifications-save').prop('disabled', false);
+              // Could we easily add back a deleted search while still on this page?
+          }
     });
 });
 

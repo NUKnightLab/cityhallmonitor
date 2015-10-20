@@ -19,7 +19,7 @@ ATTACHMENT_PUBLISH_URL = 'https://cityhallmonitor.knightlab.com/documents/%d'
 
 
 class Command(BaseCommand):
-    help = 'Compared data in DB vs DocumentCloud.'
+    help = 'Compare data in DB vs DocumentCloud.'
     
     _client = None
 

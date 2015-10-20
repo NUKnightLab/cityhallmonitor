@@ -14,12 +14,13 @@
                             <label>Only show items with action taken in...</label>
                             <select id="date-range-type">
                                 <option value="past-month">Last 30 days</option>
-                                <option value="past-year">Last 365 days</option>
+                                <option value="past-year">Past year</option>
                                 <option value="any">Any time</option>
-                                <option value="date-range">Date range...</option>
+                                {# <option value="date-range">Date range...</option> #}
                             </select>
                         </div>
 
+                        {% comment %} # For future work. See issue #74
                         <div class="row datepicker custom-date-start">
                             <label class="small-3 columns">from</label>
                             <div class="small-5 columns">
@@ -36,6 +37,7 @@
                                 </select>
                             </div>
                         </div>
+                        {% endcomment %}
 
                         <div class="row datepicker custom-date-end">
                             <label class="small-3 columns">to</label>

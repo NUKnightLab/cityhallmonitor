@@ -205,6 +205,11 @@ class Command(BaseCommand):
                 for attachment in MatterAttachment.objects.filter(
                         matter_id=matter_id):
                     self.fetch(attachment, project.id)
+                    attachment.link_obtained_at = timezone.now()
+                    attachment.save()
+                    logger.debug(
+                        'Updated link_obtained_at timestamp for '\
+                        'MatterAttachment: %s', attachment.id)
             else:
                 q = MatterAttachment.objects.all()
                 if options['all']:

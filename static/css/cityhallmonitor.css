@@ -1,4 +1,13 @@
 /* colors */
+.container {
+  margin-top: 40px; }
+
+.container > .panel {
+  margin-top: -40px; }
+
+footer {
+  margin-top: 40px; }
+
 /* Title style overrides */
 h1,
 h2.intro {
@@ -91,16 +100,6 @@ body {
 #results-block {
   min-height: 400px; }
 
-/* purpleline additions to make*/
-select:focus {
-  border-color: #888;
-  outline: none; }
-
-.side-nav {
-  background: #f2f2f2;
-  /*border: 1px solid #d8d8d8;*/ }
-
-/* end purpleline fixes */
 /* Email sub box */
 .subscription-email span {
   color: #ce4d28; }
@@ -110,11 +109,6 @@ select:focus {
 #search-submit {
   margin-top: 21px; }
 
-#notifications-save {
-  margin-top: 40px;
-  float: right;
-  clear: both; }
-
 .alert-box {
   margin: 40px auto; }
 
@@ -123,21 +117,21 @@ select:focus {
   padding: 0 0 0 10px;
   font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  color: #ce4d28;
+  color: #888;
   line-height: 1.4em; }
+  #post-subscribe-msg.error {
+    color: #ce4d28; }
 
 /* notifications.html */
-#notifications-list {
-  margin: 40px auto; }
-  #notifications-list table.columns {
-    padding: 0; }
-  #notifications-list td, #notifications-list th {
-    padding: 1em; }
-  #notifications-list table p {
-    margin-bottom: 0; }
-    #notifications-list table p.deleted {
-      color: #888;
-      text-decoration: line-through; }
+#notifications-list table.columns {
+  padding: 0; }
+#notifications-list td, #notifications-list th {
+  padding: 1em; }
+#notifications-list table p {
+  margin-bottom: 0; }
+  #notifications-list table p.deleted {
+    color: #888;
+    text-decoration: line-through; }
 
 a.delete-subscription {
   color: #ce4d28;
@@ -179,5 +173,16 @@ a.delete-subscription {
 
 .download-pdf {
   margin-left: 20px; }
+
+/* purpleline additions to make*/
+select:focus {
+  border-color: #888;
+  outline: none; }
+
+.side-nav {
+  background: #f2f2f2;
+  /*border: 1px solid #d8d8d8;*/ }
+
+/* end purpleline fixes */
 
 /*# sourceMappingURL=cityhallmonitor.css.map */

@@ -204,7 +204,7 @@ class Command(BaseCommand):
                 logger.info('Fetching files for matter ID %s.', matter_id)
                 for attachment in MatterAttachment.objects.filter(
                         matter_id=matter_id):
-                    self.fetch(attchment, project.id)
+                    self.fetch(attachment, project.id)
             else:
                 q = MatterAttachment.objects.all()
                 if options['all']:

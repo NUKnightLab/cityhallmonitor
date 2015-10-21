@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import F, Q
 from django.utils import timezone
@@ -5,6 +6,7 @@ import json
 import logging
 import requests
 from cityhallmonitor.models import Matter, MatterAttachment
+from documentcloud import DocumentCloud
 
 
 logger = logging.getLogger(__name__)
@@ -12,15 +14,58 @@ logger = logging.getLogger(__name__)
 _legistar_matter_attachments_url = \
     'http://webapi.legistar.com/v1/chicago/Matters/%(matter_id)s/Attachments'
 
+USERNAME = settings.DOCUMENT_CLOUD_USERNAME
+PASSWORD = settings.DOCUMENT_CLOUD_PASSWORD
+DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
+DEFAULT_PROJECT = 'Chicago City Hall Monitor'
+
 
 class Command(BaseCommand):
     help = 'Get attachments for updated matters from the Chicago Legistar API.'
 
+    _client = None
+
     def add_arguments(self, parser):
         parser.add_argument('matter_id', nargs='?', help='Matter ID')
 
+    def client(self):
+        if self._client is None:
+            self._client = DocumentCloud(USERNAME, PASSWORD)
+        return self._client
+
+    def search(self, query):
+        """
+        Seach DocumentCloud
+        """
+        r = self.client().documents.search(query)
+        assert type(r) is list, \
+            'DocumentCloud search response is %s: %s' % (type(r), repr(r))
+        return r
+    
+    def privatize_doc(self, hyperlink):
+        """
+        Make doc with source=hyperlink private
+        """
+        logger.debug('Privatizing %s' % hyperlink)
+               
+        r = self.search('account:%s access:public source: "%s"' % (
+            DOCUMENT_CLOUD_ACCOUNT, hyperlink))
+        if not r:
+            logger.info('Skipping privatization (no public version found): %s' \
+                % hyperlink)
+            return            
+        if len(r) > 1:
+            raise Exception(
+                'Multiple instances exist in DocumentCloud for '\
+                'source: %s' % hyperlink)               
+        doc = r[0]    
+        doc.access = 'private'
+        doc.save()
+        
     def fetch(self, matter):
-        """Fetch attachments for matter"""
+        """
+        Fetch attachments for matter
+        """
         url = _legistar_matter_attachments_url % {'matter_id': matter.id}        
         logger.debug('Downloading %s', url)   
         
@@ -30,9 +75,20 @@ class Command(BaseCommand):
             raise Exception('Error downloading %s [%d]' \
                 % (url, r.status_code))
         for i, item in enumerate(r.json()):
+            
+            try:
+                r = MatterAttachment.objects.get(id=item['MatterAttachmentId'])
+                hyperlink = r.hyperlink
+            except MatterAttachment.DoesNotExist:
+                hyperlink = ''
+               
             try:
                 r = MatterAttachment.from_json(matter.id, item)
-                r.save()
+
+                if r.hyperlink != hyperlink:
+                    self.privatize_doc(hyperlink)
+               
+                r.save()                
             except Exception as e:
                 logger.info(item)
                 raise e

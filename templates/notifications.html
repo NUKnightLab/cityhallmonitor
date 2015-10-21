@@ -65,7 +65,7 @@ $(function() {
       var self = this;
       // Server-side code expects an array
       var sid = [$(this).attr("data-sid")];
-      // TODO: add visible state indication for loading and deleted searches
+      // TODO: add visible state indication for loading
       $.ajax({
           url: '{% url "unsubscribe" %}',
           type: 'GET',

@@ -118,7 +118,7 @@ body {
     margin: 40px auto;
 }
 
-#post-subscribe-msg {
+.status-msg {
     text-align: left;
     padding: 0 0 0 10px;
     font-family: $font-family-sans-serif;
@@ -129,6 +129,7 @@ body {
         color: $orange;
     }
 }
+
 
 /* notifications.html */
 #notifications-list {

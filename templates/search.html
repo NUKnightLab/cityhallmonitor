@@ -54,7 +54,7 @@
     <script type="text/template" id="result-template">
         <div class="result row" id="<%= data.MatterId %>">
             <div class="small-8 columns">
-                <a href="documents/<%= data.MatterAttachmentId %>">
+                <a href="/documents/<%= data.MatterAttachmentId %>" data-document="<%= id %>" class="read-more">
                 <p class="updated-date"><%= data.MatterSortDate.substring(0,10) %></p>
                 <h5><%= data.MatterTitle %></h5>
                 </a>

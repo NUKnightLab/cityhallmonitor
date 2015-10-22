@@ -1,6 +1,15 @@
 $ = jQuery;
 
 var handle_subscribe = function(event, url) {
+    var showMsg = function(msg, type, detail){
+      $('#post-subscribe-msg').text(msg + (detail ? detail : ''));
+      if ($('#post-subscribe-msg').hasClass('error') && type != 'error') {
+        $('#post-subscribe-msg').removeClass('error');
+      } else if (type == 'error'){
+        $('#post-subscribe-msg').addClass('error');
+      }
+      $('#post-subscribe-msg').show();
+    }
     var email = $('#search-subscribe-email').val().trim();
     if(!email) {
         $('#post-subscribe-msg').fadeIn('slow')
@@ -21,15 +30,13 @@ var handle_subscribe = function(event, url) {
         dataType: 'json',
         timeout: 20000,
         error: function(xhr, status, err) {
-            alert('Error making subscription: '+err);
+            showMsg('Error making subscription: ', 'error', err);
         },
         success: function(data) {
             if(data.error) {
-                $('#post-subscribe-msg').fadeIn('slow')
-                                        .text('Error making subscription: '+ data.error);
+                showMsg('Error making subscription: ', 'error', data.error);
             } else {
-                $('#post-subscribe-msg').fadeIn('slow')
-                                        .text('We sent you an email. Click the link in it to confirm your subscription.');
+                showMsg('We sent you an email. Click the link in it to confirm your subscription.', 'success');
             }
         }
     });

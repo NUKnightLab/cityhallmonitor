@@ -6,6 +6,18 @@ $white: #fff;
 $iron: #ccc;
 $jumbo: #888;
 
+.container {
+    margin-top: 40px;
+}
+
+.container > .panel {
+    margin-top: -40px;
+}
+
+footer {
+    margin-top: 40px;
+}
+
 /* Title style overrides */
 h1,
 h2.intro {
@@ -97,44 +109,30 @@ body {
     min-height: 400px;
 }
 
-/* purpleline additions to make*/
-select:focus {
-    border-color: $jumbo;
-    outline: none;
-}
-
-.side-nav {
-    background: #f2f2f2;
-    /*border: 1px solid #d8d8d8;*/
-}
-/* end purpleline fixes */
-
 /* Email sub box */
 .subscription-email span { color: $orange; }
 #search-subscribe,
 #post-subscribe-msg,
 #search-submit { margin-top: 21px; }
-#notifications-save {
-    margin-top: 40px;
-    float: right;
-    clear: both;
-}
 .alert-box {
     margin: 40px auto;
 }
 
-#post-subscribe-msg {
+.status-msg {
     text-align: left;
     padding: 0 0 0 10px;
     font-family: $font-family-sans-serif;
     font-size: 14px;
-    color: $orange;
+    color: $jumbo;
     line-height: 1.4em;
+    &.error {
+        color: $orange;
+    }
 }
+
 
 /* notifications.html */
 #notifications-list {
-    margin: 40px auto;
     table.columns {
         padding: 0;
     }
@@ -193,3 +191,15 @@ a.delete-subscription {
 .result-thumb { float: left; }
 .more-info { float: right; }
 .download-pdf { margin-left: 20px; }
+
+/* purpleline additions to make*/
+select:focus {
+    border-color: $jumbo;
+    outline: none;
+}
+
+.side-nav {
+    background: #f2f2f2;
+    /*border: 1px solid #d8d8d8;*/
+}
+/* end purpleline fixes */

@@ -1,13 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% if error %}
-  <div class="row">
-    <div data-alert class="alert-box alert small-10 small-offset-1 columns">
-        Error managing notifications [{{ error }}]
-    </div>
-  </div>
-  {% else %}
+
   <div class="row">
 
     <div id="notifications-alert" data-alert class="alert-box alert small-10 small-offset-1 columns" style="display: none;">
@@ -23,6 +17,11 @@
       <div class="small-12 medium-8 medium-offset-1 columns">
           <div class="row">
               <h2>Manage subscriptions</h2>
+              {% if error %}
+                <div data-alert class="alert-box alert small-10 small-offset-1 columns">
+                    Error managing notifications [{{ error }}]
+                </div>
+              {% else %}
               <p class="subscription-email">When we find new data matching your subscriptions, we'll send a notification to <span>{{ email }}</span>.</p>
               <table class="small-12 columns">
                 <tr>
@@ -32,22 +31,20 @@
                 {% for r in subscriptions %}
                 <tr>
                     <td>
-                        <p class="subscription-desc">&ldquo;{{ r.query }}&rdquo;</p>
+                        <p class="subscription-desc">{{ r.query }}</p>
                     </td>
                     <td>
-                        <p><a class="delete-subscription" data-sid="{{ r.sid }}" id="notifications-checkbox-{{ r.sid }}">delete</a></p>
-                        <!--<input id="notifications-checkbox-{{ r.sid }}" type="checkbox" value="1" data-sid="{{ r.sid }}" checked>
-                        <label for="notifications-checkbox-{{ r.sid }}">Notify me</label>-->
+                        <p><i class="fa fa-spinner fa-pulse"></i><a class="delete-subscription active" data-sid="{{ r.sid }}" id="notifications-checkbox-{{ r.sid }}">delete</a></p>
                     </td>
                 </tr>
                 {% endfor %}
               </table>
+              {% endif %}
           </div>
+        </div>
       </div>
-    </div>
   </div>
 
-{% endif %}
 
 {% endblock content %}
 {% block extra_scripts %}
@@ -64,11 +61,11 @@ function notifications_alert(error, detail) {
 $(function() {
     $(document).foundation();
 
-    $('.delete-subscription').click(function(event){
+    $('.delete-subscription.active').click(function(event){
       var self = this;
       // Server-side code expects an array
       var sid = [$(this).attr("data-sid")];
-      // TODO: add visible state indication for loading and deleted searches
+      // TODO: add visible state indication for loading
       $.ajax({
           url: '{% url "unsubscribe" %}',
           type: 'GET',
@@ -85,9 +82,10 @@ $(function() {
               if(data.error) {
                   notifications_alert('Error saving changes to notifications', data.error);
               } else {
-                $(self).addClass("deleted")
+                $(self).removeClass('active')
+                       .addClass("deleted")
                        .text("deleted!");
-                $(self).closest('tr').children(".subscription-desc").addClass("deleted");
+                $(self).closest('tr').find(".subscription-desc").addClass("deleted");
               }
           },
           complete: function() {

@@ -67,10 +67,12 @@ var doSearch = function(subscribeUrl) {
             if (dateRangeType !== 'any' && dt < startDateStr) {
                 return true;
             }
-            if(!(dt in dates)) {
+            
+            if(dates.indexOf(dt) < 0) {        
                 dates.push(dt);
                 groups[dt] = {};
             }
+            
             if(doc.data.MatterId in groups[dt]) {
                 groups[dt][doc.data.MatterId]['docs'].push(doc);
             } else {
@@ -78,7 +80,7 @@ var doSearch = function(subscribeUrl) {
                     'data': doc.data,
                     'docs': [doc]
                 };
-            }
+            }            
         });
 
         $('#results-summary').html($(summaryTemplate({
@@ -95,7 +97,7 @@ var doSearch = function(subscribeUrl) {
         if(data.documents.length) {
             dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             for (i=0; i<dates.length; i++) {
-                var dateGroups = groups[dates[i]];
+                var dateGroups = groups[dates[i]];               
                 $.each(dateGroups, function(j, g) {
                     addResult(g);
                 });

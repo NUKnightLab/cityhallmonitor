@@ -217,9 +217,12 @@ class Command(BaseCommand):
                 else:
                     logger.info('Fetching new files')
                     q = q.filter(
-                        Q(link_obtained_at=None)
-                        | (Q(link_obtained_at__lte=F('last_modified'))
-                         & Q(last_modified__isnull=False)))
+                            Q(link_obtained_at=None)
+                            | (Q(last_modified__gte=F('link_obtained_at'))
+                             & Q(last_modified__isnull=False))
+                            | (Q(matter__last_modified__gte=F('link_obtained_at'))
+                             & Q(matter__last_modified__isnull=False))
+                        )
                 for attachment in [a for a in q]:
                     self.fetch(attachment, project.id)
                     attachment.link_obtained_at = timezone.now()

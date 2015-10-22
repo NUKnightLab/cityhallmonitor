@@ -85,7 +85,7 @@ class Command(BaseCommand):
             try:
                 r = MatterAttachment.from_json(matter.id, item)
 
-                if r.hyperlink != hyperlink:
+                if hyperlink and r.hyperlink != hyperlink:
                     self.privatize_doc(hyperlink)
                
                 r.save()                

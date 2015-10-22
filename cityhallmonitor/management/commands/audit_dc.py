@@ -4,7 +4,7 @@ from django.utils import timezone
 import logging
 import pprint
 from cityhallmonitor.models import Matter, MatterAttachment, MatterType
-from documentcloud import DocumentCloud
+from documentcloud import DocumentCloud, Document
 from smtplib import SMTPException
 
 
@@ -36,7 +36,26 @@ class Command(BaseCommand):
         assert type(r) is list, \
             'DocumentCloud search response is %s: %s' % (type(r), repr(r))
         return r
-
+        
+    def search_page(self, query, page=1, per_page=1000):
+        """
+        Search document cloud (with page) and verify response type
+        Copying usage from documents.search() function
+        """
+        client = self.client()
+        
+        document_list = []
+        results = client.documents._get_search_page(query, page, per_page)
+        if results:
+            document_list += results
+        
+        obj_list = []
+        for doc in document_list:
+            doc['_connection'] = client.documents._connection
+            obj = Document(doc)
+            obj_list.append(obj)
+        return obj_list        
+                   
     def datadiff(self, d1, d2):
         """
         Return differences between two dictionaries
@@ -134,22 +153,27 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             query = options['query']
+            
             if query:
-                logger.info('Searching DocumentCloud [%s]' % query)
-                r = self.search('account:%s project:"%s" access:public %s' % (
-                    DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT, query))
+                q = 'account:%s project:"%s" access:public %s' % (
+                    DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT, query)
             else:
-                logger.info('Searching DocumentCloud')
-                r = self.search('account:%s project:"%s" access:public' % (
-                    DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT))
-                        
-            logger.info('Found %d matching documents' % len(r))
-                                
-            for (i, doc) in enumerate(r, start=1):
-                self.process_document(doc)  
-                if i and (i % 1000) == 0:
-                    logger.debug('Processed %d documents' % i)
-
+                q = 'account:%s project:"%s" access:public' % (
+                    DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT)
+             
+            page = 1
+            while True:
+                logger.info('Searching DocumentCloud [%s], page %d' % (q, page))
+                doc_list = self.search_page(q, page)     
+                logger.info('Found %d matching documents' % len(doc_list))
+                
+                if doc_list:
+                    for doc in doc_list:
+                        self.process_document(doc)  
+                    page += 1
+                else:
+                    break
+                
         except Exception as e:
             logger.exception(str(e))
               

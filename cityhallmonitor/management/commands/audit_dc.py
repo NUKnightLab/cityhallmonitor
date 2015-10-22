@@ -17,7 +17,7 @@ DEFAULT_PROJECT = 'Chicago City Hall Monitor'
 
 
 class Command(BaseCommand):
-    help = 'Compare data in DocumentCloud vs DB.'
+    help = 'Compare public data in DocumentCloud vs DB.'
     
     _client = None
 
@@ -92,7 +92,8 @@ class Command(BaseCommand):
     def process_document(self, doc):
         """
         Compare data when searching by source and by id
-        """       
+        """ 
+        # Query database by source      
         qs = MatterAttachment.objects.filter(hyperlink=doc.source)
         n = len(qs)
         if not n:
@@ -111,19 +112,35 @@ class Command(BaseCommand):
             if delta:
                 logger.error('Data mismatch by source [source=%s]\n%s' % (
                     attachment.hyperlink, pprint.pformat(delta, width=100))
-                )                      
+                ) 
         
-                                                               
+        # Query database by MatterAttachmentId
+        qs = MatterAttachment.objects.filter(id=doc.data['MatterAttachmentId'])
+        n = len(qs)
+        if not n:
+            logger.error(
+                'MatterAttachmentId not found in db [id=%s]' % (
+                doc.data['MatterAttachmentId'])
+            )   
+        else:
+            attachment = qs[0]
+            delta = self.diff_data(attachment, doc)                  
+            if delta:
+                logger.error('Data mismatch by MatterAttachmentId [MatterAttachmentId=%s]\n%s' % (
+                    doc.data['MatterAttachmentId'], pprint.pformat(delta, width=100))
+                ) 
+        
+
     def handle(self, *args, **options):
         try:
             query = options['query']
             if query:
                 logger.info('Searching DocumentCloud [%s]' % query)
-                r = self.search('account:%s project:"%s" %s' % (
+                r = self.search('account:%s project:"%s" access:public %s' % (
                     DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT, query))
             else:
                 logger.info('Searching DocumentCloud')
-                r = self.search('account:%s project:"%s"' % (
+                r = self.search('account:%s project:"%s" access:public' % (
                     DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT))
                         
             logger.info('Found %d matching documents' % len(r))

@@ -1,9 +1,11 @@
 var summaryTemplate = null;
-var resultTemplate = null;
+var singleResultTemplate = null;
+var multiResultTemplate = null;
 
 $(function() {
     summaryTemplate = _.template($("#summary-template").html());
-    resultTemplate = _.template($("#result-template").html());
+    singleResultTemplate = _.template($("#single-result-template").html());
+    multiResultTemplate = _.template($("#multi-result-template").html());
     $('.example-search').click(function() {
         $('#search-input').val($(this).text());
         $('#search-submit').click();
@@ -13,9 +15,11 @@ $(function() {
 });
 
 var addResult = function(obj) {
-    $.each(obj.docs, function(i, doc) {
-        $(resultTemplate(doc)).appendTo('#search-results');
-    });
+    if (obj.docs.length > 1) {
+      $(multiResultTemplate({ docs: obj.docs })).appendTo('#search-results');
+    } else {
+      $(singleResultTemplate({ doc: obj.docs[0] })).appendTo('#search-results');
+    }
 };
 
 var doSearch = function(subscribeUrl) {
@@ -32,7 +36,7 @@ var doSearch = function(subscribeUrl) {
         case 'past-year':
             startDate.subtract(1, 'years');
             var iterDate = moment();
-            while (iterDate.format(MONTH_FORMAT) >= startDate.format(MONTH_FORMAT)) { 
+            while (iterDate.format(MONTH_FORMAT) >= startDate.format(MONTH_FORMAT)) {
                 queryExtra += ' MatterSortMonth: ' + iterDate.format(MONTH_FORMAT);
                 iterDate.subtract(1, 'months');
             }
@@ -67,12 +71,12 @@ var doSearch = function(subscribeUrl) {
             if (dateRangeType !== 'any' && dt < startDateStr) {
                 return true;
             }
-            
-            if(dates.indexOf(dt) < 0) {        
+
+            if(dates.indexOf(dt) < 0) {
                 dates.push(dt);
                 groups[dt] = {};
             }
-            
+
             if(doc.data.MatterId in groups[dt]) {
                 groups[dt][doc.data.MatterId]['docs'].push(doc);
             } else {
@@ -80,7 +84,7 @@ var doSearch = function(subscribeUrl) {
                     'data': doc.data,
                     'docs': [doc]
                 };
-            }            
+            }
         });
 
         $('#results-summary').html($(summaryTemplate({
@@ -97,7 +101,7 @@ var doSearch = function(subscribeUrl) {
         if(data.documents.length) {
             dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             for (i=0; i<dates.length; i++) {
-                var dateGroups = groups[dates[i]];               
+                var dateGroups = groups[dates[i]];
                 $.each(dateGroups, function(j, g) {
                     addResult(g);
                 });

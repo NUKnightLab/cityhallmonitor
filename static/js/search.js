@@ -28,6 +28,25 @@ var doSearch = function(subscribeUrl) {
     var endDate = moment();
     var queryExtra = '';
     var queryQualifier = '';
+    var ignoreRoutine = $('#ignore-routine').is(':checked');
+    var routineFilter = '';
+    if ($('#ignore-routine').is(':checked')) {
+        routineFilter
+        += ' !"Congratulations extended"'
+        + ' !"Gratitude extended"'
+        + ' !"Recognition extended"'
+        + ' !"Issuance of permits for sign(s)"'
+        + ' !"Sidewalk cafe(s) for"'
+        + ' !"Canopy(s) for"'
+        + ' !"Awning(s) for"'
+        + ' !"Residential permit parking"'
+        + ' !"Handicapped Parking Permit"'
+        + ' !"Handicapped permit"'
+        + ' !"Grant(s) of privilege in public way"'
+        + ' !"Loading/Standing/Tow Zone(s)"'
+        + ' !"Senior citizens sewer refund(s)"'
+        + ' !"Oath of office"';
+    }
     switch (dateRangeType) {
         case 'past-year':
             startDate.subtract(1, 'years');
@@ -51,7 +70,7 @@ var doSearch = function(subscribeUrl) {
             break;
     }
     query += ' account:12872-knight-lab project:"Chicago City Hall Monitor"';
-    query += ' ' + queryExtra;
+    query += ' ' + queryExtra + routineFilter;
     console.log('EXECUTING DOCUMENTCLOUD QUERY:: ' + query);
     $.ajax({
         url: 'https://www.documentcloud.org/api/search.json?q='

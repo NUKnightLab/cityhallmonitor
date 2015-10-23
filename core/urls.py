@@ -9,6 +9,8 @@ urlpatterns = [
         name='about'),
     url(r'^subscriptions$', TemplateView.as_view(template_name='subscriptions.html'),
         name='subscriptions'),
+    url(r'^faq$', TemplateView.as_view(template_name='faq.html'),
+        name='faq'),
     url(r'^facet$', 'cityhallmonitor.views.facet', name='facet'),
     url(r'^documents/(?P<id>[0-9]+)$', 
         'cityhallmonitor.views.documents', name='documents'),   

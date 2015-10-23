@@ -51,17 +51,36 @@
         </div>
     </script>
 
-    <script type="text/template" id="result-template">
-        <div class="result row" id="<%= data.MatterId %>">
-            <div class="small-8 columns">
-                <a href="/documents/<%= data.MatterAttachmentId %>" data-document="<%= id %>" class="read-more">
-                <p class="updated-date"><%= data.MatterSortDate.substring(0,10) %></p>
-                <h5><%= data.MatterTitle %></h5>
+    <script type="text/template" id="multi-result-template">
+        <div class="result multi row" id="<%= docs[0].data.MatterId %>" >
+          <h5 class="small-12 columns"><%= docs[0].data.MatterTitle %></h5>
+        <% _.each(docs, function(doc, i) { %>
+          <% console.log(doc, i); %>
+          <div class="small-8 columns">
+                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
+                <p><span class="updated-date"><%= doc.updated_at.slice(0, -15) %></span><%= doc.title %></p>
                 </a>
             </div>
             <div class="more-info small-4 columns">
-                <a href="/documents/<%= data.MatterAttachmentId %>" data-document="<%= id %>" class="read-more button info tiny">Read</a>
-                <a class="download-pdf" href="<%= source %>">Download PDF</a>
+                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>
+                <a class="download-pdf" href="<%= doc.source %>">Download PDF</a>
+            </div>
+        <% }); %>
+      <hr />
+      </div>
+    </script>
+
+    <script type="text/template" id="single-result-template">
+        <div class="result row" id="<%= doc.data.MatterId %>">
+            <div class="small-8 columns">
+                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
+                <p class="updated-date"><%= doc.data.MatterSortDate.substring(0,10) %></p>
+                <h5><%= doc.data.MatterTitle %></h5>
+                </a>
+            </div>
+            <div class="more-info small-4 columns">
+                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>
+                <a class="download-pdf" href="<%= doc.source %>">Download PDF</a>
             </div>
             <hr />
         </div>

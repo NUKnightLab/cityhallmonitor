@@ -184,8 +184,9 @@ a.delete-subscription {
     font-family: $font-family-sans-serif;
 }
 
+/* TODO: Style `h5 a` differently than `a h5` so users can differentiate between a MatterTitle that is clickable (i.e. one for a matter that has only one document) and a MatterTitle that is not */
 .updated-date {
-    margin-bottom: 0;
+    margin: 0 10px 0 0;
     color: $jumbo;
 }
 .result-thumb { float: left; }

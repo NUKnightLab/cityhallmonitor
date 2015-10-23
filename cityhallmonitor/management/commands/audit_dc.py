@@ -117,37 +117,41 @@ class Command(BaseCommand):
         n = len(qs)
         if not n:
             logger.error(
-                'source not found in db [source=%s]' % (
-                doc.source)
+                'source not found in db [id=%s, source=%s]' % (
+                doc.data['MatterAttachmentId'], doc.source)
             )   
         elif n > 1:
             logger.error(
-                'source matches multiple in db [source=%s]' % (
-                doc.source)
+                'source matches multiple in db [id=%s, source=%s]' % (
+                doc.data['MatterAttachmentId'], doc.source)
             )  
         else:
             attachment = qs[0]
             delta = self.diff_data(attachment, doc)                  
             if delta:
-                logger.error('Data mismatch by source [source=%s]\n%s' % (
-                    attachment.hyperlink, pprint.pformat(delta, width=100))
-                ) 
+                logger.error(
+                    'data mismatch by source [id=%s, source=%s]' % (
+                    doc.data['MatterAttachmentId'], doc.source)
+                )
+                logger.debug(pprint.pformat(delta, width=100))
         
         # Query database by MatterAttachmentId
         qs = MatterAttachment.objects.filter(id=doc.data['MatterAttachmentId'])
         n = len(qs)
         if not n:
             logger.error(
-                'MatterAttachmentId not found in db [id=%s]' % (
-                doc.data['MatterAttachmentId'])
+                'MatterAttachmentId not found in db [id=%s, source=%s]' % (
+                doc.data['MatterAttachmentId'], doc.source)
             )   
         else:
             attachment = qs[0]
             delta = self.diff_data(attachment, doc)                  
             if delta:
-                logger.error('Data mismatch by MatterAttachmentId [MatterAttachmentId=%s]\n%s' % (
-                    doc.data['MatterAttachmentId'], pprint.pformat(delta, width=100))
-                ) 
+                logger.error(
+                    'data mismatch by MatterAttachmentId [id=%s, source=%s]' % (
+                    doc.data['MatterAttachmentId'], doc.source)
+                )
+                logger.debug(pprint.pformat(delta, width=100)) 
         
 
     def handle(self, *args, **options):

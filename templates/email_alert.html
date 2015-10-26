@@ -1,20 +1,22 @@
-<p>
-Your search notification on City Hall Monitor:
-</p>
-<p>
-{{ query }}
-</p>
-<p>
-Matched {{ documents|length }} new documents:
-</p>
+{% include "_email_header.html" %}
+<table border="0">
+  <tr>
+    <td><p>Your search for <span style="color: #ce4d28; font-weight: bold;">{{ query }}</span> on <a href="https://cityhallmonitor.knightlab.com">City Hall Monitor</a> matched {{ documents|length }} new documents:</p></td>
+  </tr>
+  {% for doc in documents %}
+  <tr>
+    <td>
+      <a href="{{ doc.published_url }}">
+        <h5>{{ doc.data.MatterTitle }}<h5>
+        <p>{{ doc.title }}</p>
+      </a>
+      <hr>
+    </td>
+  </tr>
+  {% endfor %}
+  <tr style="background-color: #999; text-align: right;">
+    <td><a href="{{ notifications_url }}">Unsubscribe or change your notifications</a></td>
+  </tr>
+</table>
 
-{% for doc in documents %}
-<p>
-{{ doc.data.MatterTitle }}<br>
-<a href="{{ doc.published_url }}">{{ doc.title }}</a>
-</p>
-{% endfor %}
-
-<hr>
-
-<a href="{{ notifications_url }}">Manage your notifications</a>
+{% include "_email_footer.html" %}

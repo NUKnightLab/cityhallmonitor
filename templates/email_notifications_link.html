@@ -1,6 +1,10 @@
-<p>
-Use this link to manage your City Hall Monitor subscriptions:
-</p>
-<p>
-<a href="{{ notifications_url }}">{{ notifications_url }}</a>
-</p>
+{% include "_email_header.html" %}
+<table border="0">
+  <tr>
+    <td>
+      <p>Use this link to manage your City Hall Monitor subscriptions:</p>
+      <p><a href="{{ notifications_url }}">{{ notifications_url }}</a></p>
+    </td>
+  </tr>
+</table>
+{% include "_email_footer.html" %}

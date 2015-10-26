@@ -1,4 +1,5 @@
 import logging
+import pprint
 import re
 import urllib
 from django.conf import settings
@@ -62,7 +63,7 @@ class DocumentSyncException(Exception): pass
 
 class Command(BaseCommand):
     help = 'Upload updated attachment files from the Chicago Legistar API to DocumentCloud'
-    
+
     _client = None
 
     def client(self):
@@ -96,7 +97,7 @@ class Command(BaseCommand):
     def search(self, query):
         """Seach DocumentCloud"""
         return self.client().documents.search(query)
- 
+
     def short_description(self, attachment):
         """Get short description for attachment"""
         filename = '.'.join(attachment.name.split('.')[:-1])
@@ -113,9 +114,9 @@ class Command(BaseCommand):
         published_url = ATTACHMENT_PUBLISH_URL % attachment.id
         description = self.short_description(attachment)
         sort_date = max([d for d in [
-                matter.intro_date, 
-                matter.agenda_date, 
-                matter.passed_date, 
+                matter.intro_date,
+                matter.agenda_date,
+                matter.passed_date,
                 matter.enactment_date] if d is not None], default=None)
         data = {
             'MatterAttachmentId': str(attachment.id),
@@ -138,15 +139,17 @@ class Command(BaseCommand):
         }
         r = self.search('account:%s source: "%s"' % (
             DOCUMENT_CLOUD_ACCOUNT, attachment.hyperlink))
-      
+
         assert type(r) is list, \
             'DocumentCloud search response is %s: %s' % (type(r), repr(r))
-           
+
+        logger.debug('Result from DocumentCloud is %s' % str(r))
+
         if r:
             logger.debug(
-                'Document exists in DocumentCloud. Not transferring: %s',                
+                'Document exists in DocumentCloud. Not transferring: %s',
                 attachment.hyperlink)
-                
+
             if len(r) > 1:
                 raise DocumentSyncException(
                     'Multiple instances exist in DocumentCloud for '\
@@ -155,16 +158,18 @@ class Command(BaseCommand):
                 doc = r[0]
                 olddata = { k:v for k,v in doc.data.items()
                     if k != 'ops:DescriptionProcessed' }
+                logger.debug('Old data:\n=========\n%s' % pprint.pformat(olddata, indent=4))
+                logger.debug('\nNew data:\n=========\n%s' % pprint.pformat(data, indent=4))
                 if self.datadiff(data, olddata):
-                    logger.debug('Updating metadata for document: %s', 
+                    logger.debug('Updating metadata for document: %s',
                         attachment.hyperlink)
                     if not doc.data:
                         data['ops:DescriptionProcessed'] = '0'
                     doc.data = data
                     doc.put()
         else:
-            logger.info('Transferring to DocumentCloud: %s', 
-                attachment.hyperlink)   
+            logger.info('Transferring to DocumentCloud: %s',
+                attachment.hyperlink)
             data['ops:DescriptionProcessed'] = '0'
             doc = self.upload_to_doccloud(
                 attachment.hyperlink, attachment.name,
@@ -180,12 +185,12 @@ class Command(BaseCommand):
         for doc in r:
             self.stdout.write('Deleting document: %s', doc.source)
             doc.delete()
-        
+
     def handle(self, *args, **options):
         logger.info(
             'matterid=%(matter_id)s, all=%(all)s, deleteall=%(deleteall)s',
             options)
-        
+
         try:
             if options['deleteall']:
                 answer = input(
@@ -232,6 +237,6 @@ class Command(BaseCommand):
                         'MatterAttachment: %s', attachment.id)
         except Exception as e:
             logger.exception(str(e))
-              
+
         logger.info('Done\n')
-        
+

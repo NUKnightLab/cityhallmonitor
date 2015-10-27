@@ -109,11 +109,13 @@ body {
 /* Email sub box */
 .subscription-email span { color: $orange; }
 #search-input,
-#search-subscribe,
-#post-subscribe-msg,
 #search-submit {
     margin-top: 32px;
     margin-bottom: 0px;
+}
+#search-subscribe,
+#post-subscribe-msg{
+    margin-top: 21px;
 }
 .alert-box {
     margin: 40px auto;

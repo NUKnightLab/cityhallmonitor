@@ -200,6 +200,9 @@ a.delete-subscription {
 .download-pdf { margin-left: 20px; }
 
 /* purpleline additions to make*/
+.reveal-modal.open {
+    padding-top: 55px;
+}
 select:focus {
     border-color: $jumbo;
     outline: none;

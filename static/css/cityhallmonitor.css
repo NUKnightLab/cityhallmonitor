@@ -87,9 +87,6 @@ body {
   border-radius: 0;
   background-color: white; }
 
-#search-form input {
-  margin-top: 20px; }
-
 #spinner-holder {
   text-align: center; }
 
@@ -104,10 +101,12 @@ body {
 .subscription-email span {
   color: #ce4d28; }
 
+#search-input,
 #search-subscribe,
 #post-subscribe-msg,
 #search-submit {
-  margin-top: 21px; }
+  margin-top: 32px;
+  margin-bottom: 0px; }
 
 .alert-box {
   margin: 40px auto; }
@@ -160,6 +159,10 @@ a.delete-subscription {
 .more-info {
   font-size: 12px;
   font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.help {
+  margin: 10px 0;
+  line-height: 1; }
 
 /* TODO: Style `h5 a` differently than `a h5` so users can differentiate between a MatterTitle that is clickable (i.e. one for a matter that has only one document) and a MatterTitle that is not */
 .updated-date {

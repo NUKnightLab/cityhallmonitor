@@ -73,11 +73,12 @@
     <script type="text/template" id="single-result-template">
         <div class="result row" id="<%= doc.data.MatterId %>">
             <div class="small-8 columns">
+              <p class="updated-date"><%= doc.data.MatterSortDate.substring(0,10) %></p>
+              <p class="help meta">Status: <span class="label <%= statusClass %>"><%= doc.data.MatterStatus %></span></p>
+              <p class="help meta">Type: <span class="label secondary"><%= doc.data.MatterType %></span></p>
                 <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
-                <p class="updated-date"><%= doc.data.MatterSortDate.substring(0,10) %></p>
-                <h5><%= doc.data.MatterTitle %></h5>
+                  <h5><%= doc.data.MatterTitle %></h5>
                 </a>
-                <p class="help">Status: <span class="<%= doc.data.MatterStatus %>"><%= doc.data.MatterStatus %></span> Type: <span class="<%= doc.data.MatterType %>"><%= doc.data.MatterType %></span></p>
             </div>
             <div class="more-info small-4 columns">
                 <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>

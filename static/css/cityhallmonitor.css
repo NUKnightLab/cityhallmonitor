@@ -166,6 +166,15 @@ a.delete-subscription {
   margin: 10px 0;
   line-height: 1; }
 
+.meta {
+  display: inline-block;
+  margin-right: 20px;
+  margin-bottom: 0; }
+  .meta .label {
+    font-size: 12px; }
+    .meta .label.secondary {
+      display: inline-block; }
+
 /* TODO: Style `h5 a` differently than `a h5` so users can differentiate between a MatterTitle that is clickable (i.e. one for a matter that has only one document) and a MatterTitle that is not */
 .updated-date {
   margin: 0 10px 0 0;

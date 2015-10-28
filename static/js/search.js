@@ -18,7 +18,35 @@ var addResult = function(obj) {
     if (obj.docs.length > 1) {
       $(multiResultTemplate({ docs: obj.docs })).appendTo('#search-results');
     } else {
-      $(singleResultTemplate({ doc: obj.docs[0] })).appendTo('#search-results');
+      var statusClass;
+      switch (obj.docs[0].data.MatterStatus){
+        case 'Adopted':
+        case 'Approved':
+        case 'Passed':
+        case 'Recommended for Passage':
+          statusClass = 'success';
+          break;
+
+        case 'Deferred and Published':
+        case 'Direct Introduction':
+        case 'In Committee':
+        case 'Introduced':
+        case 'Placed on File':
+        case 'Recommended for Re-referral':
+        case 'Re-referred':
+          statusClass = 'secondary';
+          break;
+
+        case 'Failed to Pass':
+        case 'Recommended Do Not Pass':
+        case 'Tabled':
+        case 'Vetoed':
+        case 'Void':
+        case 'Withdrawn':
+          statusClass = 'alert';
+          break;
+      }
+      $(singleResultTemplate({ doc: obj.docs[0], statusClass: statusClass })).appendTo('#search-results');
     }
 };
 

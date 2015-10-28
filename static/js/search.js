@@ -85,6 +85,12 @@ var doSearch = function(subscribeUrl) {
         var dates = [];
         var startDateStr = startDate.format(DATE_FORMAT);
         var dt = null;
+        var totalDocuments = 0;
+        var statTypes = {
+            'Statuses': 'MatterStatus',
+            'Matter types': 'MatterType'
+        };
+        var statsData = {};
         $.each(data.documents, function(i, doc) {
             dt = doc.data.MatterSortDate;
             if (dateRangeType !== 'any' && dt < startDateStr) {
@@ -104,10 +110,20 @@ var doSearch = function(subscribeUrl) {
                     'docs': [doc]
                 };
             }
+            $.each(statTypes, function(key, title) {
+                if (!(key in statsData)){
+                    statsData[key] = {};
+                }
+                if (!(doc.data[title] in statsData[key])) {
+                    statsData[key][doc.data[title]] = 0;
+                }
+                statsData[key][doc.data[title]] += 1;
+            });
+            totalDocuments += 1;
         });
 
         $('#results-summary').html($(summaryTemplate({
-            total:data.total,
+            total:totalDocuments,
             query: $('#search-input').val(),
             qualifier: queryQualifier
         })));
@@ -117,7 +133,7 @@ var doSearch = function(subscribeUrl) {
             return false;
         });
 
-        if(data.documents.length) {
+        if(totalDocuments > 0) {
             dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             for (i=0; i<dates.length; i++) {
                 var dateGroups = groups[dates[i]];
@@ -127,6 +143,17 @@ var doSearch = function(subscribeUrl) {
             }
         }
         $("#search-results").foundation('reveal', 'reflow');
+
+        if (statsData) {
+            $('#results-stats').append('<ul class="side-nav"><li><strong>Summary of results</strong></li></ul>');
+            var ul = $('#results-stats ul');
+            $.each(statsData, function(stat, data) {
+                ul.append('<li><strong>' + stat + '</strong></li>');
+                $.each(data, function(key, val) {
+                    ul.append('<li>(' + val + ') ' + key + '</li>');
+                });
+            });
+        }
         hideLoadingState();
     });
 }; // doSearch

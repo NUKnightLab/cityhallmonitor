@@ -3,18 +3,15 @@
             <div class="row">
                 <form action="#" id="search-form">
 
-                    <div class="small-12 medium-7 columns">
+                    <div class="small-12 medium-6 columns">
                         <input type="text" placeholder="Search for a keyword, ordinance, or alderman" id="search-input" tabindex=1 />
                         <p class="help">Examples: <a href="" class="example-search">"sale of city-owned property"</a> or <a href="" class="example-search">"zoning reclassification"</a> or <a href="" class="example-search">"rogers park" + permit</a></p>
-                        <input id="ignore-routine" type="checkbox" checked />
-                        <label>Ignore the <a href="{% url 'faq' %}#what-does-ignore-the-boring-stuff-mean" title="See FAQ for more info">boring stuff</a></label>
-
                     </div>
 
                     <div class="small-6 medium-3 columns" id="date">
 
                         <div class="row">
-                            <label>Only show items with action taken in...</label>
+                            <p class="help">Show items from...</p>
                             <select id="date-range-type">
                                 <option value="past-month">Last 30 days</option>
                                 <option value="past-year">Past year</option>
@@ -54,8 +51,11 @@
                             </div>
                         </div><!--datepicker-->
                     </div><!-- #date -->
-                    <div class="small-6 medium-2 columns">
+                    <div class="small-6 medium-3 columns">
                       <button type="submit" value="Search" id="search-submit" class="button postfix alert small" tabindex=2>Search</button>
+                        <input id="ignore-routine" type="checkbox" checked />
+                        <label for="ignore-routine" class="help">Ignore the <a href="{% url 'faq' %}#what-does-ignore-the-boring-stuff-mean" title="See FAQ for more info">boring stuff</a></label>
+
                     </div>
                 </form> <!-- #search-form -->
             </div>

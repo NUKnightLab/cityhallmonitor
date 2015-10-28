@@ -78,6 +78,7 @@
                 <p class="updated-date"><%= doc.data.MatterSortDate.substring(0,10) %></p>
                 <h5><%= doc.data.MatterTitle %></h5>
                 </a>
+                <p class="help">Status: <span class="<%= doc.data.MatterStatus %>"><%= doc.data.MatterStatus %></span> Type: <span class="<%= doc.data.MatterType %>"><%= doc.data.MatterType %></span></p>
             </div>
             <div class="more-info small-4 columns">
                 <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>

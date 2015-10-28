@@ -5,24 +5,22 @@
 {% endblock %}
 
 {% block content %}
+<div class="row">
+  <div class="small-12 columns">
+    {% if error %}
+    <div data-alert class="alert-box alert">{{ error }}</div>
+    {% else %}
 
-{% if error %}
-
-<div data-alert class="alert-box alert">
-{{ error }}
+    <h5>{{ matter_attachment.matter }}</h5>
+    <div id="document_cloud_viewer"></div>
+  </div>
 </div>
-    
-{% else %}
-
-<h4>{{ matter_attachment.matter }}</h4>    
-<div id="document_cloud_viewer"></div>
 <script>
     DV.load('https://www.documentcloud.org/documents/{{ doc.id }}.js', {
         container : '#document_cloud_viewer',
         responsive: true
     });
 </script>
-    
 {% endif %}
 
 {% endblock content %}

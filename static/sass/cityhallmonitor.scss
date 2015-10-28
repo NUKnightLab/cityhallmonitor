@@ -95,9 +95,6 @@ body {
     border-radius: 0;
     background-color: white;
 }
-#search-form input {
-    margin-top: 20px;
-}
 #spinner-holder {
     text-align: center;
 }
@@ -111,9 +108,15 @@ body {
 
 /* Email sub box */
 .subscription-email span { color: $orange; }
+#search-input,
+#search-submit {
+    margin-top: 32px;
+    margin-bottom: 0px;
+}
 #search-subscribe,
-#post-subscribe-msg,
-#search-submit { margin-top: 21px; }
+#post-subscribe-msg{
+    margin-top: 21px;
+}
 .alert-box {
     margin: 40px auto;
 }
@@ -183,7 +186,10 @@ a.delete-subscription {
     font-size: 12px;
     font-family: $font-family-sans-serif;
 }
-
+.help {
+    margin: 10px 0;
+    line-height: 1;
+}
 /* TODO: Style `h5 a` differently than `a h5` so users can differentiate between a MatterTitle that is clickable (i.e. one for a matter that has only one document) and a MatterTitle that is not */
 .updated-date {
     margin: 0 10px 0 0;
@@ -194,6 +200,9 @@ a.delete-subscription {
 .download-pdf { margin-left: 20px; }
 
 /* purpleline additions to make*/
+.reveal-modal.open {
+    padding-top: 55px;
+}
 select:focus {
     border-color: $jumbo;
     outline: none;

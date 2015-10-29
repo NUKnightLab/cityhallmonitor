@@ -1,11 +1,13 @@
 var summaryTemplate = null;
 var singleResultTemplate = null;
 var multiResultTemplate = null;
+var resultStatsTemplate = null;
 
 $(function() {
     summaryTemplate = _.template($("#summary-template").html());
     singleResultTemplate = _.template($("#single-result-template").html());
     multiResultTemplate = _.template($("#multi-result-template").html());
+    resultStatsTemplate = _.template($("#result-stats-sidebar").html());
     $('.example-search').click(function() {
         $('#search-input').val($(this).text());
         $('#search-submit').click();
@@ -174,14 +176,16 @@ var doSearch = function(subscribeUrl) {
         $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('nav').outerHeight()}, 350);
 
         if (statsData) {
-            $('#results-stats').append('<ul class="side-nav"><li><strong>Summary of results</strong></li></ul>');
+            $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
+
+           /* $('#results-stats').append('<ul class="side-nav"><li><strong>Summary of results</strong></li></ul>');
             var ul = $('#results-stats ul');
             $.each(statsData, function(stat, data) {
                 ul.append('<li><strong>' + stat + '</strong></li>');
                 $.each(data, function(key, val) {
                     ul.append('<li>(' + val + ') ' + key + '</li>');
                 });
-            });
+            });*/
         }
         hideLoadingState();
     });

@@ -171,6 +171,7 @@ var doSearch = function(subscribeUrl) {
             }
         }
         $("#search-results").foundation('reveal', 'reflow');
+        $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('nav').outerHeight()}, 350);
 
         if (statsData) {
             $('#results-stats').append('<ul class="side-nav"><li><strong>Summary of results</strong></li></ul>');

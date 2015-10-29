@@ -8,7 +8,7 @@
     <div id="document-modal-view"></div>
 </div>
 
-<div class="panel">
+<div class="panel" id="page-topper">
     <div class="row" id="big-hed">
         <h1><span class="secondary">City Hall</span> <span class="logo-mark xxl">Monitor</span></h1>
         <h2 class="intro">We've got some city hall documents.</h2>
@@ -32,7 +32,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script type="text/template" id="summary-template">
-        <div class="small-12 medium-10 medium-offset-1 columns">
+        <div class="small-12 columns">
             <h5>We found <span class="num-of-results"><%= total %> results</span> matching <em><%= query %></em><%= qualifier %>.</h5>
             <form action="#" id="search-subscribe-form">
                 <div class="row collapse">

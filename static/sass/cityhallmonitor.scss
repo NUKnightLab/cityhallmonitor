@@ -26,7 +26,7 @@ h2.intro {
 #big-hed {
     margin-bottom: 40px;
 }
-span.secondary { display: block; }
+/*span.secondary { display: block; }*/
 span.logo-mark.xxl { margin-top: 0; }
 
 /* Navbar */
@@ -174,9 +174,9 @@ a.delete-subscription {
         border: 1px solid $jumbo;
         margin-right: 1em;
     }
-    h4 {
-        margin: 10px 0 30px 0;
-        line-height: 1.4;
+    h5 {
+        margin: 0 0 22px 0;
+        line-height: 1.6rem;
     }
 }
 .help,
@@ -192,20 +192,28 @@ a.delete-subscription {
 }
 .meta {
     display: inline-block;
-    margin-right: 20px;
-    margin-bottom:0;
+    margin: 0 20px 10px 0;
+    color: $jumbo;
     .label {
         font-size: 12px;
         &.secondary { display: inline-block; }
+        &.warning { background-color: #eae34a; color: #333; }
     }
 }
 /* TODO: Style `h5 a` differently than `a h5` so users can differentiate between a MatterTitle that is clickable (i.e. one for a matter that has only one document) and a MatterTitle that is not */
 .updated-date {
-    margin: 0 10px 0 0;
+    margin: 0 20px 0 0;
     color: $jumbo;
+    display: inline-block;
 }
 .result-thumb { float: left; }
-.more-info { float: right; }
+.more-info {
+    float: right;
+    padding-top: 35px;
+}
+.multi .more-info {
+    padding-top: 0px;
+}
 .download-pdf { margin-left: 20px; }
 
 /* purpleline additions to make*/

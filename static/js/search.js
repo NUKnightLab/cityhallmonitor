@@ -34,7 +34,7 @@ var addResult = function(obj) {
         case 'Placed on File':
         case 'Recommended for Re-referral':
         case 'Re-referred':
-          statusClass = 'secondary';
+          statusClass = 'warning';
           break;
 
         case 'Failed to Pass':

@@ -53,14 +53,21 @@
     </script>
 
     <script type="text/template" id="multi-result-template">
+        <% var successStatuses = ['Adopted', 'Approved', 'Passed', 'Recommended for Passage'];
+           var failStatuses = ['Failed to Pass', 'Recommended Do Not Pass', 'Tabled', 'Vetoed', 'Void']; %>
+
         <div class="result multi row" id="<%= docs[0].data.MatterId %>" >
-          <h5 class="small-12 columns"><%= docs[0].data.MatterTitle %></h5>
+          <div class="small-12 columns">
+            <h5><span class="label secondary"><i class="fa fa-exclamation-circle"></i> Multiple documents</span> <%= docs[0].data.MatterTitle %></h5>
+          </div>
         <% _.each(docs, function(doc, i) { %>
-          <% console.log(doc, i); %>
-          <div class="small-8 columns">
-                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
-                <p><span class="updated-date"><%= doc.updated_at.slice(0, -15) %></span><%= doc.title %></p>
-                </a>
+          <div class="small-7 small-offset-1 columns">
+              <p class="updated-date"><%= doc.updated_at.slice(0, -15) %></p>
+              <p class="help meta">Type: <span><%= doc.data.MatterType %></span></p>
+              <p class="help meta">Status: <span class="label <% if (successStatuses.indexOf(doc.data.MatterStatus) > 0) { %>success<% } else if (failStatuses.indexOf(doc.data.MatterStatus) > 0) { %>alert<% } else { %>warning<% } %>"><%= doc.data.MatterStatus %></span></p>
+              <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
+                <p><%= doc.title %></p>
+              </a>
             </div>
             <div class="more-info small-4 columns">
                 <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>
@@ -75,8 +82,8 @@
         <div class="result row" id="<%= doc.data.MatterId %>">
             <div class="small-8 columns">
               <p class="updated-date"><%= doc.data.MatterSortDate.substring(0,10) %></p>
+              <p class="help meta">Type: <span><%= doc.data.MatterType %></span></p>
               <p class="help meta">Status: <span class="label <%= statusClass %>"><%= doc.data.MatterStatus %></span></p>
-              <p class="help meta">Type: <span class="label secondary"><%= doc.data.MatterType %></span></p>
                 <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
                   <h5><%= doc.data.MatterTitle %></h5>
                 </a>

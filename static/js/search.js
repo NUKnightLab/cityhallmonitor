@@ -177,15 +177,6 @@ var doSearch = function(subscribeUrl) {
 
         if (statsData) {
             $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
-
-           /* $('#results-stats').append('<ul class="side-nav"><li><strong>Summary of results</strong></li></ul>');
-            var ul = $('#results-stats ul');
-            $.each(statsData, function(stat, data) {
-                ul.append('<li><strong>' + stat + '</strong></li>');
-                $.each(data, function(key, val) {
-                    ul.append('<li>(' + val + ') ' + key + '</li>');
-                });
-            });*/
         }
         hideLoadingState();
     });

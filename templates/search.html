@@ -53,18 +53,15 @@
     </script>
 
     <script type="text/template" id="multi-result-template">
-        <% var successStatuses = ['Adopted', 'Approved', 'Passed', 'Recommended for Passage'];
-           var failStatuses = ['Failed to Pass', 'Recommended Do Not Pass', 'Tabled', 'Vetoed', 'Void']; %>
-
         <div class="result multi row" id="<%= docs[0].data.MatterId %>" >
           <div class="small-12 columns">
+            <p class="updated-date"><%= docs[0].data.MatterSortDate.substring(0,10) %></p>
+            <p class="help meta">Type: <span><%= docs[0].data.MatterType %></span></p>
+            <p class="help meta">Status: <span class="label <%= statusClass %>"><%= docs[0].data.MatterStatus %></span></p>
             <h5><span class="label secondary"><i class="fa fa-exclamation-circle"></i> Multiple documents</span> <%= docs[0].data.MatterTitle %></h5>
           </div>
         <% _.each(docs, function(doc, i) { %>
           <div class="small-7 small-offset-1 columns">
-              <p class="updated-date"><%= doc.updated_at.slice(0, -15) %></p>
-              <p class="help meta">Type: <span><%= doc.data.MatterType %></span></p>
-              <p class="help meta">Status: <span class="label <% if (successStatuses.indexOf(doc.data.MatterStatus) > 0) { %>success<% } else if (failStatuses.indexOf(doc.data.MatterStatus) > 0) { %>alert<% } else { %>warning<% } %>"><%= doc.data.MatterStatus %></span></p>
               <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
                 <p><%= doc.title %></p>
               </a>

@@ -17,37 +17,37 @@ $(function() {
 });
 
 var addResult = function(obj) {
+    var statusClass;
+    switch (obj.docs[0].data.MatterStatus){
+      case 'Adopted':
+      case 'Approved':
+      case 'Passed':
+      case 'Recommended for Passage':
+        statusClass = 'success';
+        break;
+
+      case 'Deferred and Published':
+      case 'Direct Introduction':
+      case 'In Committee':
+      case 'Introduced':
+      case 'Placed on File':
+      case 'Recommended for Re-referral':
+      case 'Re-referred':
+        statusClass = 'warning';
+        break;
+
+      case 'Failed to Pass':
+      case 'Recommended Do Not Pass':
+      case 'Tabled':
+      case 'Vetoed':
+      case 'Void':
+      case 'Withdrawn':
+        statusClass = 'alert';
+        break;
+    }
     if (obj.docs.length > 1) {
-      $(multiResultTemplate({ docs: obj.docs })).appendTo('#search-results');
+      $(multiResultTemplate({ docs: obj.docs, statusClass: statusClass })).appendTo('#search-results');
     } else {
-      var statusClass;
-      switch (obj.docs[0].data.MatterStatus){
-        case 'Adopted':
-        case 'Approved':
-        case 'Passed':
-        case 'Recommended for Passage':
-          statusClass = 'success';
-          break;
-
-        case 'Deferred and Published':
-        case 'Direct Introduction':
-        case 'In Committee':
-        case 'Introduced':
-        case 'Placed on File':
-        case 'Recommended for Re-referral':
-        case 'Re-referred':
-          statusClass = 'warning';
-          break;
-
-        case 'Failed to Pass':
-        case 'Recommended Do Not Pass':
-        case 'Tabled':
-        case 'Vetoed':
-        case 'Void':
-        case 'Withdrawn':
-          statusClass = 'alert';
-          break;
-      }
       $(singleResultTemplate({ doc: obj.docs[0], statusClass: statusClass })).appendTo('#search-results');
     }
 };
@@ -177,15 +177,6 @@ var doSearch = function(subscribeUrl) {
 
         if (statsData) {
             $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
-
-           /* $('#results-stats').append('<ul class="side-nav"><li><strong>Summary of results</strong></li></ul>');
-            var ul = $('#results-stats ul');
-            $.each(statsData, function(stat, data) {
-                ul.append('<li><strong>' + stat + '</strong></li>');
-                $.each(data, function(key, val) {
-                    ul.append('<li>(' + val + ') ' + key + '</li>');
-                });
-            });*/
         }
         hideLoadingState();
     });

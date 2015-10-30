@@ -209,6 +209,52 @@ select:focus {
   background: #f2f2f2;
   /*border: 1px solid #d8d8d8;*/ }
 
+/* FAQ styles; should be a dl; put this in purpleline as a pattern */
+.question dt {
+  padding-left: 25px;
+  margin-bottom: 0.7rem;
+  font-weight: bold; }
+  .question dt::before {
+    content: "Q: ";
+    margin-left: -25px;
+    font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #ce4d28;
+    font-weight: bold;
+    font-style: normal; }
+.question dd p:first-child::before {
+  content: "A: ";
+  font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #ce4d28;
+  font-weight: bold;
+  font-style: normal; }
+
+/*    p {
+        &:first-child {
+            padding-left: 25px;
+            margin-bottom: 0.7rem;
+            font-weight: bold;
+            &::before {
+                content: "Q: ";
+                margin-left: -25px;
+                font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                color: #ce4d28;
+                font-weight: bold;
+                font-style: normal;
+            }
+        }
+        &:nth-child(1n+2) {
+            padding-left: 25px;
+            color: #555;
+        }
+        &:nth-child(2)::before {
+            content: "A: ";
+            margin-left: -25px;
+            font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #ce4d28;
+            font-weight: bold;
+            font-style: normal;
+        }
+    }*/
 /* end purpleline fixes */
 
 /*# sourceMappingURL=cityhallmonitor.css.map */

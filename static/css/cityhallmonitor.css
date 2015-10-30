@@ -155,6 +155,12 @@ a.delete-subscription {
     margin: 0 0 22px 0;
     line-height: 1.6rem; }
 
+.multi .document {
+  /*border-bottom: 1px solid #eee;*/ }
+  .multi .document p {
+    margin: 6px 0;
+    text-align: right; }
+
 .help,
 .updated-date,
 .download-pdf,

@@ -179,6 +179,13 @@ a.delete-subscription {
         line-height: 1.6rem;
     }
 }
+.multi .document {
+    /*border-bottom: 1px solid #eee;*/
+    p {
+        margin: 6px 0;
+        text-align: right;
+    }
+}
 .help,
 .updated-date,
 .download-pdf,

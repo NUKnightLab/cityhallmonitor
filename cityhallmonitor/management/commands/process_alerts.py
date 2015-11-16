@@ -10,8 +10,6 @@ from documentcloud import DocumentCloud
 from smtplib import SMTPException
 
 
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
-
 EMAIL_SUBJECT = 'City Hall Monitor Search Alert'
 
 EMAIL_TEMPLATE = 'email_alert.html'
@@ -64,7 +62,7 @@ class Command(BaseCommand):
         """Process subscription"""
         query = 'account:%s project:"%s" access:public %s' % (
             settings.DOCUMENT_CLOUD_ACCOUNT, 
-            DEFAULT_PROJECT, 
+            settings.DOCUMENT_CLOUD_PROJECT, 
             subscription.query)
  
         r = self.search(query)

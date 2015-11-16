@@ -11,11 +11,6 @@ from smtplib import SMTPException
 logger = logging.getLogger(__name__)
 
 
-DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
-
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
-
-
 class Command(BaseCommand):
     help = 'Compare public data in DocumentCloud vs DB.'
     
@@ -160,10 +155,13 @@ class Command(BaseCommand):
             
             if query:
                 q = 'account:%s project:"%s" access:public %s' % (
-                    DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT, query)
+                    settings.DOCUMENT_CLOUD_ACCOUNT,
+                    settings.DOCUMENT_CLOUD_PROJECT, 
+                    query)
             else:
                 q = 'account:%s project:"%s" access:public' % (
-                    DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT)
+                    settings.DOCUMENT_CLOUD_ACCOUNT,
+                    settings.DOCUMENT_CLOUD_PROJECT)
              
             page = 1
             while True:

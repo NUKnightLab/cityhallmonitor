@@ -11,11 +11,9 @@ from newspaper.nlp import summarize
 
 logger = logging.getLogger(__name__)
 
-USERNAME = settings.DOCUMENT_CLOUD_USERNAME
-PASSWORD = settings.DOCUMENT_CLOUD_PASSWORD
-DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
+
 ATTACHMENT_PUBLISH_URL = 'https://cityhallmonitor.knightlab.com/documents/%d'
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
+
 PARENTHETICALS = re.compile('[{([})\]"]+')
 
 
@@ -52,7 +50,9 @@ class Command(BaseCommand):
 
     def client(self):
         if self._client is None:
-            self._client = DocumentCloud(USERNAME, PASSWORD)
+            self._client = DocumentCloud(
+                settings.DOCUMENT_CLOUD_USERNAME, 
+                settings.DOCUMENT_CLOUD_PASSWORD)
         return self._client
 
     def add_arguments(self, parser):
@@ -68,7 +68,7 @@ class Command(BaseCommand):
 
     def search(self, query):
         """Seach DocumentCloud"""
-        return DocumentCloud(USERNAME, PASSWORD).documents.search(query)
+        return self.client().documents.search(query)
 
     def cleanup(self, text):
         """Cleanup text"""
@@ -104,7 +104,10 @@ class Command(BaseCommand):
                     self.stdout.write('Aborting')
                     return
                     
-            query = 'account:%s' % DOCUMENT_CLOUD_ACCOUNT
+            query = 'account:%s project:"%s"' % (
+                    settings.DOCUMENT_CLOUD_ACCOUNT,
+                    settings.DOCUMENT_CLOUD_PROJECT)
+                    
             if not options['all']:
                 query += ' ops:DescriptionProcessed: 0' 
         

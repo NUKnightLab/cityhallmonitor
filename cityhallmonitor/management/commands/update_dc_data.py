@@ -7,11 +7,6 @@ from documentcloud import DocumentCloud
 
 logger = logging.getLogger(__name__)
 
-USERNAME = settings.DOCUMENT_CLOUD_USERNAME
-PASSWORD = settings.DOCUMENT_CLOUD_PASSWORD
-DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
-
 
 class Command(BaseCommand):
     help = 'Update Matter-related document data in DocumentCloud'
@@ -20,7 +15,9 @@ class Command(BaseCommand):
 
     def client(self):
         if self._client is None:
-            self._client = DocumentCloud(USERNAME, PASSWORD)
+            self._client = DocumentCloud(
+                settings.DOCUMENT_CLOUD_USERNAME,
+                settings.DOCUMENT_CLOUD_PASSWORD)
         return self._client
 
     def add_arguments(self, parser):
@@ -86,7 +83,9 @@ class Command(BaseCommand):
         try:
             logger.info('Searching DocumentCloud')
             r = self.search('account:%s project:"%s" %s' % (
-                DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT, options['query']))
+                    settings.DOCUMENT_CLOUD_ACCOUNT,
+                    settings.DOCUMENT_CLOUD_PROJECT, 
+                    options['query']))
             
             logger.info('Found %d matching documents' % len(r))
             

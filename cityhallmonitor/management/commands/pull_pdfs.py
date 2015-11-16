@@ -12,11 +12,10 @@ from documentcloud import DocumentCloud
 
 logger = logging.getLogger(__name__)
 
-USERNAME = settings.DOCUMENT_CLOUD_USERNAME
-PASSWORD = settings.DOCUMENT_CLOUD_PASSWORD
 DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
+DOCUMENT_CLOUD_PROJECT = settings.DOCUMENT_CLOUD_PROJECT
+
 ATTACHMENT_PUBLISH_URL = 'https://cityhallmonitor.knightlab.com/documents/%d'
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
 
 DOCCLOUD_RESERVED_KEYS = set([
     'person',
@@ -69,7 +68,9 @@ class Command(BaseCommand):
 
     def client(self):
         if self._client is None:
-            self._client = DocumentCloud(USERNAME, PASSWORD)
+            self._client = DocumentCloud(
+                settings.DOCUMENT_CLOUD_USERNAME,
+                settings.DOCUMENT_CLOUD_PASSWORD)
         return self._client
 
     def add_arguments(self, parser):
@@ -139,7 +140,9 @@ class Command(BaseCommand):
             'MatterSortYear': sort_date.strftime('%Y')
         }
         r = self.search('account:%s project:"%s" source: "%s"' % (
-            DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT, attachment.hyperlink))
+                DOCUMENT_CLOUD_ACCOUNT, 
+                DOCUMENT_CLOUD_PROJECT, 
+                attachment.hyperlink))
 
         assert type(r) is list, \
             'DocumentCloud search response is %s: %s' % (type(r), repr(r))
@@ -182,9 +185,10 @@ class Command(BaseCommand):
     def delete_all(self):
         """Deletes all documents for this account!!!"""
         self.stdout.write(
-            'Deleting all DocumentCloud documents for account: %s',
-             DOCUMENT_CLOUD_ACCOUNT)
-        r = self.search('account:%s' % DOCUMENT_CLOUD_ACCOUNT)
+            'Deleting all DocumentCloud documents for account:%s project:"%s"',
+             DOCUMENT_CLOUD_ACCOUNT, DOCUMENT_CLOUD_PROJECT)
+        r = self.search('account:%s project:"%s"' % (
+            DOCUMENT_CLOUD_ACCOUNT, DOCUMENT_CLOUD_PROJECT))
         for doc in r:
             self.stdout.write('Deleting document: %s', doc.source)
             doc.delete()
@@ -198,7 +202,8 @@ class Command(BaseCommand):
             if options['deleteall']:
                 answer = input(
                     'Are you sure you want to delete all documents for ' \
-                    'account: %s? [Y/n] ' % DOCUMENT_CLOUD_ACCOUNT)
+                    'account:%s project:"%s"? [Y/n] ' % (
+                    DOCUMENT_CLOUD_ACCOUNT, DOCUMENT_CLOUD_PROJECT))
                 if answer == '' or answer.lower().startswith('y'):
                     self.delete_all()
                     self.stdout.write('Done\n')
@@ -207,7 +212,7 @@ class Command(BaseCommand):
                 return
 
             matter_id = options['matter_id']
-            project = self.get_project(DEFAULT_PROJECT)
+            project = self.get_project(DOCUMENT_CLOUD_PROJECT)
             if matter_id:
                 logger.info('Fetching files for matter ID %s.', matter_id)
                 for attachment in MatterAttachment.objects.filter(

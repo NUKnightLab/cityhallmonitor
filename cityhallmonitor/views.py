@@ -38,8 +38,9 @@ def documents(request, id):
         matter_attachment = MatterAttachment.objects.get(pk=id) 
         
         client = DocumentCloud()
-        r = client.documents.search('account:%s source: "%s"' % (
-            settings.DOCUMENT_CLOUD_ACCOUNT, 
+        r = client.documents.search('account:%s project:"%s" source: "%s"' % (
+            settings.DOCUMENT_CLOUD_ACCOUNT,
+            settings.DOCUMENT_CLOUD_PROJECT, 
             matter_attachment.hyperlink
         ))
         

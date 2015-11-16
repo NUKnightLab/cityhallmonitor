@@ -14,11 +14,6 @@ logger = logging.getLogger(__name__)
 _legistar_matter_attachments_url = \
     'http://webapi.legistar.com/v1/chicago/Matters/%(matter_id)s/Attachments'
 
-USERNAME = settings.DOCUMENT_CLOUD_USERNAME
-PASSWORD = settings.DOCUMENT_CLOUD_PASSWORD
-DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
-
 
 class Command(BaseCommand):
     help = 'Get attachments for updated matters from the Chicago Legistar API.'
@@ -30,7 +25,9 @@ class Command(BaseCommand):
 
     def client(self):
         if self._client is None:
-            self._client = DocumentCloud(USERNAME, PASSWORD)
+            self._client = DocumentCloud(
+                settings.DOCUMENT_CLOUD_USERNAME,
+                settings.DOCUMENT_CLOUD_PASSWORD)
         return self._client
 
     def search(self, query):
@@ -48,8 +45,10 @@ class Command(BaseCommand):
         """
         logger.debug('Privatizing %s' % hyperlink)
                
-        r = self.search('account:%s access:public source: "%s"' % (
-            DOCUMENT_CLOUD_ACCOUNT, hyperlink))
+        r = self.search('account:%s project:"%s" access:public source: "%s"' % (
+                settings.DOCUMENT_CLOUD_ACCOUNT,
+                settings.DOCUMENT_CLOUD_PROJECT, 
+                hyperlink))
         if not r:
             logger.info('Skipping privatization (no public version found): %s' \
                 % hyperlink)

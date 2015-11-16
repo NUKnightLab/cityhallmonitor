@@ -11,10 +11,6 @@ from smtplib import SMTPException
 logger = logging.getLogger(__name__)
 
 
-DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
-
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
-
 ATTACHMENT_PUBLISH_URL = 'https://cityhallmonitor.knightlab.com/documents/%d'
 
 
@@ -97,8 +93,10 @@ class Command(BaseCommand):
         Compare data when searching by source and by id
         """
         # Search by source
-        r = self.search('account:%s source: "%s"' % (
-            DOCUMENT_CLOUD_ACCOUNT, attachment.hyperlink))       
+        r = self.search('account:%s project:"%s" source: "%s"' % (
+                settings.DOCUMENT_CLOUD_ACCOUNT, 
+                settings.DOCUMENT_CLOUD_PROJECT,
+                attachment.hyperlink))       
         if not r:
             logger.error(
                 'source not found in DC [id=%d, source=%s]' % (
@@ -117,8 +115,10 @@ class Command(BaseCommand):
                 )                      
            
         # Search DC by MatterAttachmentId
-        r = self.search('account:%s MatterAttachmentId:%d' % (
-            DOCUMENT_CLOUD_ACCOUNT, attachment.id))   
+        r = self.search('account:%s project:"%s" MatterAttachmentId:%d' % (
+                settings.DOCUMENT_CLOUD_ACCOUNT, 
+                settings.DOCUMENT_CLOUD_PROJECT,
+                attachment.id))   
         if not r:
             logger.error(
                 'MatterAttachmentId not found in DC [id=%d, source=%s]' % (

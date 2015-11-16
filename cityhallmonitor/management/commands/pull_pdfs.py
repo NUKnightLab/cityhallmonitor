@@ -17,6 +17,7 @@ PASSWORD = settings.DOCUMENT_CLOUD_PASSWORD
 DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
 ATTACHMENT_PUBLISH_URL = 'https://cityhallmonitor.knightlab.com/documents/%d'
 DEFAULT_PROJECT = 'Chicago City Hall Monitor'
+
 DOCCLOUD_RESERVED_KEYS = set([
     'person',
     'organization',
@@ -137,8 +138,8 @@ class Command(BaseCommand):
             'MatterSortMonth': sort_date.strftime('%Y-%m'),
             'MatterSortYear': sort_date.strftime('%Y')
         }
-        r = self.search('account:%s source: "%s"' % (
-            DOCUMENT_CLOUD_ACCOUNT, attachment.hyperlink))
+        r = self.search('account:%s project:"%s" source: "%s"' % (
+            DOCUMENT_CLOUD_ACCOUNT, DEFAULT_PROJECT, attachment.hyperlink))
 
         assert type(r) is list, \
             'DocumentCloud search response is %s: %s' % (type(r), repr(r))
@@ -161,6 +162,8 @@ class Command(BaseCommand):
                 logger.debug('Old data:\n=========\n%s' % pprint.pformat(olddata, indent=4))
                 logger.debug('\nNew data:\n=========\n%s' % pprint.pformat(data, indent=4))
                 if self.datadiff(data, olddata):
+                    logger.debug('DocumentCloud source: %s',
+                        doc.source)
                     logger.debug('Updating metadata for document: %s',
                         attachment.hyperlink)
                     if not doc.data:

@@ -80,6 +80,16 @@ This script assumes you've created a Postgres admin user with the same username 
 
 If your Postgres admin user has a different name, change the value of `PGUSER`.
 
+This script doesn't always work.  You can do it manually:
+
+```
+$ createdb -U postgres cityhallmonitor
+$ psql -U postgres cityhallmonitor
+cityhallmonitor=# CREATE USER cityhallmonitor WITH PASSWORD 'default';
+cityhallmonitor=# GRANT ALL PRIVILEGES ON DATABASE "cityhallmonitor" to cityhallmonitor;
+cityhallmonitor=# \q
+```
+
 Verify you can connect to database as cityhallmonitor user:
 
 ```

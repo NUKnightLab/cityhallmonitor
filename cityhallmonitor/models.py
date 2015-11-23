@@ -392,7 +392,7 @@ class MatterAttachment(LegistarModel):
             with connection.cursor() as c:            
                 c.execute(
                     "UPDATE %s" \
-                    " SET text_index = to_tsvector('english', coalesce(text, '') || '')" \
+                    " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
                     " WHERE id=%d" % (self._meta.db_table, self.id))
 
     def __str__(self):

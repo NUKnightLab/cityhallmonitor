@@ -87,6 +87,12 @@ LOGGING['handlers'].update({
         'formatter': 'verbose',
         'filename': '/home/apps/log/cityhallmonitor/get_descriptions.log'
     },
+    'pull_text': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/pull_text.log'
+    },
     'process_alerts': {
         'level': 'DEBUG',
         'class': 'logging.FileHandler',
@@ -132,6 +138,10 @@ LOGGING['loggers'].update({
     },
     'cityhallmonitor.management.commands.get_descriptions': {
         'handlers': ['get_descriptions'],
+        'level': 'DEBUG'
+    },
+    'cityhallmonitor.management.commands.pull_text': {
+        'handlers': ['pull_text'],
         'level': 'DEBUG'
     },
     'cityhallmonitor.management.commands.process_alerts': {

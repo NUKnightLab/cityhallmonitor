@@ -1,6 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection, models
-
+from django.db.models.expressions import BaseExpression, Combinable
+from django.utils import timezone
+ 
 
 # https://djangosnippets.org/snippets/1328/
 class TsVectorField(models.Field):
@@ -19,16 +21,58 @@ class TsVectorField(models.Field):
 
 class LegistarModel(models.Model):
     """
-    Common fields
+    Common fields and methods
     """
     id = models.IntegerField(primary_key=True)
     guid = models.CharField(max_length=100,blank=True)
     last_modified = models.DateTimeField(null=True)
     row_version = models.CharField(max_length=100, blank=True)
+    
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         abstract = True
-    
+ 
+
+    def __init__(self, *args, **kwargs):
+        """Override to save original state"""
+        super(LegistarModel, self).__init__(*args, **kwargs)
+        self.reset_state()
+        
+    def _as_dict(self):
+        """
+        Return dict representation
+        Based on //github.com/romgar/django-dirtyfields/blob/develop/src/dirtyfields/dirtyfields.py
+        """
+        d = {}
+        for field in self._meta.fields:
+            field_value = getattr(self, field.name)
+            
+            if not isinstance(field_value, (BaseExpression, Combinable)):
+                d[field.name] = field_value
+        return d 
+        
+    def reset_state(self):
+        """
+        Reset saved state
+        """
+        self._original_state = self._as_dict()
+        
+    def is_dirty(self):
+        """
+        Is the record really dirty or not (used in signals/handlers.py)  
+        """
+        if not self.id:
+            return True
+        
+        new_state = self._as_dict()
+        for key, value in new_state.items():
+            if value != self._original_state[key]:
+                return True
+        
+        return False
+         
     @classmethod
     def get_or_new(cls, id):
         """Get existing record by id or create a new instance"""

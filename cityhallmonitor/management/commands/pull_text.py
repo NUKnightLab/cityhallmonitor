@@ -29,7 +29,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--limit', type=int, help='Process up to LIMIT documents')
-
+ 
     def get_project(self, name):
         return self.client().projects.get_by_title(name)
 
@@ -52,7 +52,7 @@ class Command(BaseCommand):
                 raise DocumentSyncException(
                     'Multiple instances exist in DocumentCloud for '\
                     'document: %s' % attachment.hyperlink)
-            logger.info('Processing: %s' % attachment.hyperlink)
+            logger.debug('Processing: %s' % attachment.hyperlink)
             
             doc = r[0]
             
@@ -64,18 +64,34 @@ class Command(BaseCommand):
            
     def handle(self, *args, **options):
         logger.info('limit=%(limit)s', options)
+ 
+        total = 0
+       
         try:
-            qs = MatterAttachment.objects.filter(text='')
+            chunk = 1000    # query for 1000 recs at a time
+            n = 1
             
             if options['limit']:
-                for attachment in qs[:options['limit']]:
-                    self.fetch(attachment)
+                chunk = min(chunk, options['limit'])
+                    
+                while n and total < options['limit']:
+                    qs = MatterAttachment.objects.filter(text='')[:chunk]           
+                    for attachment in qs:
+                        self.fetch(attachment)   
+                        
+                    n = len(qs)               
+                    total += n                     
             else:
-                for attachment in qs:
-                    self.fetch(attachment)
+                while n:
+                    qs = MatterAttachment.objects.filter(text='')[:chunk]          
+                    for attachment in qs:
+                        self.fetch(attachment) 
+                    
+                    n = len(qs)
+                    total += n                  
                 
         except Exception as e:
             logger.exception(str(e))
 
-        logger.info('Done\n')
+        logger.info('Done, processed %d records\n' % total)
 

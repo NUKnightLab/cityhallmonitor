@@ -1,5 +1,20 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
+from django.db import connection, models
+
+
+# https://djangosnippets.org/snippets/1328/
+class TsVectorField(models.Field):
+    description = "PostgreSQL tsvector field"
+    
+    def __init__(self, text='', *args, **kwargs):
+        self.text = text
+        kwargs['null'] = True
+        kwargs['editable'] = False
+        kwargs['serialize'] = False
+        super(TsVectorField, self).__init__(*args, **kwargs)
+            
+    def db_type(self, connection):
+        return 'tsvector'
 
 
 class LegistarModel(models.Model):
@@ -351,9 +366,34 @@ class MatterAttachment(LegistarModel):
     is_supporting_doc = models.BooleanField()
     binary = models.TextField(blank=True, default='') # <MatterAttachmentBinary i:nil="true"/>
     link_obtained_at = models.DateTimeField(null=True)
+    
+    dc_id = models.TextField(blank=True, default='') # DocumentCloud document id
+    text = models.TextField(blank=True) # extracted text
+    text_vector = TsVectorField() # postgresql tsvector
+
+    __original_text = None
 
     class Meta:
         verbose_name = 'MatterAttachment'
+
+    def __init__(self, *args, **kwargs):
+        """Override to save original text to detect changes"""
+        super(MatterAttachment, self).__init__(*args, **kwargs)
+        self.__original_text = self.text
+
+    def save(self, *args, **kwargs):
+        """Override to detect changes to text and update tsvector field"""
+        update_tsvector = self.text != self.__original_text                            
+        super(MatterAttachment, self).save(*args, **kwargs)
+        self.__original_text = self.text
+        
+        # Update tsvector field
+        if update_tsvector:
+            with connection.cursor() as c:            
+                c.execute(
+                    "UPDATE %s" \
+                    " SET text_index = to_tsvector('english', coalesce(text, '') || '')" \
+                    " WHERE id=%d" % (self._meta.db_table, self.id))
 
     def __str__(self):
         return self.file_name

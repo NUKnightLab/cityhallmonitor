@@ -42,25 +42,28 @@ class Command(BaseCommand):
 
     def fetch(self, attachment):
         """Get extracted text and id from DocumentCloud"""
-        r = self.search('account:%s project:"%s" source: "%s" access:public' % (
-                DOCUMENT_CLOUD_ACCOUNT, 
-                DOCUMENT_CLOUD_PROJECT, 
-                attachment.hyperlink))
+        try:
+            r = self.search('account:%s project:"%s" source: "%s" access:public' % (
+                    DOCUMENT_CLOUD_ACCOUNT, 
+                    DOCUMENT_CLOUD_PROJECT, 
+                    attachment.hyperlink))
+            
+            if not r:
+                raise Exception('not found')
 
-        if r:
             if len(r) > 1:
-                raise DocumentSyncException(
-                    'Multiple instances exist in DocumentCloud for '\
-                    'document: %s' % attachment.hyperlink)
+                raise Exception('multiple instances')
+                
             logger.debug('Processing: %s' % attachment.hyperlink)
-            
+        
             doc = r[0]
-            
+      
             attachment.dc_id = doc.id
             attachment.text = doc.full_text or ''
             attachment.save()            
-        else:
-            logger.error('Document not found: %s' % attachment.hyperlink)
+        except Exception as e:
+            logger.error('Error processing document %s [%s]' \
+                % (attachment.hyperlink, str(e)))
            
     def handle(self, *args, **options):
         logger.info('limit=%(limit)s', options)

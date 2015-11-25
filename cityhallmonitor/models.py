@@ -1,8 +1,28 @@
+import re
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection, models
 from django.db.models.expressions import BaseExpression, Combinable
 from django.utils import timezone
- 
+
+
+# text patterns for "routine" documents
+_routine_text = [
+    'Congratulations extended',
+    'Gratitude extended',    
+    'Recognition extended',
+    'Issuance of permits for sign\(s\)',
+    'Sidewalk cafe\(s\) for',
+    'Canopy\(s\) for',
+    'Awning\(s\) for',
+    'Residential permit parking',
+    'Handicapped Parking Permit',
+    'Handicapped permit',
+    'Grant\(s\) of privilege in public way',
+    'Loading/Standing/Tow',
+    'Senior citizens sewer',
+    'Oath of office'
+]
+
 
 # https://djangosnippets.org/snippets/1328/
 class TsVectorField(models.Field):
@@ -461,7 +481,54 @@ class MatterAttachment(LegistarModel):
         r.binary = d['MatterAttachmentBinary'] or ''
         return r
 
-    
+
+class Document(DirtyFieldsModel):
+    """
+    This is what we actually search on.
+    """
+    matterattachment = models.OneToOneField(MatterAttachment, primary_key=True)
+    sort_date = models.DateTimeField(null=True)
+    text = models.TextField(blank=True)
+    text_vector = TsVectorField()
+    is_routine = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "%s [%s]" % \
+            (matterattachment.matter.title, matterattachment.name)
+
+    def on_related_update(self):
+        """Update fields when related data is updated"""
+        matter = self.matterattachment.matter
+        
+        self.sort_date = max([dt for dt in [
+            matter.intro_date,
+            matter.agenda_date,
+            matter.passed_date,
+            matter.enactment_date] if dt is not None], default=None)
+            
+        self.text = '%s;;;%s' % (matter.title, self.text.split(';;;')[1])
+
+        self.is_routine = False
+        for t in _routine_text:
+            if re.search(r'\b%s\b' % t, self.text, re.I):
+                self.is_routine = True
+                break            
+        
+        self.save()            
+        
+    def save(self, *args, **kwargs):
+        """Override to update text_vector"""
+        text_updated = (self.text != self._original_state['text'])        
+        super(Document, self).save(*args, **kwargs)
+                
+        if text_updated:
+            with connection.cursor() as c:            
+                c.execute(
+                    "UPDATE %s" \
+                    " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
+                    " WHERE id=%d" % (self._meta.db_table, self.id))
+        
+        
 class VoteType(LegistarModel):
     """Vote types e.g., Yea, Nay, Present"""
     name = models.TextField()

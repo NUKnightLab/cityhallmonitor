@@ -428,35 +428,11 @@ class MatterAttachment(LegistarModel):
     is_hyperlink = models.BooleanField()
     is_supporting_doc = models.BooleanField()
     binary = models.TextField(blank=True, default='') # <MatterAttachmentBinary i:nil="true"/>
-    link_obtained_at = models.DateTimeField(null=True)
-    
+    link_obtained_at = models.DateTimeField(null=True)   
     dc_id = models.TextField(blank=True, default='') # DocumentCloud document id
-    text = models.TextField(blank=True) # extracted text
-    text_vector = TsVectorField() # postgresql tsvector
-
-    __original_text = None
 
     class Meta:
         verbose_name = 'MatterAttachment'
-
-    def __init__(self, *args, **kwargs):
-        """Override to save original text to detect changes"""
-        super(MatterAttachment, self).__init__(*args, **kwargs)
-        self.__original_text = self.text
-
-    def save(self, *args, **kwargs):
-        """Override to detect changes to text and update tsvector field"""
-        update_tsvector = self.text != self.__original_text                            
-        super(MatterAttachment, self).save(*args, **kwargs)
-        self.__original_text = self.text
-        
-        # Update tsvector field
-        if update_tsvector:
-            with connection.cursor() as c:            
-                c.execute(
-                    "UPDATE %s" \
-                    " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
-                    " WHERE id=%d" % (self._meta.db_table, self.id))
 
     def __str__(self):
         return self.file_name

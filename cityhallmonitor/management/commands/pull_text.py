@@ -2,7 +2,7 @@ import logging
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
-from cityhallmonitor.models import MatterAttachment
+from cityhallmonitor.models import MatterAttachment, Document
 from documentcloud import DocumentCloud
 
 
@@ -10,9 +10,6 @@ logger = logging.getLogger(__name__)
 
 DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
 DOCUMENT_CLOUD_PROJECT = settings.DOCUMENT_CLOUD_PROJECT
-
-
-class DocumentSyncException(Exception): pass
 
 
 class Command(BaseCommand):
@@ -30,9 +27,6 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--limit', type=int, help='Process up to LIMIT documents')
  
-    def get_project(self, name):
-        return self.client().projects.get_by_title(name)
-
     def search(self, query):
         """Seach DocumentCloud"""
         r = self.client().documents.search(query)
@@ -50,19 +44,18 @@ class Command(BaseCommand):
             
             if not r:
                 raise Exception('not found')
-
             if len(r) > 1:
                 raise Exception('multiple instances')
                 
             logger.debug('Processing: %s' % attachment.hyperlink)
         
             doc = r[0]
-      
-            attachment.dc_id = doc.id
-            attachment.text = doc.full_text or ''
-            attachment.save()            
+            if doc.full_text:      
+                attachment.dc_id = doc.id
+                attachment.save()            
+                Document.create_from_attachment(attachment, doc.full_text) 
         except Exception as e:
-            logger.error('Error processing document %s [%s]' \
+            logger.error('Error processing %s [%s]' \
                 % (attachment.hyperlink, str(e)))
            
     def handle(self, *args, **options):
@@ -71,26 +64,25 @@ class Command(BaseCommand):
         total = 0
        
         try:
-            chunk = 1000    # query for 1000 recs at a time
-            n = 1
-            
+            chunk = 1000    # process 1000 recs at a time
+            n = 1 
+            qs = MatterAttachment.objects.filter(document=None)
+           
             if options['limit']:
                 chunk = min(chunk, options['limit'])
                     
                 while n and total < options['limit']:
-                    qs = MatterAttachment.objects.filter(text='')[:chunk]           
-                    for attachment in qs:
-                        self.fetch(attachment)   
-                        
-                    n = len(qs)               
-                    total += n                     
+                    max_n = min(total+chunk, options['limit'])
+                    
+                    for i, attachment in enumerate(qs[total:max_n]):
+                        self.fetch(attachment)                           
+                    n = i
+                    total = max_n                    
             else:
                 while n:
-                    qs = MatterAttachment.objects.filter(text='')[:chunk]          
-                    for attachment in qs:
-                        self.fetch(attachment) 
-                    
-                    n = len(qs)
+                    for i, attachment in enumerate(qs[total:total+chunk]):
+                        self.fetch(attachment)                     
+                    n = i
                     total += n                  
                 
         except Exception as e:

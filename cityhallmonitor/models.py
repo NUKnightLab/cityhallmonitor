@@ -472,8 +472,8 @@ class Document(DirtyFieldsModel):
         return "%s [%s]" % \
             (matterattachment.matter.title, matterattachment.name)
 
-    def on_related_update(self):
-        """Update fields when related data is updated"""
+    def _set_dependent_fields(self):
+        """Initialize dependent instance fields"""
         matter = self.matterattachment.matter
         
         self.sort_date = max([dt for dt in [
@@ -481,16 +481,27 @@ class Document(DirtyFieldsModel):
             matter.agenda_date,
             matter.passed_date,
             matter.enactment_date] if dt is not None], default=None)
-            
-        self.text = '%s;;;%s' % (matter.title, self.text.split(';;;')[1])
 
         self.is_routine = False
         for t in _routine_text:
             if re.search(r'\b%s\b' % t, self.text, re.I):
                 self.is_routine = True
                 break            
-        
-        self.save()            
+    
+    @classmethod
+    def create_from_attachment(cls, attachment, text):
+        r = Document(matterattachment=attachment)
+        r.text = '%s;;;%s' % (attachment.matter.title, text)
+        r._set_dependent_fields()
+        r.save()
+        return r
+                      
+    def on_related_update(self):
+        """Update fields when related data is updated"""        
+        self.text = '%s;;;%s' % \
+            (self.matterattachment.matter.title, self.text.split(';;;')[1])
+        r._set_dependent_fields()
+        r.save()
         
     def save(self, *args, **kwargs):
         """Override to update text_vector"""
@@ -502,7 +513,8 @@ class Document(DirtyFieldsModel):
                 c.execute(
                     "UPDATE %s" \
                     " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
-                    " WHERE id=%d" % (self._meta.db_table, self.id))
+                    " WHERE matterattachment_id=%d" \
+                    % (self._meta.db_table, self.matterattachment.id))
         
         
 class VoteType(LegistarModel):

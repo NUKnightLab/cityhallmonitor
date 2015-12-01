@@ -86,6 +86,7 @@ def process_query(request):
                 'sort_date': r.sort_date,
                 'name': attachment.name,
                 'hyperlink': attachment.hyperlink,
+                'dc_id': attachment.dc_id,
                 'matter': {
                     'id': matter.id,
                     'title': matter.title,

@@ -456,8 +456,8 @@ class MatterAttachment(LegistarModel):
         r.is_supporting_doc = d['MatterAttachmentIsSupportingDocument']
         r.binary = d['MatterAttachmentBinary'] or ''
         return r
-
-
+              
+        
 class Document(DirtyFieldsModel):
     """
     This is what we actually search on.
@@ -515,7 +515,26 @@ class Document(DirtyFieldsModel):
                     " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
                     " WHERE matter_attachment_id=%d" \
                     % (self._meta.db_table, self.matter_attachment.id))
-        
+
+
+class ReadOnlyDocument(Document):
+    """
+    Proxy class to use for user-facing searches.  By overriding the
+    DirtyFieldsModel methods, we can use objects.exclude() to speed
+    up the queries.
+    """
+    class Meta:
+        proxy = True
+    
+    def _as_dict(self):
+        pass
+    
+    def reset_state(self):
+        pass
+    
+    def is_dirty(self):
+        return False
+      
         
 class VoteType(LegistarModel):
     """Vote types e.g., Yea, Nay, Present"""

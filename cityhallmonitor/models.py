@@ -462,7 +462,7 @@ class Document(DirtyFieldsModel):
     """
     This is what we actually search on.
     """
-    matterattachment = models.OneToOneField(MatterAttachment, primary_key=True)
+    matter_attachment = models.OneToOneField(MatterAttachment, primary_key=True)
     sort_date = models.DateTimeField(null=True)
     text = models.TextField(blank=True)
     text_vector = TsVectorField()
@@ -470,11 +470,11 @@ class Document(DirtyFieldsModel):
 
     def __str__(self):
         return "%s [%s]" % \
-            (matterattachment.matter.title, matterattachment.name)
+            (self.matter_attachment.matter.title, self.matter_attachment.name)
 
     def _set_dependent_fields(self):
         """Initialize dependent instance fields"""
-        matter = self.matterattachment.matter
+        matter = self.matter_attachment.matter
         
         self.sort_date = max([dt for dt in [
             matter.intro_date,
@@ -489,9 +489,9 @@ class Document(DirtyFieldsModel):
                 break            
     
     @classmethod
-    def create_from_attachment(cls, attachment, text):
-        r = Document(matterattachment=attachment)
-        r.text = '%s;;;%s' % (attachment.matter.title, text)
+    def create_from_attachment(cls, matter_attachment, text):
+        r = Document(matter_attachment=matter_attachment)
+        r.text = '%s;;;%s' % (matter_attachment.matter.title, text)
         r._set_dependent_fields()
         r.save()
         return r
@@ -499,7 +499,7 @@ class Document(DirtyFieldsModel):
     def on_related_update(self):
         """Update fields when related data is updated"""        
         self.text = '%s;;;%s' % \
-            (self.matterattachment.matter.title, self.text.split(';;;')[1])
+            (self.matter_attachment.matter.title, self.text.split(';;;')[1])
         r._set_dependent_fields()
         r.save()
         
@@ -513,8 +513,8 @@ class Document(DirtyFieldsModel):
                 c.execute(
                     "UPDATE %s" \
                     " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
-                    " WHERE matterattachment_id=%d" \
-                    % (self._meta.db_table, self.matterattachment.id))
+                    " WHERE matter_attachment_id=%d" \
+                    % (self._meta.db_table, self.matter_attachment.id))
         
         
 class VoteType(LegistarModel):

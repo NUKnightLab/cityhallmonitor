@@ -120,7 +120,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 if(doc.matter[matter_field] in statsData[key]) {
                     statsData[key][doc.matter[matter_field]] += 1;
                 } else {
-                    statsData[key][doc.matter[matter_field]] = 0;
+                    statsData[key][doc.matter[matter_field]] = 1;
                 }                
             });
         });

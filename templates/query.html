@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class='reveal-modal' id='document-modal' data-reveal>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    <div id="document-modal-view"></div>
+</div>
+
+<div class="panel" id="page-topper">
+    <div class="row" id="big-hed">
+        <h1><span class="secondary">City Hall</span> <span class="logo-mark xxl">Monitor</span></h1>
+        <h2 class="intro">We've got some city hall documents.</h2>
+    </div>
+    {% include "search_form.html" %}
+</div> <!-- .panel -->
+        <div id="spinner-holder" class="row hide">
+            <i class="fa fa-spinner fa-pulse fa-4x"></i>
+        </div>
+        <div id="results-summary" class="row"></div>
+
+        <div id="results-block" class="row">
+            {# include "_filters.html" #}
+            <div id="results-stats" class="small-4 medium-3 columns"></div>
+            <div id="search-results" class="small-8 medium-9 columns"/></div>
+        </div> <!-- #results-block -->
+      </div>
+
+{% endblock content %}
+{% block extra_scripts %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script type="text/template" id="summary-template">
+        <div class="small-12 columns">
+            <h5>We found <span class="num-of-results"><%= total %> results</span> matching <em><%= query %></em><%= qualifier %>.</h5>
+            <form action="#" id="search-subscribe-form">
+                <div class="row collapse">
+                    <div class="small-6 columns">
+                        <label for="search-subscribe-email">Email me when these results change</label>
+                        <input type="text" id="search-subscribe-email" placeholder="enter email address" />
+                        <input type="hidden" id="search-term" value="<%= query %>" />
+                    </div>
+                    <div class="small-2 columns">
+                        <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+                    </div>
+                    <div class="small-4 columns">
+                      <p id="post-subscribe-msg" class="status-msg"></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </script>
+
+    <script type="text/template" id="multi-result-template">
+        <div class="result multi row" id="<%= docs[0].matter.id %>" >
+          <div class="small-12 columns">
+            <p class="updated-date"><%= docs[0].sort_date.substring(0,10) %></p>
+            <p class="help meta label secondary"><i class="fa fa-files-o"></i> Multiple documents</p>
+            <p class="help meta">Status: <span class="label <%= statusClass %>"><%= docs[0].matter.status %></span></p>
+            <p class="help meta">Type: <span><%= docs[0].matter.type %></span></p>
+            <h5><%= docs[0].matter.title %></h5>
+          </div>
+          <% _.each(docs, function(doc, i) { %>
+          <div class="row document">
+              <div class="small-7 small-offset-1 columns">
+                <a href="/documents/<%= doc.id %>" data-document="<%= doc.id %>" class="read-more">
+                  <p><%= doc.name %></p>
+                </a>
+              </div>
+              <div class="more-info small-4 columns">
+                  <a href="/documents/<%= doc.id %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>
+                  <a class="download-pdf" href="<%= doc.hyperlink %>">Download PDF</a>
+              </div>
+          </div>
+          <% }); %>
+          <hr />
+      </div>
+    </script>
+
+    <script type="text/template" id="single-result-template">
+        <div class="result row" id="<%= doc.matter.id %>">
+            <div class="small-8 columns">
+              <p class="updated-date"><%= doc.sort_date.substring(0,10) %></p>
+              <p class="help meta">Status: <span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
+              <p class="help meta">Type: <span><%= doc.matter.type %></span></p>
+                <a href="/documents/<%= doc.id %>" data-document="<%= doc.id %>" class="read-more">
+                  <h5><%= doc.matter.title %></h5>
+                </a>
+            </div>
+            <div class="more-info small-4 columns">
+                <a href="/documents/<%= doc.id %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>
+                <a class="download-pdf" href="<%= doc.hyperlink %>">Download PDF</a>
+            </div>
+            <hr />
+        </div>
+    </script>
+
+    <script type="text/template" id="result-stats-sidebar">
+        <ul class="side-nav">
+          <li><strong>Summary of results</strong></li>
+          <li class="divider"></li>
+          <% _.each(statsData, function(data, stat) {%>
+            <li><strong><%= stat %></strong></li>
+            <% _.each(data, function(val, key) { %>
+              <li>(<%= val %>) <%= key %></li>
+            <% }); %>
+          <% }); %>
+        </ul>
+    </script>
+
+    <script src="//s3.amazonaws.com/s3.documentcloud.org/viewer/loader.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="{% static 'js/cityhallmonitor.js' %}"></script>
+    <script src="{% static 'js/query.js' %}"></script>
+    <script type="text/javascript">
+      $(function() {
+          $('#search-form').submit(function() {
+              doSearch('{% url "process_query" %}', '{% url "subscribe" %}');
+              return false;
+          });
+      });
+    </script>
+
+{% endblock extra_scripts %}
+

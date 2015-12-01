@@ -39,6 +39,10 @@ def process_query(request):
     tsquery for the rest.  Uses the soon-to-be deprecated extra()
     method, because this returns a QuerySet on which we can do additional
     filtering.
+    
+    We might want to limit the number of results we actually return,
+    which is why the query contains an order_by clause.  Returning
+    them all for now.
     """
         
     try:

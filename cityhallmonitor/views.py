@@ -81,7 +81,7 @@ def process_query(request):
         # We use ReadOnlyDocument so we can defer the giant fields
         qs = ReadOnlyDocument.objects.defer('text', 'text_vector')\
                 .extra(where=where, order_by=['-sort_date'])\
-                .select_related('matter_attachment')      
+                .select_related('matter_attachment', 'matter_attachment__matter')      
                                          
         documents = []
         for r in qs:       

@@ -15,8 +15,7 @@ from cityhallmonitor.models import Matter, MatterAttachment, \
     MatterStatus, MatterType, Subscription, ReadOnlyDocument
     
 
-
-_re_query = re.compile("( |\\\".*?\\\"|'.*?')")
+_re_query = re.compile("(\\\".*?\\\"|(?:\s|^)'.*?'(?:\s|$)| )")
 _re_phrase = re.compile("^'.*'$|^\".*\"$")
 
 
@@ -47,7 +46,7 @@ def process_query(request):
         
         where = []
         word_list = []
-        pieces = [p for p in _re_query.split(raw) if p.strip()]
+        pieces = [p.strip() for p in _re_query.split(raw) if p.strip()]
       
         for s in pieces:
             if _re_phrase.match(s):

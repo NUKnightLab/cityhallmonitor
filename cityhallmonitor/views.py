@@ -52,11 +52,11 @@ def process_query(request):
             if _re_phrase.match(s):
                 where.append("text ~* '\m%s\M'" % s.strip("\"'"))
             else:
-                word_list.append(s)
+                word_list.append(s.replace("'", "''"))
         
         if word_list:
             where.append("text_vector @@ plainto_tsquery('%s')" % ' '.join(word_list))
-
+        
         ignore_routine = request.GET.get('ignore_routine', 'true').lower() \
             in ['true', 't', '1']       
         if ignore_routine:

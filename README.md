@@ -17,7 +17,14 @@ Due to the use of ForeignKeys, some data has to be pulled before other data (e.g
  5. MatterStatus
  6. Matter
 
-There is a `pull_attachments` which will harvest attachment records, but not the actual PDF files. `pull_pdfs` is still pending some functionality in the python-documentcloud library. For development, you will likely only want to pull a portion of the attachment records as it can take several hours to harvest all of them (around 58,000 total).
+`pull_sponsors` will download the MatterSponsor records.
+
+`pull_attachments` will download the MatterAttachment records, but not the actual PDF files. 
+
+`pull_pdfs` will upload the PDF files to DocumentCloud.  For development, you will likely only want to pull a portion of the files as it can take several hours to harvest all of them (around 58,000 total).
+
+`pull_text` will download the extracted text from the files in DocumentCloud to the database.  For development, you will likely only want to pull the text for a portion of the files as it can take several hours to harvest all of them.
+
 
 ### Local development setup
 

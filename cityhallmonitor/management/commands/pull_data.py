@@ -13,15 +13,12 @@ _legistar_url = 'http://webapi.legistar.com/v1/chicago'
 
 # Map data_type to API call suffix
 _data_type_to_api = {
-    'Action':       'Actions',
     'Body':         'Bodies',
     'BodyType':     'BodyTypes',
-    'Event':        'Events',
     'Matter':       'Matters',
     'MatterStatus': 'MatterStatuses',
     'MatterType':   'MatterTypes',
-    'Person':       'Persons',
-    'VoteType':     'VoteTypes'
+    'Person':       'Persons'
 }
 
 class Command(BaseCommand):

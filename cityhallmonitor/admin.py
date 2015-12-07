@@ -1,20 +1,13 @@
 from django.contrib import admin
 from django.db.models import F
 from cityhallmonitor.models import \
-    Action, Person, BodyType, Body, \
+    Person, BodyType, Body, \
     MatterAttachment, MatterStatus, MatterType, Matter, \
-    MatterSponsor, VoteType, Event, EventItem, Subscription, \
-    Document
+    MatterSponsor, Subscription, Document
     
 
 class DirtyFieldsAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at',)
-
-
-class ActionAdmin(DirtyFieldsAdmin):
-    list_display = ('name', 'active_flag', 'last_modified',)
-    list_filter = ('active_flag',)
-admin.site.register(Action, ActionAdmin)
 
 
 class PersonAdmin(DirtyFieldsAdmin):
@@ -86,18 +79,6 @@ class MatterSponsorAdmin(DirtyFieldsAdmin):
     list_filter = ('person',)
 
 admin.site.register(MatterSponsor, MatterSponsorAdmin)
-
-admin.site.register(VoteType)
-
-
-class EventAdmin(DirtyFieldsAdmin):
-    list_display = ('__str__', 'date', 'time', 'last_modified',)
-    search_fields = ['body__name']
-    ordering = ('-date', '-time')
-admin.site.register(Event, EventAdmin)
-
-
-admin.site.register(EventItem)
 
 
 class SubscriptionAdmin(admin.ModelAdmin):

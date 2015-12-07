@@ -53,24 +53,24 @@
     </script>
 
     <script type="text/template" id="multi-result-template">
-        <div class="result multi row" id="<%= docs[0].data.MatterId %>" >
+        <div class="result multi row" id="<%= docs[0].matter.id %>" >
           <div class="small-12 columns">
-            <p class="updated-date"><%= docs[0].data.MatterSortDate.substring(0,10) %></p>
+            <p class="updated-date"><%= docs[0].sort_date.substring(0,10) %></p>
             <p class="help meta label secondary"><i class="fa fa-files-o"></i> Multiple documents</p>
-            <p class="help meta">Status: <span class="label <%= statusClass %>"><%= docs[0].data.MatterStatus %></span></p>
-            <p class="help meta">Type: <span><%= docs[0].data.MatterType %></span></p>
-            <h5><%= docs[0].data.MatterTitle %></h5>
+            <p class="help meta">Status: <span class="label <%= statusClass %>"><%= docs[0].matter.status %></span></p>
+            <p class="help meta">Type: <span><%= docs[0].matter.type %></span></p>
+            <h5><%= docs[0].matter.title %></h5>
           </div>
           <% _.each(docs, function(doc, i) { %>
           <div class="row document">
               <div class="small-7 small-offset-1 columns">
-                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
-                  <p><%= doc.title %></p>
+                <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
+                  <p><%= doc.name %></p>
                 </a>
               </div>
               <div class="more-info small-4 columns">
-                  <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>
-                  <a class="download-pdf" href="<%= doc.source %>">Download PDF</a>
+                  <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more button info tiny">Read</a>
+                  <a class="download-pdf" href="<%= doc.hyperlink %>">Download PDF</a>
               </div>
           </div>
           <% }); %>
@@ -79,18 +79,18 @@
     </script>
 
     <script type="text/template" id="single-result-template">
-        <div class="result row" id="<%= doc.data.MatterId %>">
+        <div class="result row" id="<%= doc.matter.id %>">
             <div class="small-8 columns">
-              <p class="updated-date"><%= doc.data.MatterSortDate.substring(0,10) %></p>
-              <p class="help meta">Status: <span class="label <%= statusClass %>"><%= doc.data.MatterStatus %></span></p>
-              <p class="help meta">Type: <span><%= doc.data.MatterType %></span></p>
-                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more">
-                  <h5><%= doc.data.MatterTitle %></h5>
+              <p class="updated-date"><%= doc.sort_date.substring(0,10) %></p>
+              <p class="help meta">Status: <span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
+              <p class="help meta">Type: <span><%= doc.matter.type %></span></p>
+                <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
+                  <h5><%= doc.matter.title %></h5>
                 </a>
             </div>
             <div class="more-info small-4 columns">
-                <a href="/documents/<%= doc.data.MatterAttachmentId %>" data-document="<%= doc.id %>" class="read-more button info tiny">Read</a>
-                <a class="download-pdf" href="<%= doc.source %>">Download PDF</a>
+                <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more button info tiny">Read</a>
+                <a class="download-pdf" href="<%= doc.hyperlink %>">Download PDF</a>
             </div>
             <hr />
         </div>
@@ -116,7 +116,7 @@
     <script type="text/javascript">
       $(function() {
           $('#search-form').submit(function() {
-              doSearch('{% url "subscribe" %}');
+              doSearch('{% url "process_query" %}', '{% url "subscribe" %}');
               return false;
           });
       });

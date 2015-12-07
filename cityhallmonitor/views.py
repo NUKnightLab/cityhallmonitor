@@ -28,11 +28,7 @@ def _make_subscription_sid(id, email):
 
 def search(request):
     return render(request, 'search.html', context={})
-    
-
-def query(request):
-    return render(request, 'query.html', context={})
-    
+        
 
 def process_query(request):
     """

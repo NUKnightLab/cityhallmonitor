@@ -104,15 +104,6 @@ def process_query(request):
         return JsonResponse({'error': str(e)})
 
             
-def facet(request):
-    return render(request, 'facet.html', context={
-        'MatterStatuses': MatterStatus.objects\
-            .values_list('name', flat=True).order_by('name'),
-        'MatterTypes': MatterType.objects\
-            .values_list('name', flat=True).order_by('name')
-    })
-    
-    
 def documents(request, id):
     """View MatterAttachment"""
     try:    

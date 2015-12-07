@@ -57,8 +57,7 @@ class Command(BaseCommand):
             
                 for matter in Matter.objects.filter(
                         Q(sponsors_obtained_at=None)
-                        | (Q(sponsors_obtained_at__lte=F('last_modified'))
-                         & Q(last_modified__isnull=False))):
+                        | Q(sponsors_obtained_at__lte=F('updated_at'))):
                     self.fetch(matter)
         except Exception as e:
             logger.exception(str(e))

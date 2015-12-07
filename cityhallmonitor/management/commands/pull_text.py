@@ -61,32 +61,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         logger.info('limit=%(limit)s', options)
  
-        total = 0
-       
         try:
-            chunk = 1000    # process 1000 recs at a time
-            n = 1 
             qs = MatterAttachment.objects.filter(document=None)
            
             if options['limit']:
-                chunk = min(chunk, options['limit'])
-                    
-                while n and total < options['limit']:
-                    max_n = min(total+chunk, options['limit'])
-                    
-                    for i, attachment in enumerate(qs[total:max_n]):
-                        self.fetch(attachment)                           
-                    n = i
-                    total = max_n                    
+                for attachment in qs[:options['limit']]:
+                    self.fetch(attachment)    
             else:
-                while n:
-                    for i, attachment in enumerate(qs[total:total+chunk]):
-                        self.fetch(attachment)                     
-                    n = i
-                    total += n                  
-                
+                for attachment in qs:
+                    self.fetch(attachment)                     
+                 
         except Exception as e:
             logger.exception(str(e))
 
-        logger.info('Done, processed %d records\n' % total)
+        logger.info('Done\n')
 

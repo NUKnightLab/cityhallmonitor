@@ -110,8 +110,7 @@ class Command(BaseCommand):
                     'Fetching all updated matter attachments.')
                 for matter in Matter.objects.filter(
                         Q(attachments_obtained_at=None)
-                        | (Q(attachments_obtained_at__lte=F('last_modified'))
-                         & Q(last_modified__isnull=False))):
+                        | Q(attachments_obtained_at__lte=F('updated_at'))):
                     self.fetch(matter)
         except Exception as e:
             logger.exception(str(e))

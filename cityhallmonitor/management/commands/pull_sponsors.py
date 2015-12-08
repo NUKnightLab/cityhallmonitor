@@ -17,6 +17,7 @@ class Command(BaseCommand):
     help = 'Get sponsors for updated matters from the Chicago Legistar API.'
 
     def add_arguments(self, parser):
+        parser.add_argument('--limit', type=int, help='Process up to LIMIT matters')
         parser.add_argument('matter_id', nargs='?', help='Matter ID')
 
     def fetch(self, matter):
@@ -35,14 +36,14 @@ class Command(BaseCommand):
                     r = MatterSponsor.from_json(item)
                     r.save()
             except Exception as e:
-                logger.info(item)
+                logger.info(repr(item))
                 raise e
                 
         matter.sponsors_obtained_at = timezone.now()
         matter.save()
 
     def handle(self, *args, **options):
-        logger.info('matter_id=%(matter_id)s' % options)
+        logger.info('limit=%(limit)s, matter_id=%(matter_id)s' % options)
 
         try:
             matter_id = options['matter_id']
@@ -52,13 +53,22 @@ class Command(BaseCommand):
                 matter = Matter.objects.get(id=matter_id)
                 self.fetch(matter)
             else:
-                logger.info(
-                    'Fetching all updated matter sponsors.')
-            
-                for matter in Matter.objects.filter(
+                qs = Matter.objects.filter(
                         Q(sponsors_obtained_at=None)
-                        | Q(sponsors_obtained_at__lte=F('updated_at'))):
-                    self.fetch(matter)
+                        | Q(sponsors_obtained_at__lte=F('updated_at')))
+                
+                if options['limit']:
+                    logger.info(
+                        'Fetching %(limit)s updated matter sponsors.',
+                        options)
+                    for matter in qs[:options['limit']]:
+                        self.fetch(matter)
+                else:
+                    logger.info(
+                        'Fetching all updated matter sponsors.')
+                    for matter in qs:
+                        self.fetch(matter)
+                        
         except Exception as e:
             logger.exception(str(e))
         

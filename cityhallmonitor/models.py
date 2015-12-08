@@ -58,7 +58,12 @@ class DirtyFieldsModel(models.Model):
         """Return dict representation"""
         d = {}
         for field in self._meta.fields:
-            field_value = getattr(self, field.name)
+            # Using getattr for a null relation causes issues,
+            # so just grab the related id instead
+            if field.rel:
+                field_value = getattr(self, '%s_id' % field.name)
+            else:           
+                field_value = getattr(self, field.name)
             
             if not isinstance(field_value, (BaseExpression, Combinable)):
                 d[field.name] = field_value

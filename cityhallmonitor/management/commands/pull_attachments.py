@@ -21,6 +21,7 @@ class Command(BaseCommand):
     _client = None
 
     def add_arguments(self, parser):
+        parser.add_argument('--limit', type=int, help='Process up to LIMIT matters')
         parser.add_argument('matter_id', nargs='?', help='Matter ID')
 
     def client(self):
@@ -106,12 +107,21 @@ class Command(BaseCommand):
                 matter = Matter.objects.get(id=matter_id)
                 self.fetch(matter)
             else:
-                logger.info(
-                    'Fetching all updated matter attachments.')
-                for matter in Matter.objects.filter(
+                qs = Matter.objects.filter(
                         Q(attachments_obtained_at=None)
-                        | Q(attachments_obtained_at__lte=F('updated_at'))):
-                    self.fetch(matter)
+                        | Q(attachments_obtained_at__lte=F('updated_at')))
+                
+                if options['limit']:
+                    logger.info(
+                        'Fetching %(limit)s updated matter attachments.',
+                        options)
+                    for matter in qs[:options['limit']]:       
+                        self.fetch(matter)
+                else:
+                    logger.info(
+                        'Fetching all updated matter attachments.')
+                    for matter in qs:
+                        self.fetch(matter)
         except Exception as e:
             logger.exception(str(e))
         

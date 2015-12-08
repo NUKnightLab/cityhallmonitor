@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils import timezone
-from cityhallmonitor.models import Subscription, ReadOnlyDocument
+from cityhallmonitor.models import Subscription, Document
 from cityhallmonitor.views import _make_subscription_sid
 from smtplib import SMTPException
 
@@ -46,8 +46,7 @@ class Command(BaseCommand):
 
         where.append("sort_date >= '%s'" % subscription.last_check)
                 
-        # Use ReadOnlyDocument so we can defer the giant fields
-        qs = ReadOnlyDocument.objects.defer('text', 'text_vector')\
+        qs = Document.objects.defer('text', 'text_vector')\
                 .extra(where=where, order_by=['-sort_date'])\
                 .select_related('matter_attachment', 'matter_attachment__matter')      
                     
@@ -77,8 +76,8 @@ class Command(BaseCommand):
                 _make_subscription_sid(subscription.id, subscription.email)
             ),
             'documents': documents
-        })               
-        
+        })   
+                
         self.stdout.write('Sending alert for %d documents [%s]' % \
             (len(documents), subscription))          
                               

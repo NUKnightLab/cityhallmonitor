@@ -2,6 +2,7 @@ import re
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection, models
 from django.db.models.expressions import BaseExpression, Combinable
+from django.db.models.query_utils import DeferredAttribute
 from django.utils import timezone
 
 
@@ -39,6 +40,14 @@ class TsVectorField(models.Field):
         return 'tsvector'
 
 
+
+# temp code
+
+def is_deferred(model, field):
+    attr = model.__class__.__dict__.get(field.attname)
+    return isinstance(attr, DeferredAttribute)
+
+
 # Based on //github.com/romgar/django-dirtyfields/blob/develop/src/dirtyfields/dirtyfields.py
 class DirtyFieldsModel(models.Model):
     """
@@ -54,10 +63,20 @@ class DirtyFieldsModel(models.Model):
         super(DirtyFieldsModel, self).__init__(*args, **kwargs)
         self.reset_state()
 
+    def _is_deferred(self, field):
+        attr = self.__class__.__dict__.get(field.attname)
+        return isinstance(attr, DeferredAttribute)
+        
     def _as_dict(self):
-        """Return dict representation"""
+        """
+        Return dict representation *without deferred fields* (which
+        would cause the maximum recursion depth to be exceeeded).        
+        """
         d = {}
         for field in self._meta.fields:
+            if self._is_deferred(field):
+                continue
+            
             # Using getattr for a null relation causes issues,
             # so just grab the related id instead
             if field.rel:
@@ -495,25 +514,6 @@ class Document(DirtyFieldsModel):
                     " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
                     " WHERE matter_attachment_id=%d" \
                     % (self._meta.db_table, self.matter_attachment.id))
-
-
-class ReadOnlyDocument(Document):
-    """
-    Proxy class to use for user-facing searches.  By overriding the
-    DirtyFieldsModel methods, we can use objects.exclude() to speed
-    up the queries.
-    """
-    class Meta:
-        proxy = True
-    
-    def _as_dict(self):
-        pass
-    
-    def reset_state(self):
-        pass
-    
-    def is_dirty(self):
-        return False
 
 
 class Subscription(models.Model):

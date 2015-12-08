@@ -12,7 +12,7 @@ from django.template.loader import get_template
 from django.utils import timezone
 from documentcloud import DocumentCloud
 from cityhallmonitor.models import Matter, MatterAttachment, \
-    MatterStatus, MatterType, Subscription, ReadOnlyDocument
+    MatterStatus, MatterType, Subscription, Document
     
 
 _re_query = re.compile("(\\\".*?\\\"|(?:\s|^)'.*?'(?:\s|$)| )")
@@ -72,9 +72,8 @@ def process_query(request):
         elif not (date_range == 'any' or date_range == ''):
             raise Exception('Invalid date_range parameter "%s"' \
                 % date_range)
-
-        # We use ReadOnlyDocument so we can defer the giant fields
-        qs = ReadOnlyDocument.objects.defer('text', 'text_vector')\
+        
+        qs = Document.objects.defer('text', 'text_vector')\
                 .extra(where=where, order_by=['-sort_date'])\
                 .select_related('matter_attachment', 'matter_attachment__matter')      
                                          

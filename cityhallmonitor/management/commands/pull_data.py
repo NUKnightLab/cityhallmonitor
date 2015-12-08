@@ -81,7 +81,7 @@ class Command(BaseCommand):
                         r = model_class.from_json(item)
                         r.save()
                     except Exception as e:
-                        self.stdout.write(repr(item))
+                        logger.info(repr(item))
                         raise e
                                                          
                 skip += n

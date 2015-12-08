@@ -53,7 +53,8 @@ class Command(BaseCommand):
             if doc.full_text:      
                 attachment.dc_id = doc.id
                 attachment.save()            
-                Document.create_from_attachment(attachment, doc.full_text) 
+                Document.create_from_attachment(attachment, 
+                    doc.full_text.decode('utf-8')) 
         except Exception as e:
             logger.error('Error processing %s [%s]' \
                 % (attachment.hyperlink, str(e)))

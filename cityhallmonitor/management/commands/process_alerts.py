@@ -42,7 +42,8 @@ class Command(BaseCommand):
                 word_list.append(s.replace("'", "''"))
                 
         if word_list:
-            where.append("text_vector @@ plainto_tsquery('%s')" % ' '.join(word_list))
+            where.append("text_vector @@ plainto_tsquery('english', '%s')" \
+                % ' '.join(word_list))
 
         where.append("sort_date >= '%s'" % subscription.last_check)
                 

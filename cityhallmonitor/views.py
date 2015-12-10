@@ -55,7 +55,8 @@ def process_query(request):
                 word_list.append(s.replace("'", "''"))
         
         if word_list:
-            where.append("text_vector @@ plainto_tsquery('%s')" % ' '.join(word_list))
+            where.append("text_vector @@ plainto_tsquery('english', '%s')" \
+                % ' '.join(word_list))
         
         ignore_routine = request.GET.get('ignore_routine', 'true').lower() \
             in ['true', 't', '1']       

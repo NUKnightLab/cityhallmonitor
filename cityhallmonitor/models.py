@@ -1,19 +1,121 @@
+import re
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
+from django.db import connection, models
+from django.db.models.expressions import BaseExpression, Combinable
+from django.db.models.query_utils import DeferredAttribute
+from django.utils import timezone
 
 
-class LegistarModel(models.Model):
+# text patterns for "routine" documents
+_routine_text = [
+    'Congratulations extended',
+    'Gratitude extended',    
+    'Recognition extended',
+    'Issuance of permits for sign\(s\)',
+    'Sidewalk cafe\(s\) for',
+    'Canopy\(s\) for',
+    'Awning\(s\) for',
+    'Residential permit parking',
+    'Handicapped Parking Permit',
+    'Handicapped permit',
+    'Grant\(s\) of privilege in public way',
+    'Loading/Standing/Tow',
+    'Senior citizens sewer',
+    'Oath of office'
+]
+
+
+# https://djangosnippets.org/snippets/1328/
+class TsVectorField(models.Field):
+    description = "PostgreSQL tsvector field"
+    
+    def __init__(self, text='', *args, **kwargs):
+        self.text = text
+        kwargs['null'] = True
+        kwargs['editable'] = False
+        kwargs['serialize'] = False
+        super(TsVectorField, self).__init__(*args, **kwargs)
+            
+    def db_type(self, connection):
+        return 'tsvector'
+
+
+
+# temp code
+
+def is_deferred(model, field):
+    attr = model.__class__.__dict__.get(field.attname)
+    return isinstance(attr, DeferredAttribute)
+
+
+# Based on //github.com/romgar/django-dirtyfields/blob/develop/src/dirtyfields/dirtyfields.py
+class DirtyFieldsModel(models.Model):
     """
-    Common fields
+    Model with created/updated timestamps
+    """
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
+    
+    class Meta:
+        abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super(DirtyFieldsModel, self).__init__(*args, **kwargs)
+        self.reset_state()
+
+    def _is_deferred(self, field):
+        attr = self.__class__.__dict__.get(field.attname)
+        return isinstance(attr, DeferredAttribute)
+        
+    def _as_dict(self):
+        """
+        Return dict representation *without deferred fields* (which
+        would cause the maximum recursion depth to be exceeeded).        
+        """
+        d = {}
+        for field in self._meta.fields:
+            if self._is_deferred(field):
+                continue
+            
+            # Using getattr for a null relation causes issues,
+            # so just grab the related id instead
+            if field.rel:
+                field_value = getattr(self, '%s_id' % field.name)
+            else:           
+                field_value = getattr(self, field.name)
+            
+            if not isinstance(field_value, (BaseExpression, Combinable)):
+                d[field.name] = field_value
+        return d 
+        
+    def reset_state(self):
+        """Reset saved state"""
+        self._original_state = self._as_dict()
+        
+    def is_dirty(self):
+        """Dirty or not"""
+        if not self.id:
+            return True
+        
+        for k, v in self._as_dict().items():
+            if v != self._original_state[k]:
+                return True
+        
+        return False    
+
+
+class LegistarModel(DirtyFieldsModel):
+    """
+    Common fields and methods
     """
     id = models.IntegerField(primary_key=True)
     guid = models.CharField(max_length=100,blank=True)
     last_modified = models.DateTimeField(null=True)
     row_version = models.CharField(max_length=100, blank=True)
-
+    
     class Meta:
         abstract = True
-    
+                          
     @classmethod
     def get_or_new(cls, id):
         """Get existing record by id or create a new instance"""
@@ -23,31 +125,6 @@ class LegistarModel(models.Model):
             return cls(id=id)
                 
             
-class Action(LegistarModel):
-    """Actions, e.g., Adopted, Amended in Committee"""
-    name = models.TextField()
-    active_flag = models.IntegerField()
-    used_flag = models.IntegerField()
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name        
-                       
-    @classmethod
-    def from_json(cls, d):
-        """Convert legistar dictionary to model instance"""
-        r = cls.get_or_new(d['ActionId'])
-        r.guid = d['ActionGuid'] or ''
-        r.last_modified = d['ActionLastModifiedUtc']+'Z'
-        r.row_version = d['ActionRowVersion']
-        r.name = d['ActionName']
-        r.active_flag =d['ActionActiveFlag']
-        r.used_flag = d['ActionUsedFlag']
-        return r
-
-
 class Person(LegistarModel):
     """People, e.g. Alderman, Mayor, etc"""
     first_name = models.TextField(blank=True)
@@ -350,7 +427,8 @@ class MatterAttachment(LegistarModel):
     is_hyperlink = models.BooleanField()
     is_supporting_doc = models.BooleanField()
     binary = models.TextField(blank=True, default='') # <MatterAttachmentBinary i:nil="true"/>
-    link_obtained_at = models.DateTimeField(null=True)
+    link_obtained_at = models.DateTimeField(null=True)   
+    dc_id = models.TextField(blank=True, default='') # DocumentCloud document id
 
     class Meta:
         verbose_name = 'MatterAttachment'
@@ -377,131 +455,65 @@ class MatterAttachment(LegistarModel):
         r.is_supporting_doc = d['MatterAttachmentIsSupportingDocument']
         r.binary = d['MatterAttachmentBinary'] or ''
         return r
-
-    
-class VoteType(LegistarModel):
-    """Vote types e.g., Yea, Nay, Present"""
-    name = models.TextField()
-    plural_name = models.TextField()
-    used_for = models.IntegerField()
-    result = models.IntegerField()
-    sort = models.IntegerField()
-    
-    class Meta:
-        ordering = ['name', 'sort']
-        verbose_name = 'VoteType'
+              
         
-    def __str__(self):
-        return self.name
-
-    @classmethod
-    def from_json(cls, d):
-        """Convert legistar dictionary to model instance"""
-        r = cls.get_or_new(d['VoteTypeId'])       
-        r.guid = d['VoteTypeGuid'] or ''
-        r.last_modified = d['VoteTypeLastModifiedUtc']+'Z'
-        r.row_version = d['VoteTypeRowVersion']
-        r.name = d['VoteTypeName']
-        r.used_for = d['VoteTypeUsedFor']
-        r.result = d['VoteTypeResult']
-        r.sort = d['VoteTypeSort']
-        return r
-    
-    
-class Event(LegistarModel):
-    """Events, e.g. meetings and such"""
-    body = models.ForeignKey(Body, blank=True, null=True, on_delete=models.SET_NULL)
-    date = models.DateField()
-    time = models.TextField(blank=True)
-    video_status = models.TextField(blank=True)
-    agenda_status_id = models.IntegerField(null=True)
-    agenda_status_name = models.TextField(blank=True)
-    minutes_status_id = models.IntegerField(null=True)
-    minutes_status_name = models.TextField(blank=True)
-    location = models.TextField(blank=True)
-    
-    class Meta:
-        ordering = ['date', 'time']
+class Document(DirtyFieldsModel):
+    """
+    This is what we actually search on.
+    """
+    matter_attachment = models.OneToOneField(MatterAttachment, primary_key=True)
+    sort_date = models.DateTimeField(null=True)
+    text = models.TextField(blank=True)
+    text_vector = TsVectorField()
+    is_routine = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.body.name
+        return "%s [%s]" % \
+            (self.matter_attachment.matter.title, self.matter_attachment.name)
+
+    def _set_dependent_fields(self):
+        """Initialize dependent instance fields"""
+        matter = self.matter_attachment.matter
+        
+        self.sort_date = max([dt for dt in [
+            matter.intro_date,
+            matter.agenda_date,
+            matter.passed_date,
+            matter.enactment_date] if dt is not None], default=None)
+
+        self.is_routine = False
+        for t in _routine_text:
+            if re.search(r'\b%s\b' % t, self.text, re.I):
+                self.is_routine = True
+                break            
     
     @classmethod
-    def from_json(cls, d):
-        """Convert legistar dictionary to model instance"""
-        r = cls.get_or_new(d['EventId'])       
-        r.guid = d['EventGuid'] or ''
-        r.last_modified = d['EventLastModifiedUtc']+'Z'
-        r.row_version = d['EventRowVersion']
-        r.body_id = d['EventBodyId']
-        r.date = d['EventDate'].split('T')[0]
-        r.time = d['EventTime'] or ''
-        r.video_status = d['EventVideoStatus'] or ''
-        r.agenda_status_id = d['EventAgendaStatusId'] or 0
-        r.agenda_status_name = d['EventAgendaStatusName'] or ''
-        r.minutes_status_id = d['EventMinutesStatusId'] or 0
-        r.minutes_status_name = d['EventMinutesStatusName'] or ''
-        r.location = d['EventLocation'] or ''
+    def create_from_attachment(cls, matter_attachment, text):
+        r = Document(matter_attachment=matter_attachment)
+        r.text = '%s;;;%s' % (matter_attachment.matter.title, text)
+        r._set_dependent_fields()
+        r.save()
         return r
-
-
-class EventItem(LegistarModel):
-    event = models.ForeignKey(Event)
-    agenda_sequence = models.IntegerField()
-    minutes_sequence = models.IntegerField()
-    agenda_number = models.TextField(blank=True, default='')
-    video = models.IntegerField(default=0)
-    video_index = models.IntegerField(default=0)
-    version = models.TextField(blank=True, default='')
-    agenda_note = models.TextField(blank=True, default='')
-    minutes_note = models.TextField(blank=True, default='')
-    action = models.ForeignKey(Action, blank=True, null=True, on_delete=models.SET_NULL)
-    passed_flag = models.IntegerField(default=0)
-    passed_flag_name = models.TextField(blank=True, default='')
-    roll_call_flag = models.IntegerField(default=0)
-    flag_extra = models.IntegerField(default=0)
-    title = models.TextField(blank=True, default='')
-    tally = models.TextField(blank=True, default='')
-    consent = models.IntegerField(default=0)
-    mover = models.ForeignKey(Person, related_name='mover', blank=True, null=True, on_delete=models.SET_NULL)
-    seconder = models.ForeignKey(Person, related_name='seconder', blank=True, null=True, on_delete=models.SET_NULL)
-    matter = models.ForeignKey(Matter, blank=True, null=True, on_delete=models.SET_NULL)
-
-    class Meta:
-        ordering = ['agenda_sequence']
-        verbose_name = 'EventItem'
-    
-    def __str__(self):
-        return self.matter
-    
-    @classmethod
-    def from_json(cls, d):
-        """Convert legistar dictionary to model instance"""
-        r = cls.get_or_new(d['EventItemId'])       
-        r.guid = d['EventItemGuid'] or ''
-        r.last_modified = d['EventItemLastModifiedUtc']+'Z'
-        r.row_version = d['EventItemRowVersion']
-        r.event_id = d['EventItemEventId']
-        r.agenda_sequence = d['EventItemAgendaSequence'] or 0
-        r.minutes_sequence = d['EventItemMinutesSequence'] or 0
-        r.agenda_number = d['EventItemAgendaNumber'] or ''
-        r.video = d['EventItemVideo'] or 0
-        r.video_index = d['EventItemVideoIndex'] or 0            
-        r.version = d['EventItemVersion'] or ''            
-        r.agenda_note = d['EventItemAgendaNote'] or ''
-        r.minutes_note = d['EventItemMinutesNote'] or ''
-        r.action_id = d['EventItemActionId']
-        r.passed_flag = d['EventItemPassedFlag'] or 0
-        r.passed_flag_name = d['EventItemPassedFlagName'] or ''
-        r.roll_call_flag = d['EventItemRollCallFlag'] or 0
-        r.flag_extra = d['EventItemFlagExtra'] or 0
-        r.title = d['EventItemTitle'] or ''
-        r.tally = d['EventItemTally'] or ''
-        r.consent = d['EventItemConsent'] or 0
-        r.mover_id = d['EventItemMoverId']
-        r.seconder_id = d['EventItemSeconderId']
-        r.matter_id = d['EventItemMatterId']
-        return r
+                      
+    def on_related_update(self):
+        """Update fields when related data is updated"""        
+        self.text = '%s;;;%s' % \
+            (self.matter_attachment.matter.title, self.text.split(';;;')[1])
+        r._set_dependent_fields()
+        r.save()
+        
+    def save(self, *args, **kwargs):
+        """Override to update text_vector"""
+        text_updated = (self.text != self._original_state['text'])        
+        super(Document, self).save(*args, **kwargs)
+                
+        if text_updated:
+            with connection.cursor() as c:            
+                c.execute(
+                    "UPDATE %s" \
+                    " SET text_vector = to_tsvector('english', coalesce(text, '') || '')" \
+                    " WHERE matter_attachment_id=%d" \
+                    % (self._meta.db_table, self.matter_attachment.id))
 
 
 class Subscription(models.Model):

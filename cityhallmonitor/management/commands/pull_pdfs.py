@@ -12,11 +12,11 @@ from documentcloud import DocumentCloud
 
 logger = logging.getLogger(__name__)
 
-USERNAME = settings.DOCUMENT_CLOUD_USERNAME
-PASSWORD = settings.DOCUMENT_CLOUD_PASSWORD
 DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
+DOCUMENT_CLOUD_PROJECT = settings.DOCUMENT_CLOUD_PROJECT
+
 ATTACHMENT_PUBLISH_URL = 'https://cityhallmonitor.knightlab.com/documents/%d'
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
+
 DOCCLOUD_RESERVED_KEYS = set([
     'person',
     'organization',
@@ -59,7 +59,9 @@ DOCUMENT_TYPES = (
 DOCUMENT_TYPE_MATCHER = re.compile('^(%s)\d+-\d+(\.(pdf|rtf))?$' % '|'.join(
     [code for code,name in DOCUMENT_TYPES]))
 
+
 class DocumentSyncException(Exception): pass
+
 
 class Command(BaseCommand):
     help = 'Upload updated attachment files from the Chicago Legistar API to DocumentCloud'
@@ -68,7 +70,9 @@ class Command(BaseCommand):
 
     def client(self):
         if self._client is None:
-            self._client = DocumentCloud(USERNAME, PASSWORD)
+            self._client = DocumentCloud(
+                settings.DOCUMENT_CLOUD_USERNAME,
+                settings.DOCUMENT_CLOUD_PASSWORD)
         return self._client
 
     def add_arguments(self, parser):
@@ -96,92 +100,59 @@ class Command(BaseCommand):
 
     def search(self, query):
         """Seach DocumentCloud"""
-        return self.client().documents.search(query)
-
-    def short_description(self, attachment):
-        """Get short description for attachment"""
-        filename = '.'.join(attachment.name.split('.')[:-1])
-        return '%s %s' % (attachment.matter.matter_type.name, filename)
-
-    def datadiff(self, d1, d2):
-        return set(
-            [ (k,v) for k,v in d1.items() ]).symmetric_difference(
-            set([ (k,v) for k,v in d2.items() ]))
+        r = self.client().documents.search(query)
+        assert type(r) is list, \
+            'DocumentCloud search response is %s: %s' % (type(r), repr(r))
+        return r
 
     def fetch(self, attachment, project_id):
         """Upload attachment file to DocumentCloud"""
-        matter = attachment.matter
-        published_url = ATTACHMENT_PUBLISH_URL % attachment.id
-        description = self.short_description(attachment)
-        sort_date = max([d for d in [
-                matter.intro_date,
-                matter.agenda_date,
-                matter.passed_date,
-                matter.enactment_date] if d is not None], default=None)
-        data = {
-            'MatterAttachmentId': str(attachment.id),
-            'MatterId': str(matter.id),
-            'MatterFile': matter.file,
-            'MatterName': matter.name,
-            'MatterTitle': matter.title,
-            'MatterType': matter.matter_type.name,
-            'MatterStatus': matter.matter_status.name,
-            'MatterIntroDate': str(matter.intro_date),
-            'MatterAgendaDate': str(matter.agenda_date),
-            'MatterPassedDate': str(matter.passed_date),
-            'MatterEnactmentDate': str(matter.enactment_date),
-            'MatterEnactmentNumber': str(matter.enactment_number),
-            'MatterRequester': matter.requester,
-            'MatterNotes': matter.notes,
-            'MatterSortDate': str(sort_date),
-            'MatterSortMonth': sort_date.strftime('%Y-%m'),
-            'MatterSortYear': sort_date.strftime('%Y')
-        }
-        r = self.search('account:%s source: "%s"' % (
-            DOCUMENT_CLOUD_ACCOUNT, attachment.hyperlink))
-
-        assert type(r) is list, \
-            'DocumentCloud search response is %s: %s' % (type(r), repr(r))
+        r = self.search('account:%s project:"%s" source: "%s"' % (
+                DOCUMENT_CLOUD_ACCOUNT, 
+                DOCUMENT_CLOUD_PROJECT, 
+                attachment.hyperlink))
 
         logger.debug('Result from DocumentCloud is %s' % str(r))
-
+ 
         if r:
             logger.debug(
                 'Document exists in DocumentCloud. Not transferring: %s',
                 attachment.hyperlink)
-
+                
             if len(r) > 1:
                 raise DocumentSyncException(
                     'Multiple instances exist in DocumentCloud for '\
-                    'document: %s' % attachment.hyperlink)
-            else:
-                doc = r[0]
-                olddata = { k:v for k,v in doc.data.items()
-                    if k != 'ops:DescriptionProcessed' }
-                logger.debug('Old data:\n=========\n%s' % pprint.pformat(olddata, indent=4))
-                logger.debug('\nNew data:\n=========\n%s' % pprint.pformat(data, indent=4))
-                if self.datadiff(data, olddata):
-                    logger.debug('Updating metadata for document: %s',
-                        attachment.hyperlink)
-                    if not doc.data:
-                        data['ops:DescriptionProcessed'] = '0'
-                    doc.data = data
-                    doc.put()
-        else:
+                    'document: %s' % attachment.hyperlink)      
+        else:       
             logger.info('Transferring to DocumentCloud: %s',
                 attachment.hyperlink)
-            data['ops:DescriptionProcessed'] = '0'
+                        
+            data = {
+                'MatterAttachmentId': str(attachment.id),
+                'MatterId': str(attachment.matter.id),
+                'ops:DescriptionProcessed': '0'
+            }
+            published_url = ATTACHMENT_PUBLISH_URL % attachment.id
             doc = self.upload_to_doccloud(
-                attachment.hyperlink, attachment.name,
-                data=data, published_url=published_url, project_id=project_id)
+                attachment.hyperlink, 
+                attachment.name,
+                data=data, 
+                project_id=project_id,
+                published_url=published_url)
+
+            attachment.link_obtained_at = timezone.now()
             attachment.save()
+            logger.debug(
+                'Updated link_obtained_at timestamp for '\
+                'MatterAttachment: %s', attachment.id)
 
     def delete_all(self):
         """Deletes all documents for this account!!!"""
         self.stdout.write(
-            'Deleting all DocumentCloud documents for account: %s',
-             DOCUMENT_CLOUD_ACCOUNT)
-        r = self.search('account:%s' % DOCUMENT_CLOUD_ACCOUNT)
+            'Deleting all DocumentCloud documents for account:%s project:"%s"',
+             DOCUMENT_CLOUD_ACCOUNT, DOCUMENT_CLOUD_PROJECT)
+        r = self.search('account:%s project:"%s"' % (
+            DOCUMENT_CLOUD_ACCOUNT, DOCUMENT_CLOUD_PROJECT))
         for doc in r:
             self.stdout.write('Deleting document: %s', doc.source)
             doc.delete()
@@ -195,7 +166,8 @@ class Command(BaseCommand):
             if options['deleteall']:
                 answer = input(
                     'Are you sure you want to delete all documents for ' \
-                    'account: %s? [Y/n] ' % DOCUMENT_CLOUD_ACCOUNT)
+                    'account:%s project:"%s"? [Y/n] ' % (
+                    DOCUMENT_CLOUD_ACCOUNT, DOCUMENT_CLOUD_PROJECT))
                 if answer == '' or answer.lower().startswith('y'):
                     self.delete_all()
                     self.stdout.write('Done\n')
@@ -203,38 +175,21 @@ class Command(BaseCommand):
                     self.stdout.write('Aborting\n')
                 return
 
-            matter_id = options['matter_id']
-            project = self.get_project(DEFAULT_PROJECT)
-            if matter_id:
-                logger.info('Fetching files for matter ID %s.', matter_id)
-                for attachment in MatterAttachment.objects.filter(
-                        matter_id=matter_id):
-                    self.fetch(attachment, project.id)
-                    attachment.link_obtained_at = timezone.now()
-                    attachment.save()
-                    logger.debug(
-                        'Updated link_obtained_at timestamp for '\
-                        'MatterAttachment: %s', attachment.id)
+            project = self.get_project(DOCUMENT_CLOUD_PROJECT)
+
+            q = MatterAttachment.objects.all()
+                
+            if options['all']:
+                logger.info('Fetching all files')
+            elif options['matter_id']:
+                logger.info('Fetching files for matter ID %s', options['matter_id'])
+                q = q.filter(matter_id=options['matter_id'])                    
             else:
-                q = MatterAttachment.objects.all()
-                if options['all']:
-                    logger.info('Fetching all files')
-                else:
-                    logger.info('Fetching new files')
-                    q = q.filter(
-                            Q(link_obtained_at=None)
-                            | (Q(last_modified__gte=F('link_obtained_at'))
-                             & Q(last_modified__isnull=False))
-                            | (Q(matter__last_modified__gte=F('link_obtained_at'))
-                             & Q(matter__last_modified__isnull=False))
-                        )
-                for attachment in [a for a in q]:
-                    self.fetch(attachment, project.id)
-                    attachment.link_obtained_at = timezone.now()
-                    attachment.save()
-                    logger.debug(
-                        'Updated link_obtained_at timestamp for '\
-                        'MatterAttachment: %s', attachment.id)
+                logger.info('Fetching new files')
+                q = q.filter(link_obtained_at=None)
+                    
+            for attachment in [a for a in q]:
+                self.fetch(attachment, project.id)
         except Exception as e:
             logger.exception(str(e))
 

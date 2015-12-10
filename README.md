@@ -16,13 +16,15 @@ Due to the use of ForeignKeys, some data has to be pulled before other data (e.g
  4. MatterType
  5. MatterStatus
  6. Matter
- 7. VoteType
- 8. Event
- 9. Action
 
-There is also a `pull_event_items` command that will pull the EventItems for every Event in the system.  However, it currently generates an IntegrityError on my local system because there is an EventItem that references a Matter than I do not have.  This should be handled programatically somewhow (TODO).
+`pull_sponsors` will download the MatterSponsor records.
 
-There is a `pull_attachments` which will harvest attachment records, but not the actual PDF files. `pull_pdfs` is still pending some functionality in the python-documentcloud library. For development, you will likely only want to pull a portion of the attachment records as it can take several hours to harvest all of them (around 58,000 total).
+`pull_attachments` will download the MatterAttachment records, but not the actual PDF files. 
+
+`pull_pdfs` will upload the PDF files to DocumentCloud.  For development, you will likely only want to pull a portion of the files as it can take several hours to harvest all of them (around 58,000 total).
+
+`pull_text` will download the extracted text from the files in DocumentCloud to the database.  For development, you will likely only want to pull the text for a portion of the files as it can take several hours to harvest all of them.
+
 
 ### Local development setup
 
@@ -80,6 +82,16 @@ This script assumes you've created a Postgres admin user with the same username 
 
 If your Postgres admin user has a different name, change the value of `PGUSER`.
 
+This script doesn't always work.  You can do it manually:
+
+```
+$ createdb -U postgres cityhallmonitor
+$ psql -U postgres cityhallmonitor
+cityhallmonitor=# CREATE USER cityhallmonitor WITH PASSWORD 'default';
+cityhallmonitor=# GRANT ALL PRIVILEGES ON DATABASE "cityhallmonitor" to cityhallmonitor;
+cityhallmonitor=# \q
+```
+
 Verify you can connect to database as cityhallmonitor user:
 
 ```
@@ -104,7 +116,6 @@ python manage.py syncdb
 Load sample data fixtures (for now):
 
 ```
-$ python manage.py loaddata Action.json
 $ python manage.py loaddata MatterType.json
 ```
 

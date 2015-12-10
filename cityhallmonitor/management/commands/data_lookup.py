@@ -7,11 +7,6 @@ from documentcloud import DocumentCloud
 from smtplib import SMTPException
 
 
-DOCUMENT_CLOUD_ACCOUNT = settings.DOCUMENT_CLOUD_ACCOUNT
-
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
-
-
 class DictDiffer(object):
     """
     Calculate the difference between two dictionaries as:
@@ -181,7 +176,10 @@ class Command(BaseCommand):
             for q in query_list:  
                 print('\nQuerying DocumentCloud [%s]' % q)
                 
-                r = self.search('account:%s %s' % (DOCUMENT_CLOUD_ACCOUNT, q))    
+                r = self.search('account:%s project:"%s" %s' % (
+                        settings.DOCUMENT_CLOUD_ACCOUNT,
+                        settings.DOCUMENT_CLOUD_PROJECT, 
+                        q))    
                 if not r:
                     print('NOT FOUND')
                 elif len(r) > 1:

@@ -1,44 +1,45 @@
 from django.contrib import admin
 from django.db.models import F
 from cityhallmonitor.models import \
-    Action, Person, BodyType, Body, \
+    Person, BodyType, Body, \
     MatterAttachment, MatterStatus, MatterType, Matter, \
-    MatterSponsor, VoteType, Event, EventItem, Subscription
+    MatterSponsor, Subscription, Document
     
 
-class ActionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'active_flag', 'last_modified',)
-    list_filter = ('active_flag',)
-admin.site.register(Action, ActionAdmin)
+class DirtyFieldsAdmin(admin.ModelAdmin):
+    readonly_fields = ('created_at', 'updated_at',)
 
 
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(DirtyFieldsAdmin):
     list_display = ('last_name', 'first_name', 'active_flag', 'last_modified')
     list_filter = ('active_flag',)
 admin.site.register(Person, PersonAdmin)
 
 
-class BodyTypeAdmin(admin.ModelAdmin):
+class BodyTypeAdmin(DirtyFieldsAdmin):
     list_display = ('name', 'last_modified')    
 admin.site.register(BodyType, BodyTypeAdmin)
 
-class BodyAdmin(admin.ModelAdmin):
+
+class BodyAdmin(DirtyFieldsAdmin):
     list_display = ('name', 'body_type', 'active_flag', 'last_modified')
     list_filter = ('active_flag',)    
 admin.site.register(Body, BodyAdmin)
 
 
-class MatterStatusAdmin(admin.ModelAdmin):
+class MatterStatusAdmin(DirtyFieldsAdmin):
     list_display = ('name', 'active_flag', 'last_modified',)
     list_filter = ('active_flag',)
 admin.site.register(MatterStatus, MatterStatusAdmin)
 
-class MatterTypeAdmin(admin.ModelAdmin):
+
+class MatterTypeAdmin(DirtyFieldsAdmin):
     list_display = ('name', 'active_flag', 'last_modified',)
     list_filter = ('active_flag',)
 admin.site.register(MatterType, MatterTypeAdmin)
 
-class MatterAdmin(admin.ModelAdmin):
+
+class MatterAdmin(DirtyFieldsAdmin):
     list_display = ('display_val', 'matter_status', 'matter_type', 'intro_date', 'last_modified')
     list_filter = ('matter_status', 'matter_type')
     search_fields = ['name', 'title']
@@ -66,29 +67,34 @@ class MatterAdmin(admin.ModelAdmin):
 
 admin.site.register(Matter, MatterAdmin)
 
-class MatterAttachmentAdmin(admin.ModelAdmin):
+
+class MatterAttachmentAdmin(DirtyFieldsAdmin):
     list_display = ('name', 'hyperlink', 'link_obtained_at', 'matter')
     search_fields = ('matter__id',)
 admin.site.register(MatterAttachment, MatterAttachmentAdmin)
 
-class MatterSponsorAdmin(admin.ModelAdmin):
+
+class MatterSponsorAdmin(DirtyFieldsAdmin):
     list_display = ('person', 'matter')
     list_filter = ('person',)
 
 admin.site.register(MatterSponsor, MatterSponsorAdmin)
 
-admin.site.register(VoteType)
-
-class EventAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'date', 'time', 'last_modified',)
-    search_fields = ['body__name']
-    ordering = ('-date', '-time')
-admin.site.register(Event, EventAdmin)
-
-admin.site.register(EventItem)
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('email', 'query', 'last_check', 'active')
     search_fields = ('email', 'query')    
 admin.site.register(Subscription, SubscriptionAdmin)
 
+
+class DocumentAdmin(DirtyFieldsAdmin):
+    list_display = ('sort_date', '__str__', 'is_routine',)
+    list_display_links = ('__str__',)
+    list_filter = ('is_routine',)
+    
+   
+    # Hide unused fields in admin form
+    exclude = (
+        'matter_attachment',
+    )
+admin.site.register(Document, DocumentAdmin)

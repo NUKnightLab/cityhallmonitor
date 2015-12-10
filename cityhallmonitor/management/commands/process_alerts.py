@@ -1,41 +1,73 @@
+import re
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand, CommandError
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.utils import timezone
-from cityhallmonitor.models import Subscription
+from cityhallmonitor.models import Subscription, Document
 from cityhallmonitor.views import _make_subscription_sid
-from documentcloud import DocumentCloud
 from smtplib import SMTPException
 
 
-DEFAULT_PROJECT = 'Chicago City Hall Monitor'
+ATTACHMENT_PUBLISH_URL = 'https://cityhallmonitor.knightlab.com/documents/%d'
 
 EMAIL_SUBJECT = 'City Hall Monitor Search Alert'
 
 EMAIL_TEMPLATE = 'email_alert.html'
 
+_re_query = re.compile("(\\\".*?\\\"|(?:\s|^)'.*?'(?:\s|$)| )")
+_re_phrase = re.compile("^'.*'$|^\".*\"$")
+
 
 class Command(BaseCommand):
     help = 'Process user subscriptions.'
-    _client = None
     _notifications_url = ''
-
-    def client(self):
-        """Using un-authenticated client..."""
-        if self._client is None:
-            self._client = DocumentCloud()
-        return self._client
 
     def add_arguments(self, parser):
         pass # noop
 
-    def search(self, query):
-        return self.client().documents.search(query)
+    def search(self, subscription):
+        """
+        Return search results from our database
+        """
+        where = []
+        word_list = []
+        pieces = [p.strip() for p in _re_query.split(subscription.query) if p.strip()]
+      
+        for s in pieces:
+            if _re_phrase.match(s):
+                where.append("text ~* '\m%s\M'" % s.strip("\"'"))
+            else:
+                word_list.append(s.replace("'", "''"))
+                
+        if word_list:
+            where.append("text_vector @@ plainto_tsquery('english', '%s')" \
+                % ' '.join(word_list))
 
-    def send_subscription_alert(self, subscription, document_list):
-        """Send user subscription alert email"""
+        where.append("sort_date >= '%s'" % subscription.last_check)
+                
+        qs = Document.objects.defer('text', 'text_vector')\
+                .extra(where=where, order_by=['-sort_date'])\
+                .select_related('matter_attachment', 'matter_attachment__matter')      
+                    
+        documents = []
+        for r in qs:
+            attachment = r.matter_attachment
+            matter = attachment.matter
+            
+            documents.append({
+                'published_url': ATTACHMENT_PUBLISH_URL % attachment.id,
+                'matter_title': matter.title,
+                'name': attachment.name
+            })
+            
+        return documents
+        
+    def send_subscription_alert(self, subscription, documents):
+        """
+        Send user subscription alert email
+        """
         email_template = get_template(EMAIL_TEMPLATE)
         
         html_message = email_template.render({
@@ -44,12 +76,12 @@ class Command(BaseCommand):
                 self._notifications_url,
                 _make_subscription_sid(subscription.id, subscription.email)
             ),
-            'documents': document_list
-        })               
-        
+            'documents': documents
+        })   
+                
         self.stdout.write('Sending alert for %d documents [%s]' % \
-            (len(document_list), subscription))  
-                               
+            (len(documents), subscription))          
+                              
         msg = EmailMessage(
             EMAIL_SUBJECT,
             html_message,
@@ -61,19 +93,14 @@ class Command(BaseCommand):
         msg.send()
 
     def process_subscription(self, subscription):
-        """Process subscription"""
-        query = 'account:%s project:"%s" access:public %s' % (
-            settings.DOCUMENT_CLOUD_ACCOUNT, 
-            DEFAULT_PROJECT, 
-            subscription.query)
- 
-        r = self.search(query)
-        if subscription.last_check:
-            r = [d for d in r if d.updated_at > subscription.last_check]
-         
+        """
+        Process subscription
+        """
+        documents = self.search(subscription)
+        
         try:
-            if len(r):
-                self.send_subscription_alert(subscription, r)
+            if len(documents):
+                self.send_subscription_alert(subscription, documents)
                         
             subscription.last_check = timezone.now()
             subscription.save()
@@ -82,8 +109,7 @@ class Command(BaseCommand):
                 'ERROR sending email for subscription %d: %s' % \
                 (subscription.id, str(se)))                             
         
-    def handle(self, *args, **options):
-        """Process subscriptions"""       
+    def handle(self, *args, **options):    
         self._notifications_url = \
             settings.DOMAIN_URL + reverse('notifications')
         self.stdout.write('Notifications URL = %s' % self._notifications_url)

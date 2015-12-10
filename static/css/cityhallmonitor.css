@@ -98,6 +98,13 @@ body {
   min-height: 400px; }
 
 /* Email sub box */
+#sub-box {
+  display: none; }
+
+input#search-subscribe-email {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0; }
+
 .subscription-email span {
   color: #ce4d28; }
 
@@ -108,7 +115,7 @@ body {
 
 #search-subscribe,
 #post-subscribe-msg {
-  margin-top: 21px; }
+  /*margin-top: 33px;*/ }
 
 .alert-box {
   margin: 40px auto; }
@@ -202,6 +209,13 @@ a.delete-subscription {
 
 .download-pdf {
   margin-left: 20px; }
+
+/* summary sidebar */
+.result-category span {
+  color: #888;
+  font-style: italic;
+  margin-left: 4px;
+  font-size: 0.9em; }
 
 /* purpleline additions to make*/
 .reveal-modal.open {

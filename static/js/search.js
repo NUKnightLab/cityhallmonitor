@@ -179,5 +179,8 @@ var doSearch = function(subscribeUrl) {
             $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
         }
         hideLoadingState();
+        $('#email-trigger').on('click', function(){
+          $('#sub-box').slideToggle();
+        });
     });
 }; // doSearch

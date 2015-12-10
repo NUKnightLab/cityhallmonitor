@@ -68,6 +68,7 @@ var hideLoadingState = function(){
 };
 
 $(function() {
+
     $(document).foundation();
 
     // Load DC viewer into modal after opened, else positioned incorrectly

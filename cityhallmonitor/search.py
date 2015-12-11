@@ -1,5 +1,5 @@
 # consider https://djangosnippets.org/snippets/1328/ for an example of making this work
-# as part of a model class 
+# as part of a model class
 import re
 from django.utils import timezone
 from cityhallmonitor.models import Document
@@ -9,19 +9,25 @@ _re_query = re.compile("(\\\".*?\\\"|(?:\s|^)'.*?'(?:\s|$)| )")
 _re_phrase = re.compile("^'.*'$|^\".*\"$")
 
 def simple_search(query, ignore_routine=True, date_range=None):
+    rank_normalization = 32 # default
     where = []
+    extra_select = {}
     word_list = []
     pieces = [p.strip() for p in _re_query.split(query) if p.strip()]
-
+    order_by = '-sort_date'
     for s in pieces:
         if _re_phrase.match(s):
             where.append("text ~* '\m%s\M'" % s.strip("\"'"))
         else:
             word_list.append(s.replace("'", "''"))
 
+
+
     if word_list:
-        where.append("text_vector_weighted @@ plainto_tsquery('english', '%s')" \
-            % ' '.join(word_list))
+        ts_query = "plainto_tsquery('english', '%s')" % ' '.join(word_list)
+        where.append("text_vector_weighted @@ %s" % ts_query)
+        extra_select['rank'] = 'ts_rank(text_vector_weighted, %s, %d )' % (ts_query, rank_normalization)
+        order_by = '-rank'
 
     if ignore_routine:
         where.append("cityhallmonitor_document.is_routine = false")
@@ -37,7 +43,7 @@ def simple_search(query, ignore_routine=True, date_range=None):
             % date_range)
 
     qs = Document.objects.defer('text', 'text_vector')\
-            .extra(where=where, order_by=['-sort_date'])\
+            .extra(select=extra_select, where=where, order_by=[order_by])\
             .select_related('matter_attachment', 'matter_attachment__matter')
 
     return qs

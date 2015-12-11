@@ -1,3 +1,5 @@
+# consider https://djangosnippets.org/snippets/1328/ for an example of making this work
+# as part of a model class 
 import re
 from django.utils import timezone
 from cityhallmonitor.models import Document
@@ -18,7 +20,7 @@ def simple_search(query, ignore_routine=True, date_range=None):
             word_list.append(s.replace("'", "''"))
 
     if word_list:
-        where.append("text_vector @@ plainto_tsquery('english', '%s')" \
+        where.append("text_vector_weighted @@ plainto_tsquery('english', '%s')" \
             % ' '.join(word_list))
 
     if ignore_routine:

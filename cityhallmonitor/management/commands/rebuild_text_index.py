@@ -7,6 +7,8 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = 'For each document, force an update of its related fields and its postgres text index'
 
+    logger.info('Rebuilding text index')
+    
     def handle(self, *args, **options):
         for i,d in enumerate(Document.objects.all()):
             d._set_dependent_fields()

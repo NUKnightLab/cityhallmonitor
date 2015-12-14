@@ -104,6 +104,12 @@ LOGGING['handlers'].update({
         'class': 'logging.FileHandler',
         'formatter': 'verbose',
         'filename': '/home/apps/log/cityhallmonitor/update_dc_data.log'
+    },
+    'rebuild_text_index': {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'formatter': 'verbose',
+        'filename': '/home/apps/log/cityhallmonitor/rebuild_text_index.log'
     }
 })
 
@@ -138,6 +144,10 @@ LOGGING['loggers'].update({
     },
     'cityhallmonitor.management.commands.update_dc_data': {
         'handlers': ['update_dc_data'],
+        'level': 'DEBUG'
+    },        
+    'cityhallmonitor.management.commands.rebuild_text_index': {
+        'handlers': ['rebuild_text_index'],
         'level': 'DEBUG'
     }        
 })

@@ -2,7 +2,7 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from cityhallmonitor.models import DirtyFieldsModel, \
-    Matter, MatterAttachment
+    Matter, MatterAttachment, MatterSponsor
 
      
 @receiver(pre_save, sender=DirtyFieldsModel)
@@ -23,9 +23,11 @@ def handle_post_save(sender, instance, **kwargs):
         elif sender == MatterAttachment and instance.is_dirty():
             if hasattr(instance, 'document'):
                 r.document.on_related_update()
-        
-        
-        
+        elif sender == MatterSponsor and instance.is_dirty():
+            for r in instance.matter.matterattachment_set.all():
+                if hasattr(r, 'document'):
+                    r.document.on_related_update()
+                
     if hasattr(sender, 'reset_state'):
         instance.reset_state()
     

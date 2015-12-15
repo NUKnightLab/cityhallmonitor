@@ -26,6 +26,8 @@ class Command(BaseCommand):
         if options['limit']:
             qs = qs[:options['limit']]
         
+        i = 0
+        
         for i,d in enumerate(qs, start=1):
             d._set_dependent_fields()
             d.save(update_text=True)

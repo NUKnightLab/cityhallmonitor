@@ -37,15 +37,24 @@ def process_query(request):
 
     try:
         raw = request.GET.get('query')
+        raw_title = request.GET.get('query_title', '')
+        raw_sponsors = request.GET.get('query_sponsors', '')
+        
         ignore_routine = request.GET.get('ignore_routine', 'true').lower() \
             in ['true', 't', '1']
         date_range = request.GET.get('date_range', '')
         order_by = request.GET.get('order_by', '-sort_date')
 
-        qs = simple_search(raw, 
-                ignore_routine=ignore_routine, 
-                date_range=date_range,
-                order_by=order_by)
+        if raw_title or raw_sponsors:
+            qs = advanced_search(raw, raw_title, raw_sponsors,
+                    ignore_routine=ignore_routine, 
+                    date_range=date_range,
+                    order_by=order_by)       
+        else:
+            qs = simple_search(raw, 
+                    ignore_routine=ignore_routine, 
+                    date_range=date_range,
+                    order_by=order_by)
 
         documents = []
         for r in qs:

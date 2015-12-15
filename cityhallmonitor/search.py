@@ -8,26 +8,24 @@ from datetime import timedelta
 _re_query = re.compile("(\\\".*?\\\"|(?:\s|^)'.*?'(?:\s|$)| )")
 _re_phrase = re.compile("^'.*'$|^\".*\"$")
 
-def simple_search(query, ignore_routine=True, date_range=None):
+def simple_search(query, ignore_routine=True, date_range=None, order_by='-sort_date'):
     rank_normalization = 32 # default
     where = []
     extra_select = {}
     word_list = []
     pieces = [p.strip() for p in _re_query.split(query) if p.strip()]
-    order_by = '-sort_date'
+
     for s in pieces:
         if _re_phrase.match(s):
             where.append("text ~* '\m%s\M'" % s.strip("\"'"))
         else:
             word_list.append(s.replace("'", "''"))
 
-
-
     if word_list:
         ts_query = "plainto_tsquery('english', '%s')" % ' '.join(word_list)
         where.append("text_vector_weighted @@ %s" % ts_query)
         extra_select['rank'] = 'ts_rank(text_vector_weighted, %s, %d )' % (ts_query, rank_normalization)
-        order_by = '-rank'
+        #order_by = '-rank' << assuming we should NOT override parameter
 
     if ignore_routine:
         where.append("cityhallmonitor_document.is_routine = false")

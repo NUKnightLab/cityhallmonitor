@@ -21,9 +21,16 @@
         <div id="results-summary" class="row"></div>
 
         <div id="results-block" class="row">
-            {# include "_filters.html" #}
             <div id="results-stats" class="small-4 medium-3 columns"></div>
-            <div id="search-results" class="small-8 medium-9 columns"/></div>
+            <div  class="small-8 medium-9 columns"/>
+              <div id="sort-by">
+                <p class="help meta">Sort by: </span>
+                <p class="help meta" id="sort-relevance"><span class="option active">Relevance</span></p>
+                <p class="help meta" id="sort-chron"><span class="option">Date updated</span></p>
+              </div>
+              <div id="search-results">
+              </div>
+            </div>
         </div> <!-- #results-block -->
       </div>
 

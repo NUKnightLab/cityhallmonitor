@@ -2,6 +2,7 @@ $font-family-sans-serif: 'Apres RE', 'Helvetica Neue', Helvetica, Arial, sans-se
 
 /* colors */
 $orange: #ce4d28;
+$link-blue: #1dacd6;
 $white: #fff;
 $iron: #ccc;
 $jumbo: #888;
@@ -177,6 +178,41 @@ a.delete-subscription {
 
 
 /* Search results list */
+#sort-by {
+    display: none;
+    margin-bottom: 50px;
+    .option {
+        cursor: pointer;
+        color: $link-blue;
+        padding: 5px;
+        margin: 1px;
+        &.active {
+            margin: 0;
+            background-color: #f2f2f2;
+            border: 1px solid #d8d8d8;
+        }
+        &:hover {
+            margin: 0;
+            background-color: #f2f2f2;
+            border: 1px solid #d8d8d8;
+        }
+    }
+    .meta {
+        margin: 0;
+        color: #333;
+    }
+    p {
+        &:first-child {
+            margin-right: 10px;
+        }
+        /*&:nth-child(even):after {*/
+            /*content: " | ";*/
+            /*color: $jumbo;*/
+            /*margin: 0 5px;*/
+            /*border-bottom: none;*/
+        /*}*/
+    }
+}
 .result {
     margin-bottom: 2em;
     img {
@@ -189,7 +225,6 @@ a.delete-subscription {
     }
 }
 .multi .document {
-    /*border-bottom: 1px solid #eee;*/
     p {
         margin: 6px 0;
         text-align: right;

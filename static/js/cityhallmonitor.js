@@ -54,16 +54,16 @@ var buildDateUI = function(){
 
 var showLoadingState = function(){
     $('#spinner-holder').show();
+    $('#sort-by, #results-stats').hide();
     $('#results-summary, #search-results').html('');
     $('input, button, select').prop('disabled', true);
     $("#search-submit").html("Loading");
-    //$('#big-hed').slideUp();
 };
 
 var hideLoadingState = function(){
     $('#spinner-holder').hide();
+    $('#sort-by, #results-stats').show();
     $("#search-submit").html("Search");
-    //$("#facets").removeClass('hide');
     $('input, button, select').prop('disabled', false);
 };
 

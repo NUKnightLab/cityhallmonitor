@@ -54,11 +54,11 @@ var addResult = function(obj) {
 
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
-    
+
     var query = $('#search-input').val();
     var dateRangeType = $('#date-range-type').val();
     var ignoreRoutine = $('#ignore-routine').is(':checked');
-    
+
     var queryQualifier = '';
 
     switch (dateRangeType) {
@@ -69,38 +69,38 @@ var doSearch = function(searchUrl, subscribeUrl) {
         case 'past-month':
             queryQualifier = ' in the last 30 days';
             break;
-            
+
         case 'any':
             break;
     }
-    
+
     console.log('EXECUTING QUERY:: ' + query);
-    
+
     $.ajax({
         url: searchUrl,
         data: {
             query: query,
             date_range: dateRangeType,
-            ignore_routine: ignoreRoutine         
+            ignore_routine: ignoreRoutine
         }
     })
     .success(function(data) {
         console.log(data);
-        
+
         var groups = {};
         var dates = [];
         var dt = null;
-        
+
         var totalDocuments = 0;
         var statTypes = {
             'Statuses': 'status',
             'Matter Types': 'type'
         };
         var statsData = {};
-        
+
         $.each(data.documents, function(i, doc) {
             dt = doc.sort_date;
-            
+
             if(dates.indexOf(dt) < 0) {
                 dates.push(dt);
                 groups[dt] = {};
@@ -112,7 +112,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
                     'docs': [doc]
                 };
             }
-            
+
             $.each(statTypes, function(key, matter_field) {
                 if (!(key in statsData)){
                     statsData[key] = {};
@@ -121,7 +121,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
                     statsData[key][doc.matter[matter_field]] += 1;
                 } else {
                     statsData[key][doc.matter[matter_field]] = 1;
-                }                
+                }
             });
         });
 
@@ -161,5 +161,5 @@ var doSearch = function(searchUrl, subscribeUrl) {
           $('#sub-box').slideToggle();
         });
     });
-    
+
 }; // doSearch

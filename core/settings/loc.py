@@ -89,15 +89,10 @@ LOGGING['loggers'].update({
         'handlers': ['console'],
         'level': 'DEBUG'
     },
-    'cityhallmonitor.management.commands.audit_db': {
-        'handlers': ['console'],
-        'level': 'DEBUG'
-    },
-    'cityhallmonitor.management.commands.audit_dc': {
+    'cityhallmonitor.management.commands.rebuild_text_index': {
         'handlers': ['console'],
         'level': 'DEBUG'
     }
-
 })
     
 # For testing

@@ -13,7 +13,7 @@ from django.utils import timezone
 from documentcloud import DocumentCloud
 from cityhallmonitor.models import Matter, MatterAttachment, \
     MatterStatus, MatterType, Subscription, Document
-    
+
 
 _re_query = re.compile("(\\\".*?\\\"|(?:\s|^)'.*?'(?:\s|$)| )")
 _re_phrase = re.compile("^'.*'$|^\".*\"$")
@@ -27,7 +27,7 @@ def _make_subscription_sid(id, email):
 
 def search(request):
     return render(request, 'search.html', context={})
-        
+
 
 def process_query(request):
     """
@@ -35,31 +35,31 @@ def process_query(request):
     tsquery for the rest.  Uses the soon-to-be deprecated extra()
     method, because this returns a QuerySet on which we can do additional
     filtering.
-    
+
     We might want to limit the number of results we actually return,
     which is why the query contains an order_by clause.  Returning
     them all for now.
     """
-        
+
     try:
         raw = request.GET.get('query')
-        
+
         where = []
         word_list = []
         pieces = [p.strip() for p in _re_query.split(raw) if p.strip()]
-      
+
         for s in pieces:
             if _re_phrase.match(s):
                 where.append("text ~* '\m%s\M'" % s.strip("\"'"))
             else:
                 word_list.append(s.replace("'", "''"))
-        
+
         if word_list:
             where.append("text_vector @@ plainto_tsquery('english', '%s')" \
                 % ' '.join(word_list))
-        
+
         ignore_routine = request.GET.get('ignore_routine', 'true').lower() \
-            in ['true', 't', '1']       
+            in ['true', 't', '1']
         if ignore_routine:
             where.append("cityhallmonitor_document.is_routine = false")
 
@@ -73,16 +73,16 @@ def process_query(request):
         elif not (date_range == 'any' or date_range == ''):
             raise Exception('Invalid date_range parameter "%s"' \
                 % date_range)
-        
+
         qs = Document.objects.defer('text', 'text_vector')\
                 .extra(where=where, order_by=['-sort_date'])\
-                .select_related('matter_attachment', 'matter_attachment__matter')      
-                                         
+                .select_related('matter_attachment', 'matter_attachment__matter')
+
         documents = []
-        for r in qs:       
+        for r in qs:
             attachment = r.matter_attachment
             matter = attachment.matter
-                 
+
             documents.append({
                 'id': attachment.id,
                 'sort_date': r.sort_date,
@@ -96,18 +96,18 @@ def process_query(request):
                     'type': matter.matter_type.name
                 }
             })
-              
-        return JsonResponse({'error': '', 'documents': documents})        
+
+        return JsonResponse({'error': '', 'documents': documents})
     except Exception as e:
         traceback.print_exc()
         return JsonResponse({'error': str(e)})
 
-            
+
 def documents(request, id):
     """View MatterAttachment"""
-    try:    
-        matter_attachment = MatterAttachment.objects.get(pk=id) 
-        
+    try:
+        matter_attachment = MatterAttachment.objects.get(pk=id)
+
         client = DocumentCloud()
         r = client.documents.search('account:%s project:"%s" source: "%s"' % (
             settings.DOCUMENT_CLOUD_ACCOUNT,

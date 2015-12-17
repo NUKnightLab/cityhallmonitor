@@ -194,7 +194,7 @@ a.delete-subscription {
         &:hover {
             margin: 0;
             background-color: #f2f2f2;
-            border: 1px solid #d8d8d8;
+            border: 1px solid #f2f2f2;
         }
     }
     .meta {
@@ -205,12 +205,6 @@ a.delete-subscription {
         &:first-child {
             margin-right: 10px;
         }
-        /*&:nth-child(even):after {*/
-            /*content: " | ";*/
-            /*color: $jumbo;*/
-            /*margin: 0 5px;*/
-            /*border-bottom: none;*/
-        /*}*/
     }
 }
 .result {

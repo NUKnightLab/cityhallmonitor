@@ -14,6 +14,7 @@ from cityhallmonitor.models import Matter, MatterAttachment, \
 
 from cityhallmonitor.search import simple_search
 
+
 def _make_subscription_sid(id, email):
     """Make a subscription identifier (for email)"""
     return "%s-%s" % \
@@ -22,6 +23,7 @@ def _make_subscription_sid(id, email):
 
 def search(request):
     return render(request, 'search.html', context={})
+
 
 def _documents_json(document_list):
     """
@@ -54,12 +56,12 @@ def default_query(request):
     """
     try:
         qs = simple_search('', ignore_routine=True, date_range='past-month')
-        return _documents_json(qs)        
+        return _documents_json(qs)
     except Exception as e:
         traceback.print_exc()
         return JsonResponse({'error': str(e)})
-        
-    
+
+
 def process_query(request):
     """
     Uses regular expression pattern matching on text for quoted phrases,

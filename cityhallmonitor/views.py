@@ -23,6 +23,43 @@ def search(request):
     return render(request, 'search.html', context={})
 
 
+def _documents_json(document_list):
+    """
+    Return JSON representation of documents
+    """
+    documents = []
+    for r in document_list:
+        attachment = r.matter_attachment
+        matter = attachment.matter
+
+        documents.append({
+            'id': attachment.id,
+            'sort_date': r.sort_date,
+            'name': attachment.name,
+            'hyperlink': attachment.hyperlink,
+            'dc_id': attachment.dc_id,
+            'matter': {
+                'id': matter.id,
+                'title': matter.title,
+                'status': matter.matter_status.name,
+                'type': matter.matter_type.name
+            }
+        })
+    return JsonResponse({'error': '', 'documents': documents})
+
+
+def default_query(request):
+    """
+    Find all non-routine documents from within the last 30 days
+    """
+    try:
+        qs = simple_search('', ignore_routine=True, date_range='past-month')
+        return _documents_json(qs)        
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse({'error': str(e)})
+        
+    
 def process_query(request):
     """
     Uses regular expression pattern matching on text for quoted phrases,
@@ -56,26 +93,7 @@ def process_query(request):
                     date_range=date_range,
                     order_by=order_by)
 
-        documents = []
-        for r in qs:
-            attachment = r.matter_attachment
-            matter = attachment.matter
-
-            documents.append({
-                'id': attachment.id,
-                'sort_date': r.sort_date,
-                'name': attachment.name,
-                'hyperlink': attachment.hyperlink,
-                'dc_id': attachment.dc_id,
-                'matter': {
-                    'id': matter.id,
-                    'title': matter.title,
-                    'status': matter.matter_status.name,
-                    'type': matter.matter_type.name
-                }
-            })
-
-        return JsonResponse({'error': '', 'documents': documents})
+        return _documents_json(qs)
     except Exception as e:
         traceback.print_exc()
         return JsonResponse({'error': str(e)})

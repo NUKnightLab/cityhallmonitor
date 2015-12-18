@@ -52,10 +52,13 @@ var appendResult = function(obj) {
     }
 };
 
+//Need to store the results of the AJAX call somewhere so we can sort without hitting the database
+var documents;
+
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
 
-    var resultsData;
+    documents = [];
     var query = $('#search-input').val();
     var dateRangeType = $('#date-range-type').val();
     var ignoreRoutine = $('#ignore-routine').is(':checked');
@@ -80,10 +83,10 @@ var doSearch = function(searchUrl, subscribeUrl) {
         return statsData;
     };
 
-    var appendSummaryAndStats = function(total, query, qualifier, statsData){
+    var appendSummaryAndStats = function(total, qualifier, statsData){
         $('#results-summary').html($(summaryTemplate({
             total: total,
-            query: query,
+            query: $('#search-input').val(),
             qualifier: qualifier
         })));
         if (statsData) {
@@ -91,48 +94,13 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
     };
 
-    var showEmailForm = function(){
-      $('#search-subscribe-form, #sort-by').show();
-          $('#search-subscribe-form').submit(function(event) {
-              handle_subscribe(event, subscribeUrl);
-              return false;
-          });
-    };
-
-    switch (dateRangeType) {
-        case 'past-year':
-            queryQualifier = ' in the past year';
-            break;
-
-        case 'past-month':
-            queryQualifier = ' in the last 30 days';
-            break;
-
-        case 'any':
-            break;
-    }
-
-    console.log('EXECUTING QUERY:: ' + query);
-
-    $.ajax({
-        url: searchUrl,
-        data: {
-            query: query,
-            date_range: dateRangeType,
-            ignore_routine: ignoreRoutine
-        }
-    })
-    .success(function(data) {
-        console.log(data);
-
+    var createResultMeta = function(data){
         var groups = {};
         var dates = [];
-        var dt = null;
-
         var statsData = {};
         $.each(data.documents, function(i, doc) {
             // dt == datetime
-            dt = doc.sort_date;
+            var dt = doc.sort_date;
             //if the datetime hasn't already been added to the dates array
             if(dates.indexOf(dt) < 0) {
                 dates.push(dt);
@@ -147,15 +115,18 @@ var doSearch = function(searchUrl, subscribeUrl) {
                     'docs': [doc]
                 };
             }
-            appendSummaryAndStats(data.documents.length, query, queryQualifier, buildResultStats(doc, statsData));
+            buildResultStats(doc, statsData);
         });
+        appendSummaryAndStats(data.documents.length, queryQualifier, statsData);
+        return {
+          documents: data.documents,
+          groups: groups,
+          dates: dates
+        };
+    }
 
-        // don't let people subscribe to the default query
-        if (subscribeUrl != null) {
-          showEmailForm(subscribeUrl);
-        }
-
-        // group documents with their related matters
+    // group documents with their related matters
+    var appendMatters = function(data, groups, dates){
         if(data.documents.length > 0) {
             dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             for (i=0; i<dates.length; i++) {
@@ -165,28 +136,66 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 });
             }
         }
+    };
 
+    var showEmailForm = function(){
+      $('#search-subscribe-form, #sort-by').show();
+          $('#search-subscribe-form').submit(function(event) {
+              handle_subscribe(event, subscribeUrl);
+              return false;
+          });
+    };
+
+    //used to determine language to display and time period to return
+    switch (dateRangeType) {
+        case 'past-year':
+            queryQualifier = ' in the past year';
+            break;
+
+        case 'past-month':
+            queryQualifier = ' in the last 30 days';
+            break;
+
+        case 'any':
+            break;
+    }
+
+    console.log('EXECUTING QUERY:: ' + query);
+    $.ajax({
+        url: searchUrl,
+        data: {
+            query: query,
+            date_range: dateRangeType,
+            ignore_routine: ignoreRoutine
+        }
+    })
+    .success(function(data) {
+        console.log(data);
+
+        var resultMeta = createResultMeta(data);
+        documents = resultMeta.documents;
+        var groups = resultMeta.groups;
+        var dates = resultMeta.dates;
+
+        appendMatters(data, groups, dates);
+
+        // don't let people subscribe to the default query
+        if (subscribeUrl != null) {
+          showEmailForm(subscribeUrl);
+        }
         $("#search-results").foundation('reveal', 'reflow');
-        $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('nav').outerHeight()}, 350);
 
-        resultsData = data.documents;
-        return resultsData;
     })
     .error(function(xhr, status, errMsg) {
         alert(errMsg);
     })
     .complete(function(xhr, status) {
         hideLoadingState();
-        $('#email-trigger').on('click', function(){
-          $('#sub-box').slideToggle();
-        });
     });
-
-    return resultsData;
 }; // doSearch
 
 var sortByDate = function(){
   $('#sort-chron').on('click', function(){
-    console.log(this);
+    console.log(documents);
   });
 }

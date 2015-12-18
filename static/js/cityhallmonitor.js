@@ -62,7 +62,7 @@ var showLoadingState = function(){
 
 var hideLoadingState = function(){
     $('#spinner-holder').hide();
-    $('#sort-by, #results-stats').show();
+    $('#results-stats').show();
     $("#search-submit").html("Search");
     $('input, button, select').prop('disabled', false);
 };

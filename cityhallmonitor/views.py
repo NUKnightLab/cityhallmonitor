@@ -11,7 +11,9 @@ from django.utils import timezone
 from documentcloud import DocumentCloud
 from cityhallmonitor.models import Matter, MatterAttachment, \
     MatterStatus, MatterType, Subscription, Document
+
 from cityhallmonitor.search import simple_search
+
 
 def _make_subscription_sid(id, email):
     """Make a subscription identifier (for email)"""
@@ -21,6 +23,43 @@ def _make_subscription_sid(id, email):
 
 def search(request):
     return render(request, 'search.html', context={})
+
+
+def _documents_json(document_list):
+    """
+    Return JSON representation of documents
+    """
+    documents = []
+    for r in document_list:
+        attachment = r.matter_attachment
+        matter = attachment.matter
+
+        documents.append({
+            'id': attachment.id,
+            'sort_date': r.sort_date,
+            'name': attachment.name,
+            'hyperlink': attachment.hyperlink,
+            'dc_id': attachment.dc_id,
+            'matter': {
+                'id': matter.id,
+                'title': matter.title,
+                'status': matter.matter_status.name,
+                'type': matter.matter_type.name
+            }
+        })
+    return JsonResponse({'error': '', 'documents': documents})
+
+
+def default_query(request):
+    """
+    Find all non-routine documents from within the last 30 days
+    """
+    try:
+        qs = simple_search('', ignore_routine=True, date_range='past-month')
+        return _documents_json(qs)
+    except Exception as e:
+        traceback.print_exc()
+        return JsonResponse({'error': str(e)})
 
 
 def process_query(request):
@@ -37,9 +76,10 @@ def process_query(request):
 
     try:
         raw = request.GET.get('query')
+
         raw_title = request.GET.get('query_title', '')
         raw_sponsors = request.GET.get('query_sponsors', '')
-        
+
         ignore_routine = request.GET.get('ignore_routine', 'true').lower() \
             in ['true', 't', '1']
         date_range = request.GET.get('date_range', '')
@@ -47,35 +87,16 @@ def process_query(request):
 
         if raw_title or raw_sponsors:
             qs = advanced_search(raw, raw_title, raw_sponsors,
-                    ignore_routine=ignore_routine, 
+                    ignore_routine=ignore_routine,
                     date_range=date_range,
-                    order_by=order_by)       
+                    order_by=order_by)
         else:
-            qs = simple_search(raw, 
-                    ignore_routine=ignore_routine, 
+            qs = simple_search(raw,
+                    ignore_routine=ignore_routine,
                     date_range=date_range,
                     order_by=order_by)
 
-        documents = []
-        for r in qs:
-            attachment = r.matter_attachment
-            matter = attachment.matter
-
-            documents.append({
-                'id': attachment.id,
-                'sort_date': r.sort_date,
-                'name': attachment.name,
-                'hyperlink': attachment.hyperlink,
-                'dc_id': attachment.dc_id,
-                'matter': {
-                    'id': matter.id,
-                    'title': matter.title,
-                    'status': matter.matter_status.name,
-                    'type': matter.matter_type.name
-                }
-            })
-
-        return JsonResponse({'error': '', 'documents': documents})
+        return _documents_json(qs)
     except Exception as e:
         traceback.print_exc()
         return JsonResponse({'error': str(e)})

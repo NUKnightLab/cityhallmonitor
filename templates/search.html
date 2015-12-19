@@ -21,9 +21,16 @@
         <div id="results-summary" class="row"></div>
 
         <div id="results-block" class="row">
-            {# include "_filters.html" #}
             <div id="results-stats" class="small-4 medium-3 columns"></div>
-            <div id="search-results" class="small-8 medium-9 columns"/></div>
+            <div  class="small-8 medium-9 columns"/>
+              <div id="sort-by">
+                <p class="help meta">Sort by: </span>
+                <p class="help meta" id="sort-relevance"><span class="option active">Relevance</span></p>
+                <p class="help meta" id="sort-chron"><span class="option">Date updated</span></p>
+              </div>
+              <div id="search-results">
+              </div>
+            </div>
         </div> <!-- #results-block -->
       </div>
 
@@ -36,18 +43,24 @@
             <h5>We found <span class="num-of-results"><%= total %> results</span> matching <em><%= query %></em><%= qualifier %>.</h5>
             <form action="#" id="search-subscribe-form">
                 <div class="row collapse">
-                    <div class="small-6 columns">
-                        <label for="search-subscribe-email">Email me when these results change</label>
-                        <input type="text" id="search-subscribe-email" placeholder="enter email address" />
-                        <input type="hidden" id="search-term" value="<%= query %>" />
-                    </div>
-                    <div class="small-2 columns">
-                        <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
-                    </div>
-                    <div class="small-4 columns">
-                      <p id="post-subscribe-msg" class="status-msg"></p>
+                    <div class="small-12 columns">
+                        <div id="email-trigger">
+                          <input type="checkbox" name="yes-to-email"><label>Email me when these results change</label>
+                        </div>
+                        <div class="row collapse" id="sub-box">
+                          <div class="small-6 columns">
+                            <input type="text" id="search-subscribe-email" placeholder="enter email address" />
+                            <input type="hidden" id="search-term" value="<%= query %>" />
+                          </div>
+                          <div class="small-2 columns">
+                            <input type="submit" value="Subscribe" id="search-subscribe" class="button postfix small"/>
+                          </div>
+                          <div class="small-2 columns end">
+                            <p id="post-subscribe-msg" class="status-msg"></p>
+                          </div>
                     </div>
                 </div>
+
             </form>
         </div>
     </script>
@@ -57,14 +70,14 @@
           <div class="small-12 columns">
             <p class="updated-date"><%= docs[0].sort_date.substring(0,10) %></p>
             <p class="help meta label secondary"><i class="fa fa-files-o"></i> Multiple documents</p>
-            <p class="help meta">Status: <span class="label <%= statusClass %>"><%= docs[0].matter.status %></span></p>
-            <p class="help meta">Type: <span><%= docs[0].matter.type %></span></p>
+            <p class="help meta"> <span class="label <%= statusClass %>"><%= docs[0].matter.status %></span></p>
             <h5><%= docs[0].matter.title %></h5>
           </div>
           <% _.each(docs, function(doc, i) { %>
           <div class="row document">
               <div class="small-7 small-offset-1 columns">
                 <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
+                  <p><span class="help meta"></span><%= doc.title %></p>
                   <p><%= doc.name %></p>
                 </a>
               </div>
@@ -82,8 +95,7 @@
         <div class="result row" id="<%= doc.matter.id %>">
             <div class="small-8 columns">
               <p class="updated-date"><%= doc.sort_date.substring(0,10) %></p>
-              <p class="help meta">Status: <span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
-              <p class="help meta">Type: <span><%= doc.matter.type %></span></p>
+              <p class="help meta"><span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
                 <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
                   <h5><%= doc.matter.title %></h5>
                 </a>
@@ -103,7 +115,7 @@
           <% _.each(statsData, function(data, stat) {%>
             <li><strong><%= stat %></strong></li>
             <% _.each(data, function(val, key) { %>
-              <li>(<%= val %>) <%= key %></li>
+              <li class="result-category"><%= key %> <span><%= val %></span></li>
             <% }); %>
           <% }); %>
         </ul>
@@ -115,6 +127,7 @@
     <script src="{% static 'js/search.js' %}"></script>
     <script type="text/javascript">
       $(function() {
+          doSearch('{% url "default_query" %}', '{% url "subscribe" %}');
           $('#search-form').submit(function() {
               doSearch('{% url "process_query" %}', '{% url "subscribe" %}');
               return false;

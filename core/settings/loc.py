@@ -37,8 +37,8 @@ WSGI_APPLICATION = 'conf.loc.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cityhallmonitor_prd',
-        'USER': 'hbillings',
+        'NAME': 'cityhallmonitor',
+        'USER': 'cityhallmonitor',
         'PASSWORD': 'default',
         'HOST': '127.0.0.1',
         'PORT': ''

@@ -1,0 +1,4 @@
+# requirements for experiments in ML 
+ipython
+jupyter
+agate==1.1.0

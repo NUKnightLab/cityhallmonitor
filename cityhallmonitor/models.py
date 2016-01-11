@@ -132,6 +132,7 @@ class Person(LegistarModel):
     full_name = models.TextField()
     active_flag = models.IntegerField()
     used_sponsor_flag = models.IntegerField()
+    matters = models.ManyToManyField('Matter', through='MatterSponsor')
 
     class Meta:
         ordering = ['last_name', 'first_name']

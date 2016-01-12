@@ -11,11 +11,11 @@ _re_phrase = re.compile("^'.*'$|^\".*\"$")
 
 def simple_search(query, ignore_routine=True, date_range=None, order_by='-sort_date'):
     rank_normalization = 32 # default
-    
+
     where = []
     extra_select = {}
     word_list = []
-    
+
     pieces = [p.strip() for p in _re_query.split(query) if p.strip()]
     for s in pieces:
         if _re_phrase.match(s):
@@ -25,9 +25,9 @@ def simple_search(query, ignore_routine=True, date_range=None, order_by='-sort_d
 
     if word_list:
         ts_query = "plainto_tsquery('english', '%s')" % ' '.join(word_list)
-        where.append("text_vector_weighted @@ %s" % ts_query)
-        extra_select['rank'] = 'ts_rank(text_vector_weighted, %s, %d )' % (ts_query, rank_normalization)
-        #order_by = '-rank' << assuming we should NOT override parameter
+        where.append("text_vector @@ %s" % ts_query)
+        extra_select['rank'] = 'ts_rank(text_vector, %s, %d )' % (ts_query, rank_normalization)
+        order_by = '-rank'
 
     if ignore_routine:
         where.append("cityhallmonitor_document.is_routine = false")
@@ -56,11 +56,11 @@ def advanced_search(query, query_title='', query_sponsors='',
     Advanced search using weights in query
     """
     rank_normalization = 32 # default
-    
+
     where = []
     extra_select = {}
     word_list = []
-    
+
     pieces = [p.strip() for p in _re_query.split(query) if p.strip()]
     for s in pieces:
         if _re_phrase.match(s):
@@ -70,20 +70,20 @@ def advanced_search(query, query_title='', query_sponsors='',
 
     if word_list:
         ts_query = "plainto_tsquery('english', '%s')" % ' '.join(word_list)
-        where.append("text_vector_weighted @@ %s" % ts_query)
-        extra_select['rank'] = 'ts_rank(text_vector_weighted, %s, %d )' % (ts_query, rank_normalization)
+        where.append("text_vector @@ %s" % ts_query)
+        extra_select['rank'] = 'ts_rank(text_vector, %s, %d )' % (ts_query, rank_normalization)
         #order_by = '-rank' << assuming we should NOT override parameter
 
     if query_title:
         pieces = ['%s:A' % p.replace("'", "''") for p in query_title.split()]
         ts_query = "to_tsquery('english', '%s')" % ' & '.join(pieces)
-        where.append("text_vector_weighted @@ %s" % ts_query)
-        
-    if query_sponsors: 
-        pieces = ['%s:B' % p.replace("'", "''") for p in query_sponsors.split()]  
+        where.append("text_vector @@ %s" % ts_query)
+
+    if query_sponsors:
+        pieces = ['%s:B' % p.replace("'", "''") for p in query_sponsors.split()]
         ts_query = "to_tsquery('english', '%s')" % ' & '.join(pieces)
-        where.append("text_vector_weighted @@ %s" % ts_query)
-                
+        where.append("text_vector @@ %s" % ts_query)
+
     if ignore_routine:
         where.append("cityhallmonitor_document.is_routine = false")
 

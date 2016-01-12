@@ -57,15 +57,19 @@ var documents;
 
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
-
     documents = [];
     var query = $('#search-input').val();
     var dateRangeType = $('#date-range-type').val();
     var ignoreRoutine = $('#ignore-routine').is(':checked');
     var queryQualifier = '';
+    var isRanked = false;
+    // only rank if not the default query
+    if (subscribeUrl != null) {
+      var isRanked = true;
+    }
 
     //build up summary stats for sidebar
-    var buildResultStats = function(doc, statsData){
+    function buildResultStats(doc, statsData){
         var statTypes = {
             'Statuses': 'status',
             'Matter Types': 'type'
@@ -83,7 +87,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
         return statsData;
     };
 
-    var appendSummaryAndStats = function(total, qualifier, statsData){
+    function appendSummaryAndStats(total, qualifier, statsData){
         $('#results-summary').html($(summaryTemplate({
             total: total,
             query: $('#search-input').val(),
@@ -94,14 +98,14 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
     };
 
-    var createResultMeta = function(data){
+    function createResultMeta(data){
         var groups = {};
         var dates = [];
         var statsData = {};
         $.each(data.documents, function(i, doc) {
-            // dt == datetime
+            // dt is datetime
             var dt = doc.sort_date;
-            //if the datetime hasn't already been added to the dates array
+            // if the datetime hasn't already been added to the dates array
             if(dates.indexOf(dt) < 0) {
                 dates.push(dt);
                 groups[dt] = {};
@@ -126,7 +130,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     }
 
     // group documents with their related matters
-    var appendMatters = function(data, groups, dates){
+    function appendMatters(data, groups, dates){
         if(data.documents.length > 0) {
             dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             for (i=0; i<dates.length; i++) {
@@ -138,7 +142,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
     };
 
-    var showEmailForm = function(){
+    function showEmailForm(){
       $('#search-subscribe-form, #sort-by').show();
           $('#search-subscribe-form').submit(function(event) {
               handle_subscribe(event, subscribeUrl);
@@ -160,13 +164,14 @@ var doSearch = function(searchUrl, subscribeUrl) {
             break;
     }
 
-    console.log('EXECUTING QUERY:: ' + query);
+    console.log('EXECUTING QUERY:: ' + query + ", is_ranked: " +isRanked );
     $.ajax({
         url: searchUrl,
         data: {
             query: query,
             date_range: dateRangeType,
-            ignore_routine: ignoreRoutine
+            ignore_routine: ignoreRoutine,
+            is_ranked: isRanked
         }
     })
     .success(function(data) {

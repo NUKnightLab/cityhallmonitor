@@ -58,17 +58,16 @@ var resultData = {
   'documents': [],
   'dateGroups': {},
   'rankGroups': {},
-  'sidebarData': {} //statsData
+  'sidebarData': {}, //statsData
+  'query': $('#search-input').val(),
+  'dateRangeType': $('#date-range-type').val(),
+  'ignoreRoutine': $('#ignore-routine').is(':checked'),
+  'queryQualifier': '',
+  'isRanked': false
 }
 
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
-    //documents = [];
-    var query = $('#search-input').val();
-    var dateRangeType = $('#date-range-type').val();
-    var ignoreRoutine = $('#ignore-routine').is(':checked');
-    var queryQualifier = '';
-    var isRanked = false;
     // only rank if not the default query
     if (subscribeUrl != null) {
       var isRanked = true;
@@ -93,6 +92,19 @@ var doSearch = function(searchUrl, subscribeUrl) {
         return statsData;
     };
 
+    function populateResults(sortType){
+        typeKeys = Object.keys(resultData[sortType]);
+        if (sortType == "dateGroups"){
+          typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
+        } //Do we also need to sort ranks?
+        for (i=0; i<typeKeys.length; i++) {
+            var resultGroups = resultData[sortType][typeKeys[i]];
+            $.each(resultGroups, function(j, g) {
+                appendResult(g);
+            });
+        }
+    }
+
     function appendSummaryAndStats(total, qualifier, statsData){
         $('#results-summary').html($(summaryTemplate({
             total: total,
@@ -102,7 +114,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
         if (statsData) {
             $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
         }
-    };
+    }
 
     // group documents with their related matters
     function sortByDate(data){
@@ -131,15 +143,17 @@ var doSearch = function(searchUrl, subscribeUrl) {
 
             appendSummaryAndStats(data.documents.length, queryQualifier, resultData.sidebarData);
 
-            dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
-            for (i=0; i<dates.length; i++) {
-                var resultGroups = resultData.dateGroups[dates[i]];
-                $.each(resultGroups, function(j, g) {
-                    appendResult(g);
-                });
-            }
+            //dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
+            populateResults("dateGroups");
+            //for (i=0; i<dates.length; i++) {
+                //var resultGroups = resultData.dateGroups[dates[i]];
+                //$.each(resultGroups, function(j, g) {
+                    //appendResult(g);
+                //});
+            //}
         }
-    };
+    }
+
     function sortByRank(data){
         if(data.documents.length > 0) {
             var ranks = [];
@@ -158,14 +172,11 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 }
                 buildResultStats(doc, resultData.sidebarData);
             });
-            for (i=0; i<ranks.length; i++) {
-                var resultGroups = resultData.rankGroups[ranks[i]];
-                $.each(resultGroups, function(j, g) {
-                    appendResult(g);
-                });
-            }
+
         }
+        populateResults("rankGroups");
     }
+
     function showEmailForm(){
       $('#search-subscribe-form, #sort-by').show();
           $('#search-subscribe-form').submit(function(event) {

@@ -53,11 +53,17 @@ var appendResult = function(obj) {
 };
 
 //Need to store the results of the AJAX call somewhere so we can sort without hitting the database
-var documents;
+//var documents
+var resultData = {
+  'documents': [],
+  'dateGroups': {},
+  'rankGroups': {},
+  'sidebarData': {} //statsData
+}
 
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
-    documents = [];
+    //documents = [];
     var query = $('#search-input').val();
     var dateRangeType = $('#date-range-type').val();
     var ignoreRoutine = $('#ignore-routine').is(':checked');
@@ -101,35 +107,33 @@ var doSearch = function(searchUrl, subscribeUrl) {
     // group documents with their related matters
     function sortByDate(data){
         if(data.documents.length > 0) {
-            var dateGroups = {};
             var dates = [];
             //TODO: create statsData global so we don't have to rebuild sidebar on sort-by-rank?
-            var statsData = {};
             $.each(data.documents, function(i, doc) {
                 // dt is datetime
                 var dt = doc.sort_date;
                 // if the datetime hasn't already been added to the dates array
                 if(dates.indexOf(dt) < 0) {
                     dates.push(dt);
-                    dateGroups[dt] = {};
+                    resultData.dateGroups[dt] = {};
                 }
                 // if the datetime already exists in `groups`, it means the matter has multiple documents: add docs to existing matter
                 // otherwise just create the `docs` property
-                if(doc.matter.id in dateGroups[dt]) {
-                    dateGroups[dt][doc.matter.id]['docs'].push(doc);
+                if(doc.matter.id in resultData.dateGroups[dt]) {
+                    resultData.dateGroups[dt][doc.matter.id]['docs'].push(doc);
                 } else {
-                    dateGroups[dt][doc.matter.id] = {
+                    resultData.dateGroups[dt][doc.matter.id] = {
                         'docs': [doc]
                     };
                 }
-                buildResultStats(doc, statsData);
+                buildResultStats(doc, resultData.sidebarData);
             });
 
-            appendSummaryAndStats(data.documents.length, queryQualifier, statsData);
+            appendSummaryAndStats(data.documents.length, queryQualifier, resultData.sidebarData);
 
             dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             for (i=0; i<dates.length; i++) {
-                var resultGroups = dateGroups[dates[i]];
+                var resultGroups = resultData.dateGroups[dates[i]];
                 $.each(resultGroups, function(j, g) {
                     appendResult(g);
                 });
@@ -138,26 +142,24 @@ var doSearch = function(searchUrl, subscribeUrl) {
     };
     function sortByRank(data){
         if(data.documents.length > 0) {
-            var rankGroups = {};
             var ranks = [];
-            var statsData = {};
             $.each(data.documents, function(i, doc) {
                 var rank = doc.rank;
                 if(ranks.indexOf(rank) < 0) {
                     ranks.push(rank);
-                    rankGroups[rank] = {};
+                    resultData.rankGroups[rank] = {};
                 }
-                if(doc.matter.id in rankGroups[rank]) {
-                    rankGroups[rank][doc.matter.id]['docs'].push(doc);
+                if(doc.matter.id in resultData.rankGroups[rank]) {
+                    resultData.rankGroups[rank][doc.matter.id]['docs'].push(doc);
                 } else {
-                    rankGroups[rank][doc.matter.id] = {
+                    resultData.rankGroups[rank][doc.matter.id] = {
                         'docs': [doc]
                     };
                 }
-                buildResultStats(doc, statsData);
+                buildResultStats(doc, resultData.sidebarData);
             });
             for (i=0; i<ranks.length; i++) {
-                var resultGroups = rankGroups[ranks[i]];
+                var resultGroups = resultData.rankGroups[ranks[i]];
                 $.each(resultGroups, function(j, g) {
                     appendResult(g);
                 });

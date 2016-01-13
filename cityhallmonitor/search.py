@@ -22,11 +22,11 @@ def simple_search(query, ignore_routine=True, date_range=None, order_by='-sort_d
             where.append("text ~* '\m%s\M'" % s.strip("\"'"))
         else:
             word_list.append(s.replace("'", "''"))
-
     if word_list:
         ts_query = "plainto_tsquery('english', '%s')" % ' '.join(word_list)
         where.append("text_vector @@ %s" % ts_query)
         extra_select['rank'] = 'ts_rank(text_vector, %s, %d )' % (ts_query, rank_normalization)
+        # order by rank as long as we have a non-empty query string
         order_by = '-rank'
 
     if ignore_routine:
@@ -72,7 +72,8 @@ def advanced_search(query, query_title='', query_sponsors='',
         ts_query = "plainto_tsquery('english', '%s')" % ' '.join(word_list)
         where.append("text_vector @@ %s" % ts_query)
         extra_select['rank'] = 'ts_rank(text_vector, %s, %d )' % (ts_query, rank_normalization)
-        #order_by = '-rank' << assuming we should NOT override parameter
+        # order by rank as long as we have a non-empty query string
+        order_by = '-rank'
 
     if query_title:
         pieces = ['%s:A' % p.replace("'", "''") for p in query_title.split()]

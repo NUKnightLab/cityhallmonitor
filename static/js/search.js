@@ -98,50 +98,72 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
     };
 
-    function createResultMeta(data){
-        var groups = {};
-        var dates = [];
-        var statsData = {};
-        $.each(data.documents, function(i, doc) {
-            // dt is datetime
-            var dt = doc.sort_date;
-            // if the datetime hasn't already been added to the dates array
-            if(dates.indexOf(dt) < 0) {
-                dates.push(dt);
-                groups[dt] = {};
-            }
-            // if the datetime already exists in `groups`, it means the matter has multiple documents: add docs to existing attribute
-            // otherwise just create the `docs` property
-            if(doc.matter.id in groups[dt]) {
-                groups[dt][doc.matter.id]['docs'].push(doc);
-            } else {
-                groups[dt][doc.matter.id] = {
-                    'docs': [doc]
-                };
-            }
-            buildResultStats(doc, statsData);
-        });
-        appendSummaryAndStats(data.documents.length, queryQualifier, statsData);
-        return {
-          documents: data.documents,
-          groups: groups,
-          dates: dates
-        };
-    }
-
     // group documents with their related matters
-    function appendMatters(data, groups, dates){
+    function sortByDate(data){
         if(data.documents.length > 0) {
+            var dateGroups = {};
+            var dates = [];
+            //TODO: create statsData global so we don't have to rebuild sidebar on sort-by-rank?
+            var statsData = {};
+            $.each(data.documents, function(i, doc) {
+                // dt is datetime
+                var dt = doc.sort_date;
+                // if the datetime hasn't already been added to the dates array
+                if(dates.indexOf(dt) < 0) {
+                    dates.push(dt);
+                    dateGroups[dt] = {};
+                }
+                // if the datetime already exists in `groups`, it means the matter has multiple documents: add docs to existing matter
+                // otherwise just create the `docs` property
+                if(doc.matter.id in dateGroups[dt]) {
+                    dateGroups[dt][doc.matter.id]['docs'].push(doc);
+                } else {
+                    dateGroups[dt][doc.matter.id] = {
+                        'docs': [doc]
+                    };
+                }
+                buildResultStats(doc, statsData);
+            });
+
+            appendSummaryAndStats(data.documents.length, queryQualifier, statsData);
+
             dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             for (i=0; i<dates.length; i++) {
-                var dateGroups = groups[dates[i]];
-                $.each(dateGroups, function(j, g) {
+                var resultGroups = dateGroups[dates[i]];
+                $.each(resultGroups, function(j, g) {
                     appendResult(g);
                 });
             }
         }
     };
-
+    function sortByRank(data){
+        if(data.documents.length > 0) {
+            var rankGroups = {};
+            var ranks = [];
+            var statsData = {};
+            $.each(data.documents, function(i, doc) {
+                var rank = doc.rank;
+                if(ranks.indexOf(rank) < 0) {
+                    ranks.push(rank);
+                    rankGroups[rank] = {};
+                }
+                if(doc.matter.id in rankGroups[rank]) {
+                    rankGroups[rank][doc.matter.id]['docs'].push(doc);
+                } else {
+                    rankGroups[rank][doc.matter.id] = {
+                        'docs': [doc]
+                    };
+                }
+                buildResultStats(doc, statsData);
+            });
+            for (i=0; i<ranks.length; i++) {
+                var resultGroups = rankGroups[ranks[i]];
+                $.each(resultGroups, function(j, g) {
+                    appendResult(g);
+                });
+            }
+        }
+    }
     function showEmailForm(){
       $('#search-subscribe-form, #sort-by').show();
           $('#search-subscribe-form').submit(function(event) {
@@ -164,7 +186,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
             break;
     }
 
-    console.log('EXECUTING QUERY:: ' + query + ", is_ranked: " +isRanked );
+    console.log('EXECUTING QUERY:: ' + query + ", is_ranked: " + isRanked );
     $.ajax({
         url: searchUrl,
         data: {
@@ -177,12 +199,13 @@ var doSearch = function(searchUrl, subscribeUrl) {
     .success(function(data) {
         console.log(data);
 
-        var resultMeta = createResultMeta(data);
-        documents = resultMeta.documents;
-        var groups = resultMeta.groups;
-        var dates = resultMeta.dates;
-
-        appendMatters(data, groups, dates);
+        documents = data.documents;
+        if (data.is_ranked) {
+          //NOTE: are results in ranked order already? If so, we just need to create meta.
+          sortByRank(data);
+        } else {
+          sortByDate(data);
+        }
 
         // don't let people subscribe to the default query
         if (subscribeUrl != null) {

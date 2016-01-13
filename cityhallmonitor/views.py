@@ -24,15 +24,11 @@ def _make_subscription_sid(id, email):
 def search(request):
     return render(request, 'search.html', context={})
 
-def _documents_json(document_list, order_by):
+def _documents_json(document_list, is_ranked):
     """
     Return JSON representation of documents
     """
     documents = []
-    is_ranked = False
-    if order_by == "-rank":
-        is_ranked = True
-    import ipdb; ipdb.set_trace()
     for r in document_list:
         attachment = r.matter_attachment
         matter = attachment.matter
@@ -60,8 +56,9 @@ def default_query(request):
     """
     try:
         order_by = request.GET.get('order_by', '-sort_date')
+        is_ranked = False
         qs = simple_search('', ignore_routine=True, date_range='past-month', order_by=order_by)
-        return _documents_json(qs, order_by)
+        return _documents_json(qs, is_ranked)
     except Exception as e:
         traceback.print_exc()
         return JsonResponse({'error': str(e)})
@@ -87,8 +84,11 @@ def process_query(request):
         ignore_routine = request.GET.get('ignore_routine', 'true').lower() \
             in ['true', 't', '1']
         date_range = request.GET.get('date_range', '')
-        # order_by can also be '-sort_date'
-        order_by = request.GET.get('order_by', '-rank')
+        is_ranked = request.GET.get('is_ranked', False)
+        # order_by doesn't seem to be passed in the AJAX call
+        order_by = request.GET.get('order_by', '-sort_date')
+        if is_ranked:
+            order_by = '-rank'
 
         if raw_title or raw_sponsors:
             qs = advanced_search(raw, raw_title, raw_sponsors,
@@ -101,7 +101,7 @@ def process_query(request):
                     date_range=date_range,
                     order_by=order_by)
 
-        return _documents_json(qs, order_by)
+        return _documents_json(qs, is_ranked)
     except Exception as e:
         traceback.print_exc()
         return JsonResponse({'error': str(e)})

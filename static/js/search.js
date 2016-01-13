@@ -70,7 +70,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
     // only rank if not the default query
     if (subscribeUrl != null) {
-      var isRanked = true;
+      var resultData.isRanked = true;
     }
 
     //build up summary stats for sidebar
@@ -141,16 +141,9 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 buildResultStats(doc, resultData.sidebarData);
             });
 
-            appendSummaryAndStats(data.documents.length, queryQualifier, resultData.sidebarData);
+            appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
 
-            //dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
             populateResults("dateGroups");
-            //for (i=0; i<dates.length; i++) {
-                //var resultGroups = resultData.dateGroups[dates[i]];
-                //$.each(resultGroups, function(j, g) {
-                    //appendResult(g);
-                //});
-            //}
         }
     }
 
@@ -186,27 +179,27 @@ var doSearch = function(searchUrl, subscribeUrl) {
     };
 
     //used to determine language to display and time period to return
-    switch (dateRangeType) {
+    switch (resultData.dateRangeType) {
         case 'past-year':
-            queryQualifier = ' in the past year';
+            resultData.queryQualifier = ' in the past year';
             break;
 
         case 'past-month':
-            queryQualifier = ' in the last 30 days';
+            resultData.queryQualifier = ' in the last 30 days';
             break;
 
         case 'any':
             break;
     }
 
-    console.log('EXECUTING QUERY:: ' + query + ", is_ranked: " + isRanked );
+    console.log('EXECUTING QUERY:: ' + resultData.query + ", is_ranked: " + resultData.isRanked );
     $.ajax({
         url: searchUrl,
         data: {
-            query: query,
-            date_range: dateRangeType,
-            ignore_routine: ignoreRoutine,
-            is_ranked: isRanked
+            query: resultData.query,
+            date_range: resultData.dateRangeType,
+            ignore_routine: resultData.ignoreRoutine,
+            is_ranked: resultData.isRanked
         }
     })
     .success(function(data) {

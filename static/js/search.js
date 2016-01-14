@@ -119,7 +119,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     }
 
     // group documents with their related matters
-    function sortByDate(data){
+    function buildDateResults(data){
         if(data.documents.length > 0) {
             var dates = [];
             //TODO: create statsData global so we don't have to rebuild sidebar on sort-by-rank?
@@ -149,7 +149,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
     }
 
-    function sortByRank(data){
+    function buildRankResults(data){
         if(data.documents.length > 0) {
             var ranks = [];
             $.each(data.documents, function(i, doc) {
@@ -195,7 +195,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
             break;
     }
 
-    console.log('EXECUTING QUERY:: ' + resultData.query + ", is_ranked: " + resultData.isRanked );
     $.ajax({
         url: searchUrl,
         data: {
@@ -211,9 +210,9 @@ var doSearch = function(searchUrl, subscribeUrl) {
         resultData.documents = data.documents;
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.
-          sortByRank(data);
+          buildRankResults(data);
         } else {
-          sortByDate(data);
+          buildDateResults(data);
         }
 
         // don't let people subscribe to the default query
@@ -230,3 +229,25 @@ var doSearch = function(searchUrl, subscribeUrl) {
         hideLoadingState();
     });
 }; // doSearch
+
+
+$('#sort-relevance').on('click', function(){
+  console.log(this);
+  if (resultData.documents.length > 0){
+    $('#sort-relevance .option').addClass('active');
+    $(this).siblings().children().removeClass('active');
+    $('#search-results').empty();
+    populateResults("rankGroups");
+  }
+});
+
+$('#sort-chron').on('click', function(){
+  console.log(this);
+  if (resultData.documents.length > 0){
+    $('#sort-chron .option').addClass('active');
+    $(this).siblings().children().removeClass('active');
+    $('#search-results').empty();
+    populateResults("dateGroups");
+  }
+});
+

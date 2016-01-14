@@ -53,19 +53,64 @@ var appendResult = function(obj) {
 };
 
 //Need to store the results of the AJAX call somewhere so we can sort without hitting the database
-var documents;
+var resultData = {
+  'documents': [],
+  'dateGroups': {},
+  'rankGroups': {},
+  'sidebarData': {}, //statsData
+  'query': '',
+  'dateRangeType': '',
+  'ignoreRoutine': true,
+  'queryQualifier': '',
+  'isRanked': false
+}
+
+function populateResults(sortType){
+    typeKeys = Object.keys(resultData[sortType]);
+    if (sortType == "dateGroups"){
+      typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
+    } //Do we also need to sort ranks?
+    for (i=0; i<typeKeys.length; i++) {
+        var resultGroups = resultData[sortType][typeKeys[i]];
+        $.each(resultGroups, function(j, g) {
+            appendResult(g);
+        });
+    }
+
+    appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
+}
+
+function appendSummaryAndStats(total, qualifier, statsData){
+    $('#results-summary').html($(summaryTemplate({
+        total: total,
+        query: $('#search-input').val(),
+        qualifier: qualifier
+    })));
+    if (statsData) {
+        $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
+    }
+}
 
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
-
-    documents = [];
-    var query = $('#search-input').val();
-    var dateRangeType = $('#date-range-type').val();
-    var ignoreRoutine = $('#ignore-routine').is(':checked');
-    var queryQualifier = '';
+    resultData = {
+      'documents': [],
+      'dateGroups': {},
+      'rankGroups': {},
+      'sidebarData': {}, //statsData
+      'query': $('#search-input').val(),
+      'dateRangeType': $('#date-range-type').val(),
+      'ignoreRoutine': $('#ignore-routine').is(':checked'),
+      'queryQualifier': '',
+      'isRanked': false
+    }
+    // only rank if there is a search term
+    if (resultData.query != "") {
+      resultData.isRanked = true;
+    }
 
     //build up summary stats for sidebar
-    var buildResultStats = function(doc, statsData){
+    function buildResultStats(doc, statsData){
         var statTypes = {
             'Statuses': 'status',
             'Matter Types': 'type'
@@ -83,62 +128,55 @@ var doSearch = function(searchUrl, subscribeUrl) {
         return statsData;
     };
 
-    var appendSummaryAndStats = function(total, qualifier, statsData){
-        $('#results-summary').html($(summaryTemplate({
-            total: total,
-            query: $('#search-input').val(),
-            qualifier: qualifier
-        })));
-        if (statsData) {
-            $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
+    // group documents with their related matters
+    function buildDateResults(data){
+        if(data.documents.length > 0) {
+            var dates = [];
+            //TODO: create statsData global so we don't have to rebuild sidebar on sort-by-rank?
+            $.each(data.documents, function(i, doc) {
+                // dt is datetime
+                var dt = doc.sort_date;
+                // if the datetime hasn't already been added to the dates array
+                if(dates.indexOf(dt) < 0) {
+                    dates.push(dt);
+                    resultData.dateGroups[dt] = {};
+                }
+                // if the datetime already exists in `groups`, it means the matter has multiple documents: add docs to existing matter
+                // otherwise just create the `docs` property
+                if(doc.matter.id in resultData.dateGroups[dt]) {
+                    resultData.dateGroups[dt][doc.matter.id]['docs'].push(doc);
+                } else {
+                    resultData.dateGroups[dt][doc.matter.id] = {
+                        'docs': [doc]
+                    };
+                }
+                buildResultStats(doc, resultData.sidebarData);
+            });
         }
-    };
-
-    var createResultMeta = function(data){
-        var groups = {};
-        var dates = [];
-        var statsData = {};
-        $.each(data.documents, function(i, doc) {
-            // dt == datetime
-            var dt = doc.sort_date;
-            //if the datetime hasn't already been added to the dates array
-            if(dates.indexOf(dt) < 0) {
-                dates.push(dt);
-                groups[dt] = {};
-            }
-            // if the datetime already exists in `groups`, it means the matter has multiple documents: add docs to existing attribute
-            // otherwise just create the `docs` property
-            if(doc.matter.id in groups[dt]) {
-                groups[dt][doc.matter.id]['docs'].push(doc);
-            } else {
-                groups[dt][doc.matter.id] = {
-                    'docs': [doc]
-                };
-            }
-            buildResultStats(doc, statsData);
-        });
-        appendSummaryAndStats(data.documents.length, queryQualifier, statsData);
-        return {
-          documents: data.documents,
-          groups: groups,
-          dates: dates
-        };
+        populateResults("dateGroups");
     }
 
-    // group documents with their related matters
-    var appendMatters = function(data, groups, dates){
+    function buildRankResults(data){
         if(data.documents.length > 0) {
-            dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
-            for (i=0; i<dates.length; i++) {
-                var dateGroups = groups[dates[i]];
-                $.each(dateGroups, function(j, g) {
-                    appendResult(g);
-                });
-            }
+            var ranks = [];
+            $.each(data.documents, function(i, doc) {
+                var rank = doc.rank;
+                if(ranks.indexOf(rank) < 0) {
+                    ranks.push(rank);
+                    resultData.rankGroups[rank] = {};
+                }
+                if(doc.matter.id in resultData.rankGroups[rank]) {
+                    resultData.rankGroups[rank][doc.matter.id]['docs'].push(doc);
+                } else {
+                    resultData.rankGroups[rank][doc.matter.id] = {
+                        'docs': [doc]
+                    };
+                }
+            });
         }
-    };
+    }
 
-    var showEmailForm = function(){
+    function showEmailForm(){
       $('#search-subscribe-form, #sort-by').show();
           $('#search-subscribe-form').submit(function(event) {
               handle_subscribe(event, subscribeUrl);
@@ -147,37 +185,41 @@ var doSearch = function(searchUrl, subscribeUrl) {
     };
 
     //used to determine language to display and time period to return
-    switch (dateRangeType) {
+    switch (resultData.dateRangeType) {
         case 'past-year':
-            queryQualifier = ' in the past year';
+            resultData.queryQualifier = ' in the past year';
             break;
 
         case 'past-month':
-            queryQualifier = ' in the last 30 days';
+            resultData.queryQualifier = ' in the last 30 days';
             break;
 
         case 'any':
             break;
     }
 
-    console.log('EXECUTING QUERY:: ' + query);
     $.ajax({
         url: searchUrl,
         data: {
-            query: query,
-            date_range: dateRangeType,
-            ignore_routine: ignoreRoutine
+            query: resultData.query,
+            date_range: resultData.dateRangeType,
+            ignore_routine: resultData.ignoreRoutine,
+            is_ranked: resultData.isRanked
         }
     })
     .success(function(data) {
         console.log(data);
 
-        var resultMeta = createResultMeta(data);
-        documents = resultMeta.documents;
-        var groups = resultMeta.groups;
-        var dates = resultMeta.dates;
+        resultData.documents = data.documents;
+        buildDateResults(data);
+        if (data.is_ranked) {
+          //NOTE: are results in ranked order already? If so, we just need to create meta.
+          buildRankResults(data);
+          populateResults("rankGroups");
+        } else {
+          populateResults("dateGroups");
+        }
 
-        appendMatters(data, groups, dates);
 
         // don't let people subscribe to the default query
         if (subscribeUrl != null) {
@@ -194,8 +236,24 @@ var doSearch = function(searchUrl, subscribeUrl) {
     });
 }; // doSearch
 
-var sortByDate = function(){
-  $('#sort-chron').on('click', function(){
-    console.log(documents);
-  });
-}
+
+$('#sort-relevance').on('click', function(){
+  console.log(this);
+  if (resultData.documents.length > 0){
+    $('#sort-relevance .option').addClass('active');
+    $(this).siblings().children().removeClass('active');
+    $('#search-results').empty();
+    populateResults("rankGroups");
+  }
+});
+
+$('#sort-chron').on('click', function(){
+  console.log(this);
+  if (resultData.documents.length > 0){
+    $('#sort-chron .option').addClass('active');
+    $(this).siblings().children().removeClass('active');
+    $('#search-results').empty();
+    populateResults("dateGroups");
+  }
+});
+

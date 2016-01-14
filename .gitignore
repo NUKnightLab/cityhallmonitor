@@ -62,3 +62,6 @@ target/
 # SASS
 .sass-cache
 *.map
+
+.gitignore
+core/settings/loc.py

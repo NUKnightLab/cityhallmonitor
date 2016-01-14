@@ -76,6 +76,19 @@ function populateResults(sortType){
             appendResult(g);
         });
     }
+
+    appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
+}
+
+function appendSummaryAndStats(total, qualifier, statsData){
+    $('#results-summary').html($(summaryTemplate({
+        total: total,
+        query: $('#search-input').val(),
+        qualifier: qualifier
+    })));
+    if (statsData) {
+        $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
+    }
 }
 
 var doSearch = function(searchUrl, subscribeUrl) {
@@ -107,17 +120,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
         return statsData;
     };
 
-    function appendSummaryAndStats(total, qualifier, statsData){
-        $('#results-summary').html($(summaryTemplate({
-            total: total,
-            query: $('#search-input').val(),
-            qualifier: qualifier
-        })));
-        if (statsData) {
-            $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
-        }
-    }
-
     // group documents with their related matters
     function buildDateResults(data){
         if(data.documents.length > 0) {
@@ -142,11 +144,8 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 }
                 buildResultStats(doc, resultData.sidebarData);
             });
-
-            appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
-
-            populateResults("dateGroups");
         }
+        populateResults("dateGroups");
     }
 
     function buildRankResults(data){
@@ -167,8 +166,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 }
                 buildResultStats(doc, resultData.sidebarData);
             });
-            appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
-
         }
         populateResults("rankGroups");
     }

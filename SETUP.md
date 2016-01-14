@@ -101,5 +101,5 @@ $ python manage.py loaddata MatterType.json
 If you want an extensive and realistic dataset, you can import a dump from our production scraper. Here are some steps.
 
 `curl -O http://archive.knilab.com.s3.amazonaws.com/cityhallmonitor/chm_prd_20160112_data.gz`
-`./clear_chmtables.sh`
+`./clear_chm_tables.sh`
 `gzcat chm_prd_20160112_data.gz | python manage.py dbshell`

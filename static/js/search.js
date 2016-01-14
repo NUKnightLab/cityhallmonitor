@@ -65,6 +65,19 @@ var resultData = {
   'isRanked': false
 }
 
+function populateResults(sortType){
+    typeKeys = Object.keys(resultData[sortType]);
+    if (sortType == "dateGroups"){
+      typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
+    } //Do we also need to sort ranks?
+    for (i=0; i<typeKeys.length; i++) {
+        var resultGroups = resultData[sortType][typeKeys[i]];
+        $.each(resultGroups, function(j, g) {
+            appendResult(g);
+        });
+    }
+}
+
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
     resultData.query = $('#search-input').val();
@@ -93,19 +106,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
         });
         return statsData;
     };
-
-    function populateResults(sortType){
-        typeKeys = Object.keys(resultData[sortType]);
-        if (sortType == "dateGroups"){
-          typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
-        } //Do we also need to sort ranks?
-        for (i=0; i<typeKeys.length; i++) {
-            var resultGroups = resultData[sortType][typeKeys[i]];
-            $.each(resultGroups, function(j, g) {
-                appendResult(g);
-            });
-        }
-    }
 
     function appendSummaryAndStats(total, qualifier, statsData){
         $('#results-summary').html($(summaryTemplate({
@@ -167,6 +167,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 }
                 buildResultStats(doc, resultData.sidebarData);
             });
+            appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
 
         }
         populateResults("rankGroups");
@@ -207,7 +208,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     .success(function(data) {
         console.log(data);
 
-        documents = data.documents;
+        resultData.documents = data.documents;
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.
           sortByRank(data);

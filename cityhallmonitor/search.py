@@ -41,7 +41,6 @@ def simple_search(query, ignore_routine=True, date_range=None, order_by='-sort_d
     elif not (date_range is None or date_range == 'any' or date_range == ''):
         raise Exception('Invalid date_range parameter "%s"' \
             % date_range)
-
     qs = Document.objects.defer('text', 'text_vector', 'text_vector_weighted')\
             .extra(select=extra_select, where=where, order_by=[order_by])\
             .select_related('matter_attachment', 'matter_attachment__matter')

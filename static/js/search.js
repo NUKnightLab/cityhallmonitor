@@ -53,24 +53,26 @@ var appendResult = function(obj) {
 };
 
 //Need to store the results of the AJAX call somewhere so we can sort without hitting the database
-//var documents
 var resultData = {
   'documents': [],
   'dateGroups': {},
   'rankGroups': {},
   'sidebarData': {}, //statsData
-  'query': $('#search-input').val(),
-  'dateRangeType': $('#date-range-type').val(),
-  'ignoreRoutine': $('#ignore-routine').is(':checked'),
+  'query': '',
+  'dateRangeType': '',
+  'ignoreRoutine': true,
   'queryQualifier': '',
   'isRanked': false
 }
 
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
+    resultData.query = $('#search-input').val();
+    resultData.dateRangeType = $('#date-range-type').val();
+    resultData.ignoreRoutine = $('#ignore-routine').is(':checked');
     // only rank if not the default query
     if (subscribeUrl != null) {
-      var resultData.isRanked = true;
+      resultData.isRanked = true;
     }
 
     //build up summary stats for sidebar
@@ -227,9 +229,3 @@ var doSearch = function(searchUrl, subscribeUrl) {
         hideLoadingState();
     });
 }; // doSearch
-
-var sortByDate = function(){
-  $('#sort-chron').on('click', function(){
-    console.log(documents);
-  });
-}

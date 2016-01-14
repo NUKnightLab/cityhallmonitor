@@ -61,8 +61,9 @@ var showLoadingState = function(){
 };
 
 var hideLoadingState = function(){
+    $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('nav').outerHeight()}, 350);
     $('#spinner-holder').hide();
-    $('#sort-by, #results-stats').show();
+    $('#results-stats').show();
     $("#search-submit").html("Search");
     $('input, button, select').prop('disabled', false);
 };
@@ -97,4 +98,10 @@ $(function() {
             // Store document id in modal data for DV.load
             .data('chm-doc-id', $(this).attr('data-document'));
     });
+
+    $('#email-trigger').on('click', function(){
+      $('#sub-box').slideToggle();
+    });
+
+
 });

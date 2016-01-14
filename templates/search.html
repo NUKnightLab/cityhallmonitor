@@ -127,7 +127,7 @@
     <script src="{% static 'js/search.js' %}"></script>
     <script type="text/javascript">
       $(function() {
-          doSearch('{% url "default_query" %}', '{% url "subscribe" %}');
+          doSearch('{% url "default_query" %}', null);
           $('#search-form').submit(function() {
               doSearch('{% url "process_query" %}', '{% url "subscribe" %}');
               return false;

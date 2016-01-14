@@ -16,7 +16,7 @@ $(function() {
     buildDateUI();
 });
 
-var addResult = function(obj) {
+var appendResult = function(obj) {
     var statusClass;
     switch (obj.docs[0].matter.status){
         case 'Adopted':
@@ -52,15 +52,101 @@ var addResult = function(obj) {
     }
 };
 
+//Need to store the results of the AJAX call somewhere so we can sort without hitting the database
+var documents;
+
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
 
+    documents = [];
     var query = $('#search-input').val();
     var dateRangeType = $('#date-range-type').val();
     var ignoreRoutine = $('#ignore-routine').is(':checked');
-
     var queryQualifier = '';
 
+    //build up summary stats for sidebar
+    var buildResultStats = function(doc, statsData){
+        var statTypes = {
+            'Statuses': 'status',
+            'Matter Types': 'type'
+        };
+        $.each(statTypes, function(key, matter_field) {
+            if (!(key in statsData)){
+                statsData[key] = {};
+            }
+            if(doc.matter[matter_field] in statsData[key]) {
+                statsData[key][doc.matter[matter_field]] += 1;
+            } else {
+                statsData[key][doc.matter[matter_field]] = 1;
+            }
+        });
+        return statsData;
+    };
+
+    var appendSummaryAndStats = function(total, qualifier, statsData){
+        $('#results-summary').html($(summaryTemplate({
+            total: total,
+            query: $('#search-input').val(),
+            qualifier: qualifier
+        })));
+        if (statsData) {
+            $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
+        }
+    };
+
+    var createResultMeta = function(data){
+        var groups = {};
+        var dates = [];
+        var statsData = {};
+        $.each(data.documents, function(i, doc) {
+            // dt == datetime
+            var dt = doc.sort_date;
+            //if the datetime hasn't already been added to the dates array
+            if(dates.indexOf(dt) < 0) {
+                dates.push(dt);
+                groups[dt] = {};
+            }
+            // if the datetime already exists in `groups`, it means the matter has multiple documents: add docs to existing attribute
+            // otherwise just create the `docs` property
+            if(doc.matter.id in groups[dt]) {
+                groups[dt][doc.matter.id]['docs'].push(doc);
+            } else {
+                groups[dt][doc.matter.id] = {
+                    'docs': [doc]
+                };
+            }
+            buildResultStats(doc, statsData);
+        });
+        appendSummaryAndStats(data.documents.length, queryQualifier, statsData);
+        return {
+          documents: data.documents,
+          groups: groups,
+          dates: dates
+        };
+    }
+
+    // group documents with their related matters
+    var appendMatters = function(data, groups, dates){
+        if(data.documents.length > 0) {
+            dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
+            for (i=0; i<dates.length; i++) {
+                var dateGroups = groups[dates[i]];
+                $.each(dateGroups, function(j, g) {
+                    appendResult(g);
+                });
+            }
+        }
+    };
+
+    var showEmailForm = function(){
+      $('#search-subscribe-form, #sort-by').show();
+          $('#search-subscribe-form').submit(function(event) {
+              handle_subscribe(event, subscribeUrl);
+              return false;
+          });
+    };
+
+    //used to determine language to display and time period to return
     switch (dateRangeType) {
         case 'past-year':
             queryQualifier = ' in the past year';
@@ -75,7 +161,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
     }
 
     console.log('EXECUTING QUERY:: ' + query);
-
     $.ajax({
         url: searchUrl,
         data: {
@@ -87,79 +172,30 @@ var doSearch = function(searchUrl, subscribeUrl) {
     .success(function(data) {
         console.log(data);
 
-        var groups = {};
-        var dates = [];
-        var dt = null;
+        var resultMeta = createResultMeta(data);
+        documents = resultMeta.documents;
+        var groups = resultMeta.groups;
+        var dates = resultMeta.dates;
 
-        var totalDocuments = 0;
-        var statTypes = {
-            'Statuses': 'status',
-            'Matter Types': 'type'
-        };
-        var statsData = {};
+        appendMatters(data, groups, dates);
 
-        $.each(data.documents, function(i, doc) {
-            dt = doc.sort_date;
-
-            if(dates.indexOf(dt) < 0) {
-                dates.push(dt);
-                groups[dt] = {};
-            }
-            if(doc.matter.id in groups[dt]) {
-                groups[dt][doc.matter.id]['docs'].push(doc);
-            } else {
-                groups[dt][doc.matter.id] = {
-                    'docs': [doc]
-                };
-            }
-
-            $.each(statTypes, function(key, matter_field) {
-                if (!(key in statsData)){
-                    statsData[key] = {};
-                }
-                if(doc.matter[matter_field] in statsData[key]) {
-                    statsData[key][doc.matter[matter_field]] += 1;
-                } else {
-                    statsData[key][doc.matter[matter_field]] = 1;
-                }
-            });
-        });
-
-        $('#results-summary').html($(summaryTemplate({
-            total: data.documents.length,
-            query: query,
-            qualifier: queryQualifier
-        })));
-
-        $('#search-subscribe-form').submit(function(event) {
-            handle_subscribe(event, subscribeUrl);
-            return false;
-        });
-
-        if(data.documents.length > 0) {
-            dates.sort(function(a,b) { return (b < a) ? -1 : 1 });
-            for (i=0; i<dates.length; i++) {
-                var dateGroups = groups[dates[i]];
-                $.each(dateGroups, function(j, g) {
-                    addResult(g);
-                });
-            }
+        // don't let people subscribe to the default query
+        if (subscribeUrl != null) {
+          showEmailForm(subscribeUrl);
         }
         $("#search-results").foundation('reveal', 'reflow');
-        $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('nav').outerHeight()}, 350);
 
-        if (statsData) {
-            $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
-        }
     })
     .error(function(xhr, status, errMsg) {
         alert(errMsg);
     })
     .complete(function(xhr, status) {
         hideLoadingState();
-        $('#email-trigger').on('click', function(){
-          $('#sub-box').slideToggle();
-        });
     });
-
 }; // doSearch
+
+var sortByDate = function(){
+  $('#sort-chron').on('click', function(){
+    console.log(documents);
+  });
+}

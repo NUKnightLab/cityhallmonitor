@@ -55,9 +55,7 @@ def default_query(request):
     Find all non-routine documents from within the last 30 days
     """
     try:
-        order_by = request.GET.get('order_by', '-sort_date')
-        is_ranked = False
-        qs = simple_search('', ignore_routine=True, date_range='past-month', order_by=order_by)
+        qs, is_ranked = simple_search('', ignore_routine=True, date_range='past-month')
         return _documents_json(qs, is_ranked)
     except Exception as e:
         traceback.print_exc()
@@ -77,7 +75,6 @@ def process_query(request):
     """
 
     try:
-        import ipdb; ipdb.set_trace();
         raw = request.GET.get('query')
         raw_title = request.GET.get('query_title', '')
         raw_sponsors = request.GET.get('query_sponsors', '')
@@ -85,22 +82,15 @@ def process_query(request):
         ignore_routine = request.GET.get('ignore_routine', 'true').lower() \
             in ['true', 't', '1']
         date_range = request.GET.get('date_range', '')
-        is_ranked = request.GET.get('is_ranked', False)
-        # order_by doesn't seem to be passed in the AJAX call
-        order_by = request.GET.get('order_by', '-sort_date')
-        if is_ranked:
-            order_by = '-rank'
 
         if raw_title or raw_sponsors:
-            qs = advanced_search(raw, raw_title, raw_sponsors,
+            qs, is_ranked = advanced_search(raw, raw_title, raw_sponsors,
                     ignore_routine=ignore_routine,
-                    date_range=date_range,
-                    order_by=order_by)
+                    date_range=date_range)
         else:
-            qs = simple_search(raw,
+            qs, is_ranked = simple_search(raw,
                     ignore_routine=ignore_routine,
-                    date_range=date_range,
-                    order_by=order_by)
+                    date_range=date_range)
 
         return _documents_json(qs, is_ranked)
     except Exception as e:

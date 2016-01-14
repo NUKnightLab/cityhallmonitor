@@ -167,7 +167,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 buildResultStats(doc, resultData.sidebarData);
             });
         }
-        populateResults("rankGroups");
     }
 
     function showEmailForm(){
@@ -205,12 +204,15 @@ var doSearch = function(searchUrl, subscribeUrl) {
         console.log(data);
 
         resultData.documents = data.documents;
+        buildDateResults(data);
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.
           buildRankResults(data);
+          populateResults("rankGroups");
         } else {
-          buildDateResults(data);
+          populateResults("dateGroups");
         }
+
 
         // don't let people subscribe to the default query
         if (subscribeUrl != null) {

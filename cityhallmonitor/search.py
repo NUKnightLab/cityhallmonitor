@@ -10,6 +10,7 @@ _re_phrase = re.compile("^'.*'$|^\".*\"$")
 
 
 def simple_search(query, ignore_routine=True, date_range=None, order_by='-sort_date'):
+    import ipdb; ipdb.set_trace();
     rank_normalization = 32 # default
 
     where = []
@@ -46,7 +47,6 @@ def simple_search(query, ignore_routine=True, date_range=None, order_by='-sort_d
             .select_related('matter_attachment', 'matter_attachment__matter')
 
     return qs
-
 
 
 def advanced_search(query, query_title='', query_sponsors='',

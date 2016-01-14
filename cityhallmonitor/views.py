@@ -77,6 +77,7 @@ def process_query(request):
     """
 
     try:
+        import ipdb; ipdb.set_trace();
         raw = request.GET.get('query')
         raw_title = request.GET.get('query_title', '')
         raw_sponsors = request.GET.get('query_sponsors', '')

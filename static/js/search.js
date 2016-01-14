@@ -93,11 +93,19 @@ function appendSummaryAndStats(total, qualifier, statsData){
 
 var doSearch = function(searchUrl, subscribeUrl) {
     showLoadingState();
-    resultData.query = $('#search-input').val();
-    resultData.dateRangeType = $('#date-range-type').val();
-    resultData.ignoreRoutine = $('#ignore-routine').is(':checked');
-    // only rank if not the default query
-    if (subscribeUrl != null) {
+    resultData = {
+      'documents': [],
+      'dateGroups': {},
+      'rankGroups': {},
+      'sidebarData': {}, //statsData
+      'query': $('#search-input').val(),
+      'dateRangeType': $('#date-range-type').val(),
+      'ignoreRoutine': $('#ignore-routine').is(':checked'),
+      'queryQualifier': '',
+      'isRanked': false
+    }
+    // only rank if there is a search term
+    if (resultData.query != "") {
       resultData.isRanked = true;
     }
 
@@ -164,7 +172,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
                         'docs': [doc]
                     };
                 }
-                buildResultStats(doc, resultData.sidebarData);
             });
         }
     }

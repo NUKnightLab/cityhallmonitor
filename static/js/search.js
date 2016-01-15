@@ -176,7 +176,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     }
 
     function showEmailForm(){
-      $('#search-subscribe-form, #sort-by').show();
+      $('#search-subscribe-form').show();
           $('#search-subscribe-form').submit(function(event) {
               handle_subscribe(event, subscribeUrl);
               return false;

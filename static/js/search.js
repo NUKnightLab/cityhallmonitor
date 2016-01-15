@@ -86,7 +86,8 @@ function appendSummaryAndStats(total, qualifier, statsData){
         query: $('#search-input').val(),
         qualifier: qualifier
     })));
-    if (statsData) {
+    $('#results-stats').empty();
+    if (total > 0) {
         $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
     }
 }
@@ -223,7 +224,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
           populateResults("dateGroups");
         }
 
-        if (resultData.query != '') {
+        if (resultData.query != '' && data.documents.length > 0) {
           // don't let people subscribe to queries without keywords
           showEmailForm(subscribeUrl);
           showSortButtons();

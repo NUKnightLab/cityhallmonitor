@@ -24,7 +24,6 @@ def simple_search(query, ignore_routine=True, date_range=None):
         else:
             word_list.append(s.replace("'", "''"))
     if word_list:
-        import ipdb; ipdb.set_trace();
         ts_query = "plainto_tsquery('english', '%s')" % ' '.join(word_list)
         where.append("text_vector_weighted @@ %s" % ts_query)
         extra_select['rank'] = 'ts_rank(text_vector, %s, %d )' % (ts_query, rank_normalization)

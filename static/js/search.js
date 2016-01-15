@@ -240,24 +240,11 @@ var doSearch = function(searchUrl, subscribeUrl) {
     });
 }; // doSearch
 
-
-$('#sort-relevance').on('click', function(){
-  console.log(this);
+$('#sort-by .sort').on('click', function(){
   if (resultData.documents.length > 0){
-    $('#sort-relevance .option').addClass('active');
+    $(this).children('.option').addClass('active');
     $(this).siblings().children().removeClass('active');
     $('#search-results').empty();
-    populateResults("rankGroups");
+    populateResults($(this).data('grouptype'));
   }
 });
-
-$('#sort-chron').on('click', function(){
-  console.log(this);
-  if (resultData.documents.length > 0){
-    $('#sort-chron .option').addClass('active');
-    $(this).siblings().children().removeClass('active');
-    $('#search-results').empty();
-    populateResults("dateGroups");
-  }
-});
-

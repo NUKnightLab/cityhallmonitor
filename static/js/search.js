@@ -153,7 +153,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 buildResultStats(doc, resultData.sidebarData);
             });
         }
-        populateResults("dateGroups");
     }
 
     function buildRankResults(data){

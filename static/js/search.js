@@ -181,7 +181,11 @@ var doSearch = function(searchUrl, subscribeUrl) {
               handle_subscribe(event, subscribeUrl);
               return false;
           });
-    };
+    }
+
+    function showSortButtons(){
+      $('#sort-by').show();
+    }
 
     //used to determine language to display and time period to return
     switch (resultData.dateRangeType) {
@@ -219,10 +223,10 @@ var doSearch = function(searchUrl, subscribeUrl) {
           populateResults("dateGroups");
         }
 
-
-        // don't let people subscribe to the default query
-        if (subscribeUrl != null) {
+        if (resultData.query != '') {
+          // don't let people subscribe to queries without keywords
           showEmailForm(subscribeUrl);
+          showSortButtons();
         }
         $("#search-results").foundation('reveal', 'reflow');
 

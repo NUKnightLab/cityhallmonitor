@@ -69,6 +69,16 @@ body {
   width: 90%; }
 
 /* Filter UI */
+#date-range-search label {
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 0px; }
+  #date-range-search label:first-child {
+    margin-right: 10px; }
+#date-range-search input[type='radio'] {
+  font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px; }
+
 .custom-date-start,
 .custom-date-end {
   display: none; }
@@ -108,10 +118,16 @@ input#search-subscribe-email {
 .subscription-email span {
   color: #ce4d28; }
 
-#search-input,
+#search-input {
+  margin: 10px 0 5px;
+  font-size: 1.5em;
+  padding: 25px 40px 25px 15px; }
+
 #search-submit {
   margin-top: 32px;
-  margin-bottom: 0px; }
+  margin-bottom: 0px;
+  font-size: 1.5em;
+  height: 51px; }
 
 #search-subscribe-form,
 #sort-by {

@@ -61,7 +61,6 @@ var showLoadingState = function(){
 };
 
 var hideLoadingState = function(){
-    $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('nav').outerHeight()}, 350);
     $('#spinner-holder').hide();
     $('#results-stats').show();
     $("#search-submit").html("Search");

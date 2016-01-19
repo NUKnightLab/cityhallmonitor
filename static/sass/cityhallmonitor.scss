@@ -80,6 +80,21 @@ body {
 }
 
 /* Filter UI */
+#date-range-search {
+    label {
+        display: inline-block;
+        font-size: 12px;
+        margin-top: 0px;
+        &:first-child {
+            margin-right: 10px;
+        }
+
+    }
+    input[type='radio'] {
+        font-family: $font-family-sans-serif;
+        font-size: 12px;
+    }
+}
 .custom-date-start,
 .custom-date-end { display: none; }
 .datepicker label {
@@ -118,10 +133,20 @@ input#search-subscribe-email {
 }
 
 .subscription-email span { color: $orange; }
-#search-input,
+#search-input {
+    margin: 10px 0 5px;
+    font-size: 1.5em;
+    padding: 25px 40px 25px 15px;
+
+}
 #search-submit {
     margin-top: 32px;
     margin-bottom: 0px;
+    font-size: 1.5em;
+    height: 51px;
+}
+#search-input,
+#search-submit {
 }
 #search-subscribe-form,
 #sort-by {

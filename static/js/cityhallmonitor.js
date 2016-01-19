@@ -99,7 +99,13 @@ $(function() {
             .data('chm-doc-id', $(this).attr('data-document'));
     });
 
-    $('#email-trigger').on('click', function(){
+    $('#results-summary').on('click', '#email-trigger', function(){
+      if ($('#email-trigger input[type="checkbox"]').prop('checked') == false) {
+        $('#email-trigger input[type="checkbox"]').prop('checked', true);
+      } else {
+        $('#email-trigger input[type="checkbox"]').prop('checked', false);
+      }
+
       $('#sub-box').slideToggle();
     });
 

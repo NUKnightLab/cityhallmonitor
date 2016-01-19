@@ -77,7 +77,6 @@ function populateResults(sortType){
         });
     }
 
-    appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
 }
 
 function appendSummaryAndStats(total, qualifier, statsData){
@@ -214,6 +213,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     .success(function(data) {
         resultData.documents = data.documents;
         buildDateResults(data);
+        appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.
           buildRankResults(data);

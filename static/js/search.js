@@ -178,10 +178,10 @@ var doSearch = function(searchUrl, subscribeUrl) {
 
     function showEmailForm(){
       $('#search-subscribe-form').show();
-          $('#search-subscribe-form').submit(function(event) {
-              handle_subscribe(event, subscribeUrl);
-              return false;
-          });
+      $('#search-subscribe-form').submit(function(event) {
+          handle_subscribe(event, subscribeUrl);
+          return false;
+      });
     }
 
     function showSortButtons(){
@@ -212,8 +212,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
     })
     .success(function(data) {
-        console.log(data);
-
         resultData.documents = data.documents;
         buildDateResults(data);
         if (data.is_ranked) {

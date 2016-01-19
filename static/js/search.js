@@ -76,7 +76,8 @@ function populateResults(sortType){
             appendResult(g);
         });
     }
-
+    $(".sort[data-grouptype='" + sortType + "']").children('.option').addClass('active');
+    $(".sort[data-grouptype='" + sortType + "']").siblings().children().removeClass('active');
 }
 
 function appendSummaryAndStats(total, qualifier, statsData){
@@ -240,8 +241,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
 
 $('#sort-by .sort').on('click', function(){
   if (resultData.documents.length > 0){
-    $(this).children('.option').addClass('active');
-    $(this).siblings().children().removeClass('active');
     $('#search-results').empty();
     populateResults($(this).data('grouptype'));
   }

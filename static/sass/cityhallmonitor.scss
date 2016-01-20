@@ -79,6 +79,25 @@ body {
     width: 90%;
 }
 
+#page-topper {
+    margin-bottom: 42px;
+}
+
+.explainer {
+    text-align: right;
+    label {
+        display: inline-block;
+        margin: 0 0 10px 0;
+        font-size: 12px;
+    }
+}
+
+.sample-results {
+    p {
+        font-size: 0.875em;
+    }
+}
+
 /* Filter UI */
 #date-range-type {
     label {

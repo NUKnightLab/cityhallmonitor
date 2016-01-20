@@ -65,3 +65,5 @@ target/
 
 .gitignore
 core/settings/loc.py
+machinelearning/corpus
+

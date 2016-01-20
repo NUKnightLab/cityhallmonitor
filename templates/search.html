@@ -41,7 +41,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script type="text/template" id="summary-template">
         <div class="small-12 columns">
-            <h5>We found <span class="num-of-results"><%= total %> results</span> <%= query %><%= qualifier %>.</h5>
+            <h3>We found <span class="num-of-results"><%= total %> results</span> <%= query %><%= qualifier %>.</h3>
             <form action="#" id="search-subscribe-form">
                 <div class="row collapse">
                     <div class="small-12 columns">
@@ -94,16 +94,15 @@
 
     <script type="text/template" id="single-result-template">
         <div class="result row" id="<%= doc.matter.id %>">
-            <div class="small-8 columns">
+            <div class="small-12 columns">
               <p class="updated-date"><%= doc.sort_date.substring(0,10) %></p>
               <p class="help meta"><span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
                 <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
                   <h5><%= doc.matter.title %></h5>
+                  <% for (i=1; i<3; i++) { %>
+                    <img src="<%= doc.base_thumbnail_url %>-p<%= i %>-small.gif">
+                  <% } %>
                 </a>
-            </div>
-            <div class="more-info small-4 columns">
-                <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more button info tiny">Read</a>
-                <a class="download-pdf" href="<%= doc.hyperlink %>">Download PDF</a>
             </div>
             <hr />
         </div>

@@ -32,9 +32,10 @@ def _documents_json(document_list, is_ranked):
     for r in document_list:
         attachment = r.matter_attachment
         matter = attachment.matter
-
+        numeric_id,filename = attachment.dc_id.split('-',1)
         documents.append({
             'id': attachment.id,
+            'base_thumbnail_url': 'https://assets.documentcloud.org/documents/' + numeric_id + '/pages/' + filename,
             'rank': getattr(r, 'rank', None),
             'sort_date': r.sort_date,
             'name': attachment.name,

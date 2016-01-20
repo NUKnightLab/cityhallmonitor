@@ -139,6 +139,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
             var dates = [];
             //TODO: create statsData global so we don't have to rebuild sidebar on sort-by-rank?
             $.each(data.documents, function(i, doc) {
+              console.log(doc);
                 // dt is datetime
                 var dt = doc.sort_date;
                 // if the datetime hasn't already been added to the dates array

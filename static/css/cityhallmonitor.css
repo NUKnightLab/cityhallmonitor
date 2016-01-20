@@ -69,13 +69,13 @@ body {
   width: 90%; }
 
 /* Filter UI */
-#date-range-search label {
+#date-range-type label {
   display: inline-block;
   font-size: 12px;
   margin-top: 0px; }
-  #date-range-search label:first-child {
+  #date-range-type label:first-child {
     margin-right: 10px; }
-#date-range-search input[type='radio'] {
+#date-range-type input[type='radio'] {
   font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px; }
 

@@ -104,7 +104,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
       'rankGroups': {},
       'sidebarData': {}, //statsData
       'query': $('#search-input').val(),
-      'dateRangeType': $('#date-range-type').val(),
+      'dateRangeType': $('#date-range-type input[type="radio"]:checked').val(),
       'ignoreRoutine': $('#ignore-routine').is(':checked'),
       'queryQualifier': '',
       'isRanked': false

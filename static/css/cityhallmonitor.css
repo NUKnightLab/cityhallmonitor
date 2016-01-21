@@ -9,18 +9,22 @@ footer {
   margin-top: 40px; }
 
 /* Title style overrides */
-h1,
-h2.intro {
-  text-align: center; }
-
 #big-hed {
-  margin-bottom: 40px; }
-
-h1 span.secondary {
-  display: block; }
-
-span.logo-mark.xxl {
-  margin-top: 0; }
+  margin-bottom: 40px;
+  text-align: center; }
+  #big-hed h1 span.secondary {
+    display: block; }
+  #big-hed span.logo-mark.xxl {
+    margin-top: 0; }
+  #big-hed.collapsed {
+    margin-bottom: 0px;
+    text-align: left; }
+    #big-hed.collapsed h1 {
+      font-size: 30px; }
+      #big-hed.collapsed h1 span.secondary {
+        display: inline; }
+    #big-hed.collapsed span.logo-mark.xxl {
+      font-size: 30px; }
 
 /* Navbar */
 .logo {

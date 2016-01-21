@@ -131,7 +131,7 @@ $(function() {
     });
 
     $('#search-submit').on('click', function(){
-      $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('#intro').outerHeight() + $('nav').outerHeight()}, 350);
+      $('#intro, #big-hed').slideUp();
     });
 
 });

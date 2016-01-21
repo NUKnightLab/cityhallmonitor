@@ -20,15 +20,21 @@ footer {
 }
 
 /* Title style overrides */
-h1,
-h2.intro {
-    text-align: center;
-}
 #big-hed {
     margin-bottom: 40px;
+    text-align: center;
+    h1 span.secondary { display: block; }
+    span.logo-mark.xxl { margin-top: 0; }
+    &.collapsed {
+        margin-bottom: 0px;
+        text-align: left;
+        h1 {
+            font-size: 30px;
+            span.secondary { display: inline; }
+        }
+        span.logo-mark.xxl { font-size: 30px; }
+    }
 }
-h1 span.secondary { display: block; }
-span.logo-mark.xxl { margin-top: 0; }
 
 /* Navbar */
 .logo {

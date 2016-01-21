@@ -70,8 +70,8 @@
         <div class="result multi row" id="<%= docs[0].matter.id %>" >
           <div class="small-12 columns">
             <p class="updated-date"><%= docs[0].sort_date.substring(0,10) %></p>
-            <p class="help meta label secondary"><i class="fa fa-files-o"></i> Multiple documents</p>
             <p class="help meta"> <span class="label <%= statusClass %>"><%= docs[0].matter.status %></span></p>
+            <p class="help meta label secondary"><i class="fa fa-files-o"></i> Multiple documents</p>
             <h5><%= docs[0].matter.title %></h5>
           </div>
           <% _.each(docs, function(doc, i) { %>
@@ -99,12 +99,13 @@
               <p class="help meta"><span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
                 <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
                   <h5><%= doc.matter.title %></h5>
-                  <% for (i=1; i<3; i++) { %>
-                    <img src="<%= doc.base_thumbnail_url %>-p<%= i %>-small.gif">
-                  <% } %>
+                  <div class="page-preview">
+                      <img src="<%= doc.base_thumbnail_url %>-p1-small.gif">
+                      <img src="<%= doc.base_thumbnail_url %>-p2-small.gif">
+                      <img class="third" src="<%= doc.base_thumbnail_url %>-p3-small.gif">
+                  </div>
                 </a>
             </div>
-            <hr />
         </div>
     </script>
 

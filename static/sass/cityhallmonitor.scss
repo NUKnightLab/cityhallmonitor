@@ -251,15 +251,25 @@ a.delete-subscription {
         }
     }
 }
-.result {
-    margin-bottom: 2em;
-    img {
-        border: 1px solid $jumbo;
-        margin-right: 1em;
-    }
+.result.row {
+    margin-bottom: 2.2em;
+
     h5 {
         margin: 0 0 22px 0;
         line-height: 1.6rem;
+    }
+    .page-preview {
+        text-align: center;
+        background: #f2f2f2;
+        margin: 0 0 20px 0;
+        img {
+            border: 1px solid $jumbo;
+            margin: 10px;
+            max-width: 140px;
+            &.nonexistant {
+                display: none;
+            }
+        }
     }
 }
 .multi .document {
@@ -295,7 +305,6 @@ a.delete-subscription {
     color: $jumbo;
     display: inline-block;
 }
-.result-thumb { float: left; }
 .more-info {
     float: right;
     padding-top: 35px;

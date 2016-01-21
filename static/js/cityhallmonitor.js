@@ -67,6 +67,17 @@ var hideLoadingState = function(){
     $('input, button, select').prop('disabled', false);
 };
 
+// Not every document has three pages. Hide the third "page" if it's a broken image.
+// (Doing this so we don't have to query DC for the total number of pages in each document.)
+var hideNonPages = function(){
+    $.each(document.getElementsByClassName('third'), function(index, img) {
+      if (img.width < 50) {
+        console.log(img.width);
+        $(img).addClass('nonexistant');
+      }
+    });
+};
+
 $(function() {
 
     $(document).foundation();
@@ -88,6 +99,17 @@ $(function() {
         }
     });
 
+   $(document).on('readystatechange', function(){
+     switch(document.readyState){
+      case "interactive":
+        console.log(document.readyState);
+      case "complete":
+        console.log(document.readyState);
+        setTimeout(function() { hideNonPages(); }, 3000);
+     }
+   });
+
+
     $('#search-results').on('click', 'a.read-more', function(evt) {
         evt.preventDefault();
 
@@ -107,9 +129,9 @@ $(function() {
 
       $('#sub-box').slideToggle();
     });
+
     $('#search-submit').on('click', function(){
       $('body,html').animate({scrollTop: $('#page-topper').outerHeight() + $('#intro').outerHeight() + $('nav').outerHeight()}, 350);
     });
-
 
 });

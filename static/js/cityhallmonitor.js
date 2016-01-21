@@ -131,7 +131,9 @@ $(function() {
     });
 
     $('#search-submit').on('click', function(){
-      $('#intro, #big-hed').slideUp();
+      $('#intro, #big-hed').slideUp("fast", function(){
+        $('body').addClass('fixed-nav');
+      });
     });
 
 });

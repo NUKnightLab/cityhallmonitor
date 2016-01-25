@@ -82,10 +82,10 @@ function populateResults(sortType){
 }
 
 function appendSummaryAndStats(total, qualifier, statsData){
-    var query = '';
-    if ($('#search-input').val() != '') {
-      query = 'matching <em>' + $('#search-input').val() + '</em>';
-    }
+    var query = $('#search-input').val();
+    // if ($('#search-input').val() != '') {
+    //   query = 'matching <em>' + $('#search-input').val() + '</em>';
+    // }
     $('#results-summary').html($(summaryTemplate({
         total: total,
         query: query,

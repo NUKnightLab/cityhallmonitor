@@ -44,7 +44,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script type="text/template" id="summary-template">
         <div class="small-12 medium-10 medium-offset-1 end columns">
-            <h3>We found <span class="num-of-results"><%= total %> results</span> <%= query %><%= qualifier %>.</h3>
+            <h3>We found <span class="num-of-results"><%= total %> results</span> <% if (query) { %>matching <%= query %><% } %><%= qualifier %>.</h3>
             <form action="#" id="search-subscribe-form">
                 <div class="row collapse">
                     <div class="small-12 columns">
@@ -140,4 +140,3 @@
     </script>
 
 {% endblock extra_scripts %}
-

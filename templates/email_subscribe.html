@@ -1,5 +1,10 @@
 {% include "_email_header.html" %}
-<p>Please <a href="{{ activation_url }}">activate your subscription</a> to <span style="color: #ce4d28; font-weight: bold;">{{ query }}</span> on City Hall Monitor.If you've changed your mind, just ignore this email and we won't send you any further emails.</p>
+{% if created %}
+<p>Please <a href="{{ activation_url }}">activate your subscription</a> to <span style="color: #ce4d28; font-weight: bold;">{{ query }}</span> on City Hall Monitor. If you've changed your mind, just ignore this email and we won't send you any further emails.</p>
 <p>Activate your subscription by visiting this link:</p>
 <p><a href="{{ activation_url }}">{{ activation_url }}</a></p>
+{% else %}
+<p>You already had a subscription for <span style="color: #ce4d28; font-weight: bold;">{{ query }}</span> on City Hall Monitor. You don't have to do anything, but you can visit the <a href="{{ manage_url }}">Manage Subscriptions</a> page to see what you have or cancel notifications.
+</p>
+{% endif %}
 {% include "_email_footer.html" %}

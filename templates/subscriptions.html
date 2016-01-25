@@ -5,6 +5,9 @@
 {% block content %}
 <div class="row">
     <div class="small-8 small-offset-2 columns">
+      <p>City Hall Monitor can let you know when new documents are published so you don't have to remember to come back and search again.
+
+      </p>
         <h2>Manage subscriptions</h2>
         <p>Enter your email address below, and we'll send you a link to manage your subscriptions.</p>
         <form>
@@ -42,11 +45,15 @@ function manage_alert(msg, detail, type) {
 $(function() {
     $(document).foundation();
 
+    var valid_email = function(email_str) {
+      return email_str.match(/.+@.+/);
+    }
+
     $('#manage-submit').click(function(event) {
         $('#manage-alert').hide();
-
+        event.preventDefault();
         var email = $('#manage-subs').val().trim();
-        if(email) {
+        if(valid_email(email)) {
             $('#manage-submit').prop('disabled', true);
 
             $.ajax({
@@ -63,15 +70,21 @@ $(function() {
                 },
                 success: function(data) {
                     if(data.error) {
+                      if (data.error == 'No active subscriptions found') {
+                        manage_alert('There are no active subscriptions for ', email, "success");
+                      } else {
                         manage_alert('Error sending link: ', data.error, "error");
+                      }
                     } else {
-                        manage_alert('A link has been sent to ', email, "success");
+                      manage_alert('A link has been sent to ', email, "success");
                     }
                 },
                 complete: function() {
                     $('#manage-submit').prop('disabled', false);
                 }
             });
+        } else {
+          manage_alert('Please enter a valid email address.')
         }
     });
 });

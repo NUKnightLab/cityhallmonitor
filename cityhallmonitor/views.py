@@ -157,7 +157,7 @@ def send_notifications_link(request):
         if not email:
             raise Exception('Expected "email" parameter')
 
-        qs = Subscription.objects.filter(email=email, active=True)
+        qs = Subscription.objects.filter(email__iexact=email, active=True)
         if not len(qs):
             raise Exception('No active subscriptions found')
         r = qs[0]
@@ -218,26 +218,32 @@ def notifications(request):
 
 def subscribe(request):
     """Save user search subscription and send email"""
+    manage_url = activation_url = ''
     try:
         email = request.GET.get('email')
         if not email:
             raise Exception('Expected "email" parameter')
-
         query = request.GET.get('query')
         if not query:
             raise Exception('Expected "query" parameter')
 
-        r = Subscription(email=email, query=query,
-            last_check=timezone.now())
-        r.save()
+        email = email.lower()
+        query = query.lower()
+        r, created = Subscription.objects.get_or_create(email=email, query=query)
+
+        if created or not r.active:
+            activation_url = '%s?sid=%s' % (request.build_absolute_uri(reverse(activate)),
+                _make_subscription_sid(r.id, email))
+        else:
+            manage_url = '%s?sid=%s' % (request.build_absolute_uri(reverse(notifications)),
+                _make_subscription_sid(r.id, email))
 
         email_template = get_template('email_subscribe.html')
         html_message = email_template.render({
+            'created': created,
             'query': query,
-            'activation_url': '%s?sid=%s' % ( \
-                request.build_absolute_uri(reverse(activate)),
-                _make_subscription_sid(r.id, email)
-            )
+            'activation_url': activation_url,
+            'manage_url': manage_url
         })
 
         try:

@@ -228,7 +228,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
           populateResults("dateGroups");
         }
 
-        if (resultData.query != '' && data.documents.length > 0) {
+        if (resultData.query != '') {
           // don't let people subscribe to queries without keywords
           showEmailForm(subscribeUrl);
           showSortButtons();

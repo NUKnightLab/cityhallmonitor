@@ -21,7 +21,7 @@ var handle_subscribe = function(event, url) {
         alert('You must enter a search query');
         return;
     }
-
+    showMsg('');
     $.ajax({
         url: url,
         type: 'GET',

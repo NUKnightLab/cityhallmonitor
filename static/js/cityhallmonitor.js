@@ -11,9 +11,9 @@ var handle_subscribe = function(event, url) {
       $('#post-subscribe-msg').show();
     }
     var email = $('#search-subscribe-email').val().trim();
-    if(!email) {
+    if(!email.match(/.+@.+/)) {
         $('#post-subscribe-msg').fadeIn('slow')
-                                .text('You must enter your email address.');
+                                .text('You must enter a valid email address.');
         return;
     }
     var query = $('#search-input').val().trim();

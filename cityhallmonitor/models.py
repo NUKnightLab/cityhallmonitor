@@ -533,7 +533,7 @@ class Subscription(models.Model):
     id = models.AutoField(primary_key=True)
     email = models.EmailField()
     query = models.TextField()
-    last_check = models.DateTimeField(null=True)
+    last_check = models.DateTimeField(null=True, auto_now_add=True)
     active = models.BooleanField(default=False)
 
     def __str__(self):

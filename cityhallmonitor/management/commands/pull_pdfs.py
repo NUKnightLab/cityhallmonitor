@@ -108,25 +108,25 @@ class Command(BaseCommand):
     def fetch(self, attachment, project_id):
         """Upload attachment file to DocumentCloud"""
         r = self.search('account:%s project:"%s" source: "%s"' % (
-                DOCUMENT_CLOUD_ACCOUNT, 
-                DOCUMENT_CLOUD_PROJECT, 
+                DOCUMENT_CLOUD_ACCOUNT,
+                DOCUMENT_CLOUD_PROJECT,
                 attachment.hyperlink))
 
         logger.debug('Result from DocumentCloud is %s' % str(r))
- 
+
         if r:
             logger.debug(
                 'Document exists in DocumentCloud. Not transferring: %s',
                 attachment.hyperlink)
-                
+
             if len(r) > 1:
                 raise DocumentSyncException(
                     'Multiple instances exist in DocumentCloud for '\
-                    'document: %s' % attachment.hyperlink)      
-        else:       
+                    'document: %s' % attachment.hyperlink)
+        else:
             logger.info('Transferring to DocumentCloud: %s',
                 attachment.hyperlink)
-                        
+
             data = {
                 'MatterAttachmentId': str(attachment.id),
                 'MatterId': str(attachment.matter.id),
@@ -134,13 +134,14 @@ class Command(BaseCommand):
             }
             published_url = ATTACHMENT_PUBLISH_URL % attachment.id
             doc = self.upload_to_doccloud(
-                attachment.hyperlink, 
+                attachment.hyperlink,
                 attachment.name,
-                data=data, 
+                data=data,
                 project_id=project_id,
                 published_url=published_url)
 
             attachment.link_obtained_at = timezone.now()
+            attachment.dc_id = doc.id
             attachment.save()
             logger.debug(
                 'Updated link_obtained_at timestamp for '\
@@ -178,20 +179,19 @@ class Command(BaseCommand):
             project = self.get_project(DOCUMENT_CLOUD_PROJECT)
 
             q = MatterAttachment.objects.all()
-                
+
             if options['all']:
                 logger.info('Fetching all files')
             elif options['matter_id']:
                 logger.info('Fetching files for matter ID %s', options['matter_id'])
-                q = q.filter(matter_id=options['matter_id'])                    
+                q = q.filter(matter_id=options['matter_id'])
             else:
                 logger.info('Fetching new files')
                 q = q.filter(link_obtained_at=None)
-                    
+
             for attachment in [a for a in q]:
                 self.fetch(attachment, project.id)
         except Exception as e:
             logger.exception(str(e))
 
         logger.info('Done\n')
-

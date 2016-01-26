@@ -438,6 +438,17 @@ class MatterAttachment(LegistarModel):
     def __str__(self):
         return self.file_name
 
+    def get_absolute_url(self):
+        """Use this to get the page on CHM which embeds this MatterAttachment"""
+        from django.core.urlresolvers import reverse
+        return reverse('documents', args=[str(self.id)])
+
+    @property
+    def dc_json_url(self):
+        if self.dc_id:
+            return "http://www.documentcloud.org/api/documents/%s.json" % self.dc_id
+        raise Exception("No known DocumentCloud ID")
+
     @classmethod
     def from_json(cls, matter_id, d):
         """

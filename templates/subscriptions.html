@@ -1,15 +1,25 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block nav %}
   {% include "_nav.html" %}
 {% endblock %}
 {% block content %}
 <div class="row">
     <div class="small-8 small-offset-2 columns">
-      <p>City Hall Monitor can let you know when new documents are published so you don't have to remember to come back and search again.
+      <p>
+        <em>City Hall Monitor</em> can let you know when new documents are published so you don't have to remember to come back and search again. Just click on
+        <i>"email me when these results change"</i> and enter your email.
 
+        <figure id="subscribe-img">
+        <img src="{% static 'img/search_results_subscribe_form.png' %}" alt="Example of the for for subscribing for search notifications.">
+        </figure>
+
+        We'll send you a verification message so that we know it's you who signed up,
+        and then we'll send you an email when <em>City Hall Monitor</em> finds new documents which match your search. (Please consider this an experimental feature. We can't make any guarantees about its "uptime" or reliability.)
       </p>
+
         <h2>Manage subscriptions</h2>
-        <p>Enter your email address below, and we'll send you a link to manage your subscriptions.</p>
+        <p>Enter your email address below, and we'll send you a link to manage your existing subscriptions.</p>
         <form>
             <div class="row collapse">
                 <div class="small-6 columns">

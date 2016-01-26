@@ -34,7 +34,7 @@
                         <p class="subscription-desc">{{ r.query }}</p>
                     </td>
                     <td>
-                        <p><i class="fa fa-spinner fa-pulse"></i><a class="delete-subscription active" data-sid="{{ r.sid }}" id="notifications-checkbox-{{ r.sid }}">delete</a></p>
+                        <p><i class="fa fa-pulse"></i><a class="delete-subscription active" data-sid="{{ r.sid }}" id="notifications-checkbox-{{ r.sid }}">delete</a></p>
                     </td>
                 </tr>
                 {% endfor %}
@@ -63,6 +63,7 @@ $(function() {
 
     $('.delete-subscription.active').click(function(event){
       var self = this;
+      $(this).addClass('fa-spinner');
       // Server-side code expects an array
       var sid = [$(this).attr("data-sid")];
       // TODO: add visible state indication for loading
@@ -89,7 +90,11 @@ $(function() {
               }
           },
           complete: function() {
+            $(this).removeClass('fa-spinner');
               // Could we easily add back a deleted search while still on this page?
+              // easy enough to put a link up, but the user would balk if we made them
+              // go back to email. But otherwise we would need some kind of temporary
+              // token that they would pass back, maybe stored in the session.
           }
         });
     });

@@ -19,12 +19,12 @@ PARENTHETICALS = re.compile('[{([})\]"]+')
 
 # When --force and --delerr are in effect...
 _forced_delete_warning = """
-WARNING: documents with error status that do not have 
+WARNING: documents with error status that do not have
 a MatterAttachment on the local system will be
 deleted. This will potentially create a condition on
 the system where the document was upload in which the
 document is marked as processed but does not exist in
-DocumentCloud. 
+DocumentCloud.
 
 To resolve this condition, AFTER THIS RUN either
 
@@ -44,14 +44,16 @@ or
 
 
 class Command(BaseCommand):
-    help = 'Set descriptions for updated attachment files from the Chicago Legistar API.'
-    
+    help ='''Set DocumentCloud descriptions for updated attachment files from the Chicago Legistar API.
+    Depends upon the update_dc_data command so don't run this if that isn't running. As of January 2016
+    we seem to have decided that we don't need either of them but leaving the code for a while.'''
+
     _client = None
 
     def client(self):
         if self._client is None:
             self._client = DocumentCloud(
-                settings.DOCUMENT_CLOUD_USERNAME, 
+                settings.DOCUMENT_CLOUD_USERNAME,
                 settings.DOCUMENT_CLOUD_PASSWORD)
         return self._client
 
@@ -103,16 +105,16 @@ class Command(BaseCommand):
                 if input_ and not input_.lower().startswith('y'):
                     self.stdout.write('Aborting')
                     return
-                    
+
             query = 'account:%s project:"%s"' % (
                     settings.DOCUMENT_CLOUD_ACCOUNT,
                     settings.DOCUMENT_CLOUD_PROJECT)
-                    
+
             if not options['all']:
-                query += ' ops:DescriptionProcessed: 0' 
-        
+                query += ' ops:DescriptionProcessed: 0'
+
             logger.info(query)
-                     
+
             r = self.search(query)
             for doc in r:
                 if doc.access == 'error':
@@ -160,9 +162,8 @@ class Command(BaseCommand):
                 else:
                     logger.warning('WARNING: skipping document with ' \
                     'unknown status %s: %s' % (doc.access, doc.source))
-                
+
         except Exception as e:
             logger.exception(str(e))
-              
+
         logger.info('Done\n')
-            

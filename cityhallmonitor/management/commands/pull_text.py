@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--limit', type=int, help='Process up to LIMIT documents')
- 
+
     def search(self, query):
         """Seach DocumentCloud"""
         r = self.client().documents.search(query)
@@ -38,42 +38,42 @@ class Command(BaseCommand):
         """Get extracted text and id from DocumentCloud"""
         try:
             r = self.search('account:%s project:"%s" source: "%s" access:public' % (
-                    DOCUMENT_CLOUD_ACCOUNT, 
-                    DOCUMENT_CLOUD_PROJECT, 
+                    DOCUMENT_CLOUD_ACCOUNT,
+                    DOCUMENT_CLOUD_PROJECT,
                     attachment.hyperlink))
-            
+
             if not r:
                 raise Exception('not found')
             if len(r) > 1:
                 raise Exception('multiple instances')
-                
+
             logger.debug('Processing: %s' % attachment.hyperlink)
-        
+
             doc = r[0]
-            if doc.full_text:      
+            if doc.full_text:
                 attachment.dc_id = doc.id
-                attachment.save()            
-                Document.create_from_attachment(attachment, 
-                    doc.full_text.decode('utf-8')) 
+                attachment.page_count = doc.pages
+                attachment.save()
+                Document.create_from_attachment(attachment,
+                    doc.full_text.decode('utf-8'))
         except Exception as e:
             logger.error('Error processing %s [%s]' \
                 % (attachment.hyperlink, str(e)))
-           
+
     def handle(self, *args, **options):
         logger.info('limit=%(limit)s', options)
- 
+
         try:
             qs = MatterAttachment.objects.filter(document=None)
-           
+
             if options['limit']:
                 for attachment in qs[:options['limit']]:
-                    self.fetch(attachment)    
+                    self.fetch(attachment)
             else:
                 for attachment in qs:
-                    self.fetch(attachment)                     
-                 
+                    self.fetch(attachment)
+
         except Exception as e:
             logger.exception(str(e))
 
         logger.info('Done\n')
-

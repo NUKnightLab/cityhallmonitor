@@ -430,6 +430,7 @@ class MatterAttachment(LegistarModel):
     binary = models.TextField(blank=True, default='') # <MatterAttachmentBinary i:nil="true"/>
     link_obtained_at = models.DateTimeField(null=True)
     dc_id = models.TextField(blank=True, default='') # DocumentCloud document id
+    page_count = models.IntegerField(null=True)
 
     class Meta:
         verbose_name = 'MatterAttachment'

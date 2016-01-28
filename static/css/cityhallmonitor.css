@@ -186,16 +186,27 @@ a.delete-subscription {
   .result.row h5 {
     margin: 0 0 22px 0;
     line-height: 1.6rem; }
-  .result.row .page-preview {
-    text-align: center;
-    background: #f2f2f2;
-    margin: 0 0 20px 0; }
-    .result.row .page-preview img {
-      border: 1px solid #888;
-      margin: 10px;
-      max-width: 140px; }
-      .result.row .page-preview img.nonexistant {
-        display: none; }
+
+.page-preview {
+  text-align: center;
+  background: #f2f2f2;
+  margin: 0 0 20px 0; }
+  .page-preview img {
+    border: 1px solid #888;
+    margin: 10px;
+    max-width: 140px; }
+    .page-preview img.nonexistant {
+      display: none; }
+
+.page-count {
+  width: 140px;
+  height: 180px;
+  background: #fff;
+  border: 1px solid #888;
+  font-size: 50px;
+  line-height: 155px;
+  font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  display: inline-block; }
 
 .multi .document p {
   margin: 6px 0;
@@ -246,12 +257,6 @@ a.delete-subscription {
   font-style: italic;
   margin-left: 4px;
   font-size: 0.9em; }
-
-figure#subscribe-img {
-  border: 1px dotted #333333;
-  padding: 5px;
-  background-color: #f3f3f3;
-}
 
 /* purpleline additions to make*/
 .reveal-modal.open {

@@ -76,7 +76,7 @@ function populateResults(sortType){
             appendResult(g);
         });
     }
-    setTimeout(function() { hideNonPages(); }, 3000);
+    //setTimeout(function() { hideNonPages(); }, 3000);
     $(".sort[data-grouptype='" + sortType + "']").children('.option').addClass('active');
     $(".sort[data-grouptype='" + sortType + "']").siblings().children().removeClass('active');
 }

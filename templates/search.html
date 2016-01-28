@@ -105,7 +105,12 @@
                   <div class="page-preview">
                       <img src="<%= doc.base_thumbnail_url %>-p1-small.gif">
                       <img src="<%= doc.base_thumbnail_url %>-p2-small.gif">
-                      <img class="third" src="<%= doc.base_thumbnail_url %>-p3-small.gif">
+                      <% if (doc.page_count > 2) { %>
+                        <img class="third" src="<%= doc.base_thumbnail_url %>-p3-small.gif">
+                      <% } %>
+                      <% if ((doc.page_count - 3) > 0) { %>
+                        <div class="page-count"><%= doc.page_count - 3 %>+</div>
+                      <% } %>
                   </div>
                 </a>
             </div>

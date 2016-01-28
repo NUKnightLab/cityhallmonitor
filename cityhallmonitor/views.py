@@ -41,6 +41,7 @@ def _documents_json(document_list, is_ranked):
             'name': attachment.name,
             'hyperlink': attachment.hyperlink,
             'dc_id': attachment.dc_id,
+            'page_count': attachment.page_count,
             'matter': {
                 'id': matter.id,
                 'title': matter.title,

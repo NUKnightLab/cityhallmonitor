@@ -235,17 +235,18 @@ a.delete-subscription {
     margin-bottom: 2.2em;
 
     h5 {
-        margin: 0 0 22px 0;
+        margin: 0 0 15px 0;
         line-height: 1.6rem;
     }
 }
 .page-preview {
-    text-align: center;
-    background: #f2f2f2;
+    /*text-align: center;*/
+    /*background: #f2f2f2;*/
     margin: 0 0 20px 0;
     img {
-        border: 1px solid $jumbo;
-        margin: 10px;
+        border: 1px solid #eee;
+        box-shadow: 1px 1px 5px $iron;
+        margin: 0px 10px 20px 0px;
         max-width: 140px;
         &.nonexistant {
             display: none;
@@ -253,14 +254,18 @@ a.delete-subscription {
     }
 }
 .page-count {
+    text-align: center;
     width: 140px;
     height: 180px;
     background: #fff;
-    border: 1px solid $jumbo;
+    border: 1px solid #eee;
+    box-shadow: 1px 1px 5px $iron;
     font-size: 50px;
-    line-height: 155px;
+    line-height: 174px;
     font-family: $font-family-sans-serif;
     display: inline-block;
+    color: #ccc;
+    text-shadow: 1px 1px 0px #888;
 }
 .multi .document {
     p {

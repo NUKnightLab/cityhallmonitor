@@ -181,6 +181,40 @@ a.delete-subscription {
   #sort-by p:first-child {
     margin-right: 10px; }
 
+#intro .result.row {
+  background-color: #f2f2f2; }
+  #intro .result.row h5 {
+    margin-top: 5px; }
+  #intro .result.row .explainer {
+    display: inline-block;
+    font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 15px;
+    font-style: italic;
+    border-bottom: 2px solid #c34528;
+    background-color: #f7ccb2;
+    padding: 2px 10px;
+    margin: 0 0 2px 0; }
+    #intro .result.row .explainer.right {
+      border-bottom: none;
+      border-top: 2px solid #c34528;
+      margin: 5px 0 0 0; }
+#intro .explainer ~ .arrow {
+  margin-top: 4px; }
+#intro .page-preview {
+  padding-top: 10px; }
+#intro .arrow {
+  display: inline-block;
+  margin-top: -19px;
+  position: absolute;
+  font-size: 30px;
+  margin-left: -38px;
+  color: #c34528;
+  transform: rotate(-12deg); }
+  #intro .arrow.right {
+    margin-top: -34px;
+    margin-left: 48px; }
+
 .result.row {
   margin-bottom: 2.2em;
   padding: 10px 0 30px; }

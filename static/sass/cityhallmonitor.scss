@@ -238,6 +238,10 @@ a.delete-subscription {
     &:active,
     &:focus {
         background-color: #ebf3f5;
+        .page-count {
+            font-size: 55px;
+            line-height: 151px;
+        }
     }
 
     h5 {
@@ -272,6 +276,7 @@ a.read-more {
     display: inline-block;
     color: #ccc;
     text-shadow: 1px 1px 0px #888;
+    transition: all 0.3s ease;
 }
 .multi .document {
     p {

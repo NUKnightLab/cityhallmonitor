@@ -232,7 +232,8 @@ a.delete-subscription {
     line-height: 151px; }
 
 a.read-more {
-  display: block; }
+  display: block;
+}
 
 .page-preview img {
   border: 1px solid #eee;
@@ -340,6 +341,10 @@ select:focus {
   font-weight: bold;
   font-style: normal; }
 
+div.read-more {
+  /* Confusing to share this class with a.read-more in search results? */
+  cursor: pointer;
+}
 .extended-answer {
   display: none;
 }

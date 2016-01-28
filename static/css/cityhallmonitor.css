@@ -184,14 +184,15 @@ a.delete-subscription {
 .result.row {
   margin-bottom: 2.2em;
   padding: 10px 0 30px; }
-  .result.row:hover, .result.row:active, .result.row:focus {
-    background-color: #ebf3f5; }
-    .result.row:hover .page-count, .result.row:active .page-count, .result.row:focus .page-count {
-      font-size: 55px;
-      line-height: 151px; }
   .result.row h5 {
     margin: 0 0 15px 0;
     line-height: 1.6rem; }
+
+#search-results .result.row:hover, #search-results .result.row:active, #search-results .result.row:focus {
+  background-color: #ebf3f5; }
+  #search-results .result.row:hover .page-count, #search-results .result.row:active .page-count, #search-results .result.row:focus .page-count {
+    font-size: 55px;
+    line-height: 151px; }
 
 a.read-more {
   display: block; }

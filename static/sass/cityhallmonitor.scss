@@ -234,6 +234,13 @@ a.delete-subscription {
 .result.row {
     margin-bottom: 2.2em;
     padding: 10px 0 30px;
+
+    h5 {
+        margin: 0 0 15px 0;
+        line-height: 1.6rem;
+    }
+}
+#search-results .result.row {
     &:hover,
     &:active,
     &:focus {
@@ -242,11 +249,6 @@ a.delete-subscription {
             font-size: 55px;
             line-height: 151px;
         }
-    }
-
-    h5 {
-        margin: 0 0 15px 0;
-        line-height: 1.6rem;
     }
 }
 a.read-more {

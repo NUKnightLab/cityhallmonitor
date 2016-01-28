@@ -119,10 +119,12 @@
 
     <script type="text/template" id="result-stats-sidebar">
         <ul class="side-nav">
-          <li><strong>Summary of results</strong></li>
+          <div id="thumbnail-checkbox">
+            <input type="checkbox" name="toggle-thumbs" checked><label for="toggle-thumbs">Thumbnails</label>
+          </div>
           <li class="divider"></li>
           <% _.each(statsData, function(data, stat) {%>
-            <li><strong><%= stat %></strong></li>
+            <li><strong>Result <%= stat %></strong></li>
             <% _.each(data, function(val, key) { %>
               <li class="result-category"><%= key %> <span><%= val %></span></li>
             <% }); %>

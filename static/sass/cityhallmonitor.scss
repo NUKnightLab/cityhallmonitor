@@ -281,14 +281,20 @@ a.delete-subscription {
         line-height: 1.6rem;
     }
 }
-#search-results .result.row {
-    &:hover,
-    &:active,
-    &:focus {
-        background-color: #ebf3f5;
-        .page-count {
-            font-size: 55px;
-            line-height: 151px;
+#search-results {
+    &.compact .result.row {
+        margin-bottom: 0px;
+        padding-bottom: 0;
+    }
+    .result.row {
+        &:hover,
+        &:active,
+        &:focus {
+            background-color: #ebf3f5;
+            .page-count {
+                font-size: 55px;
+                line-height: 151px;
+            }
         }
     }
 }

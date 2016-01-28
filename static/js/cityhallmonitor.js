@@ -130,6 +130,16 @@ $(function() {
       $('#sub-box').slideToggle();
     });
 
+    $('#results-stats').on('click', '#thumbnail-checkbox', function(){
+      if ($('#thumbnail-checkbox input[type="checkbox"]').prop('checked') == false) {
+        $('#thumbnail-checkbox input[type="checkbox"]').prop('checked', true);
+      } else {
+        $('#thumbnail-checkbox input[type="checkbox"]').prop('checked', false);
+      }
+      $('#results-block .page-preview').slideToggle();
+      $('#search-results').toggleClass('compact');
+    });
+
     $('#search-submit').on('click', function(){
       $('#intro, #big-hed').slideUp("fast", function(){
         $('body').addClass('fixed-nav');

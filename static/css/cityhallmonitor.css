@@ -222,6 +222,9 @@ a.delete-subscription {
     margin: 0 0 15px 0;
     line-height: 1.6rem; }
 
+#search-results.compact .result.row {
+  margin-bottom: 0px;
+  padding-bottom: 0; }
 #search-results .result.row:hover, #search-results .result.row:active, #search-results .result.row:focus {
   background-color: #ebf3f5; }
   #search-results .result.row:hover .page-count, #search-results .result.row:active .page-count, #search-results .result.row:focus .page-count {

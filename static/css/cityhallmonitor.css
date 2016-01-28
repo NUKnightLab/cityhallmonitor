@@ -340,6 +340,9 @@ select:focus {
   font-weight: bold;
   font-style: normal; }
 
+.extended-answer {
+  display: none;
+}
 /* end purpleline fixes */
 
 /*# sourceMappingURL=cityhallmonitor.css.map */

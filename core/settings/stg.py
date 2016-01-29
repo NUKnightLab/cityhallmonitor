@@ -52,7 +52,7 @@ STATIC_URL = '//media.knilab.com/cityhallmonitor/'
 
 # Domain for links sent in emails from management commands
 
-DOMAIN_URL = 'http://cityhallmonitor.knilab.com'
+DOMAIN_URL = 'https://cityhallmonitor.knilab.com'
 
 # Logging overrides
 
@@ -145,9 +145,9 @@ LOGGING['loggers'].update({
     'cityhallmonitor.management.commands.update_dc_data': {
         'handlers': ['update_dc_data'],
         'level': 'DEBUG'
-    },        
+    },
     'cityhallmonitor.management.commands.rebuild_text_index': {
         'handlers': ['rebuild_text_index'],
         'level': 'DEBUG'
-    }        
+    }
 })

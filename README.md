@@ -122,5 +122,12 @@ $ python manage.py loaddata MatterType.json
 testing
 
 
+#### Installing SASS
 
+To work with the project's CSS, you must use SASS. (Don't write your styles directly in `cityhallmonitor.css` or your changes will be overwritten when the SASS compiler runs next!)
 
+Install SASS if you need it: http://sass-lang.com/install
+
+From your root `cityhallmonitor` project directory, run `sass --watch static/sass:static/css`
+
+Make your changes in `cityhallmonitor.scss` and the compiler will update your CSS file when you save.

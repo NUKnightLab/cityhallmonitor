@@ -135,8 +135,8 @@ input#search-subscribe-email {
 #search-input {
     margin: 10px 0 5px;
     font-size: 1.5em;
-    padding: 25px 40px 25px 15px;
-
+    /*padding: 25px 40px 25px 15px;*/
+    height: 50px;
 }
 #search-submit {
     margin-top: 32px;
@@ -295,10 +295,13 @@ a.delete-subscription {
         &:active,
         &:focus {
             background-color: #ebf3f5;
-            .page-count {
-                font-size: 55px;
-                line-height: 151px;
-            }
+            /*.page-count {*/
+                /*font-size: 55px;*/
+                /*line-height: 151px;*/
+                /*span {*/
+                    /*font-size: 16px;*/
+                /*}*/
+            /*}*/
         }
     }
 }
@@ -324,12 +327,17 @@ a.read-more {
     border: 1px solid #eee;
     box-shadow: 1px 1px 5px $iron;
     font-size: 50px;
-    line-height: 155px;
+    line-height: 81px;
     font-family: $font-family-sans-serif;
     display: inline-block;
     color: #ccc;
     text-shadow: 1px 1px 0px #888;
     transition: all 0.3s ease;
+    span {
+        font-size: 16px;
+        display: block;
+        line-height: 0px;
+    }
 }
 .multi .page-preview {
     p {

@@ -111,7 +111,8 @@ input#search-subscribe-email {
 #search-input {
   margin: 10px 0 5px;
   font-size: 1.5em;
-  padding: 25px 40px 25px 15px; }
+  /*padding: 25px 40px 25px 15px;*/
+  height: 50px; }
 
 #search-submit {
   margin-top: 32px;
@@ -231,13 +232,14 @@ a.delete-subscription {
 #search-results .result.multi.row .page-preview:hover,
 #search-results .result.multi.row .page-preview:active,
 #search-results .result.multi.row .page-preview:focus {
-  background-color: #ebf3f5; }
-  #search-results .result.single.row:hover .page-count, #search-results .result.single.row:active .page-count, #search-results .result.single.row:focus .page-count,
-  #search-results .result.multi.row .page-preview:hover .page-count,
-  #search-results .result.multi.row .page-preview:active .page-count,
-  #search-results .result.multi.row .page-preview:focus .page-count {
-    font-size: 55px;
-    line-height: 151px; }
+  background-color: #ebf3f5;
+  /*.page-count {*/
+  /*font-size: 55px;*/
+  /*line-height: 151px;*/
+  /*span {*/
+  /*font-size: 16px;*/
+  /*}*/
+  /*}*/ }
 
 a.read-more {
   display: block; }
@@ -258,12 +260,16 @@ a.read-more {
   border: 1px solid #eee;
   box-shadow: 1px 1px 5px #ccc;
   font-size: 50px;
-  line-height: 155px;
+  line-height: 81px;
   font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
   display: inline-block;
   color: #ccc;
   text-shadow: 1px 1px 0px #888;
   transition: all 0.3s ease; }
+  .page-count span {
+    font-size: 16px;
+    display: block;
+    line-height: 0px; }
 
 .multi .page-preview p {
   margin: 6px 0;

@@ -289,7 +289,8 @@ a.delete-subscription {
         margin-bottom: 0px;
         padding-bottom: 0;
     }
-    .result.row {
+    .result.single.row,
+    .result.multi.row .page-preview{
         &:hover,
         &:active,
         &:focus {
@@ -330,10 +331,10 @@ a.read-more {
     text-shadow: 1px 1px 0px #888;
     transition: all 0.3s ease;
 }
-.multi .document {
+.multi .page-preview {
     p {
         margin: 6px 0;
-        text-align: right;
+        text-align: center;
     }
 }
 .help,

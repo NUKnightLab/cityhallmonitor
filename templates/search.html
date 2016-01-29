@@ -78,29 +78,23 @@
             <h5><%= docs[0].matter.title %></h5>
           </div>
           <% _.each(docs, function(doc, i) { %>
-          <div class="row document">
-              <div class="small-7 small-offset-1 columns">
+          <div class="small-4 columns document page-preview">
                 <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
-                  <p><span class="help meta"></span><%= doc.title %></p>
-                  <p><%= doc.name %></p>
+                  <p style="display: inline;">#<%= i + 1 %></p>
+                  <img src="<%= doc.base_thumbnail_url %>-p2-small.gif">
+                  <p><%= doc.name %> </p>
                 </a>
-              </div>
-              <div class="more-info small-4 columns">
-                  <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more button info tiny">Read</a>
-                  <a class="download-pdf" href="<%= doc.hyperlink %>">Download PDF</a>
-              </div>
           </div>
           <% }); %>
-          <hr />
       </div>
     </script>
 
     <script type="text/template" id="single-result-template">
-        <div class="result row" id="<%= doc.matter.id %>">
+      <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
+        <div class="result single row" id="<%= doc.matter.id %>">
             <div class="small-12 columns">
               <p class="updated-date"><%= doc.sort_date.substring(0,10) %></p>
               <p class="help meta"><span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
-                <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
                   <h5><%= doc.matter.title %></h5>
                   <div class="page-preview">
                       <img src="<%= doc.base_thumbnail_url %>-p1-small.gif">
@@ -112,9 +106,9 @@
                         <div class="page-count"><%= doc.page_count - 3 %>+</div>
                       <% } %>
                   </div>
-                </a>
             </div>
         </div>
+      </a>
     </script>
 
     <script type="text/template" id="result-stats-sidebar">

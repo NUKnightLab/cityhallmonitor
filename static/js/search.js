@@ -232,6 +232,8 @@ var doSearch = function(searchUrl, subscribeUrl) {
         if (resultData.query != '') {
           // don't let people subscribe to queries without keywords
           showEmailForm(subscribeUrl);
+        }
+        if (resultData.documents.length > 0) {
           showSortButtons();
         }
         $("#search-results").foundation('reveal', 'reflow');

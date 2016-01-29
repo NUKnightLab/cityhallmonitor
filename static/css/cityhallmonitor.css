@@ -232,14 +232,7 @@ a.delete-subscription {
 #search-results .result.multi.row .page-preview:hover,
 #search-results .result.multi.row .page-preview:active,
 #search-results .result.multi.row .page-preview:focus {
-  background-color: #ebf3f5;
-  /*.page-count {*/
-  /*font-size: 55px;*/
-  /*line-height: 151px;*/
-  /*span {*/
-  /*font-size: 16px;*/
-  /*}*/
-  /*}*/ }
+  background-color: #ebf3f5; }
 
 a.read-more {
   display: block; }
@@ -260,7 +253,7 @@ a.read-more {
   border: 1px solid #eee;
   box-shadow: 1px 1px 5px #ccc;
   font-size: 50px;
-  line-height: 81px;
+  line-height: 89px;
   font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
   display: inline-block;
   color: #ccc;

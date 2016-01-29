@@ -233,7 +233,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
           // don't let people subscribe to queries without keywords
           showEmailForm(subscribeUrl);
         }
-        if (resultData.documents.length > 0) {
+        if ((resultData.documents.length > 0) && (resultData.query != '')) {
           showSortButtons();
         }
         $("#search-results").foundation('reveal', 'reflow');

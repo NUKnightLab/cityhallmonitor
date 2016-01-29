@@ -232,8 +232,7 @@ a.delete-subscription {
     line-height: 151px; }
 
 a.read-more {
-  display: block;
-}
+  display: block; }
 
 .page-preview img {
   border: 1px solid #eee;
@@ -340,14 +339,11 @@ select:focus {
   color: #ce4d28;
   font-weight: bold;
   font-style: normal; }
+.question dd .extended-answer {
+  display: none; }
+  .question dd .extended-answer p:first-child::before {
+    content: ""; }
 
-div.read-more {
-  /* Confusing to share this class with a.read-more in search results? */
-  cursor: pointer;
-}
-.extended-answer {
-  display: none;
-}
 /* end purpleline fixes */
 
 /*# sourceMappingURL=cityhallmonitor.css.map */

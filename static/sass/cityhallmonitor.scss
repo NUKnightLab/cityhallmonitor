@@ -417,5 +417,11 @@ select:focus {
         font-weight: bold;
         font-style: normal;
     }
+    dd .extended-answer {
+        display: none;
+        p:first-child::before {
+            content: "";
+        }
+    }
 }
 /* end purpleline fixes */

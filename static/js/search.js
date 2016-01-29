@@ -91,10 +91,11 @@ function appendSummaryAndStats(total, qualifier, statsData){
         query: query,
         qualifier: qualifier
     })));
-    $('#results-stats').empty();
-    if (total > 0) {
-        $('#results-stats').html(resultStatsTemplate({statsData: statsData}));
-    }
+    /* not using the sidebar right now */
+    //$('#results-stats').empty();
+    //if (total > 0) {
+        //$('#results-stats').html(resultStatsTemplate({statsData: statsData}));
+    //}
 }
 
 var doSearch = function(searchUrl, subscribeUrl) {

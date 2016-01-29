@@ -181,11 +181,13 @@ a.delete-subscription {
   #sort-by p:first-child {
     margin-right: 10px; }
 
-#intro .result.row {
+#search-result-taxonomy .result.row {
   background-color: #f2f2f2; }
-  #intro .result.row h5 {
+  #search-result-taxonomy .result.row h5 {
     margin-top: 5px; }
-  #intro .result.row .explainer {
+  #search-result-taxonomy .result.row p:first-child::before {
+    content: ""; }
+  #search-result-taxonomy .result.row .explainer {
     display: inline-block;
     font-family: "Apres RE", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
@@ -195,15 +197,15 @@ a.delete-subscription {
     background-color: #f7ccb2;
     padding: 2px 10px;
     margin: 0 0 2px 0; }
-    #intro .result.row .explainer.right {
+    #search-result-taxonomy .result.row .explainer.right {
       border-bottom: none;
       border-top: 2px solid #c34528;
       margin: 5px 0 0 0; }
-#intro .explainer ~ .arrow {
+#search-result-taxonomy .explainer ~ .arrow {
   margin-top: 4px; }
-#intro .page-preview {
+#search-result-taxonomy .page-preview {
   padding-top: 10px; }
-#intro .arrow {
+#search-result-taxonomy .arrow {
   display: inline-block;
   margin-top: -19px;
   position: absolute;
@@ -211,7 +213,7 @@ a.delete-subscription {
   margin-left: -38px;
   color: #c34528;
   transform: rotate(-12deg); }
-  #intro .arrow.right {
+  #search-result-taxonomy .arrow.right {
     margin-top: -34px;
     margin-left: 48px; }
 

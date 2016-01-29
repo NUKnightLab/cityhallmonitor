@@ -3,7 +3,7 @@
 import re
 from django.utils import timezone
 from cityhallmonitor.models import Document
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 _re_query = re.compile("(\\\".*?\\\"|(?:\s|^)'.*?'(?:\s|$)| )")
 _re_phrase = re.compile("^'.*'$|^\".*\"$")
@@ -49,15 +49,17 @@ def _common_search_setup(query, ignore_routine=True, date_range=None):
     if ignore_routine:
         where.append("cityhallmonitor_document.is_routine = false")
 
-    if date_range == 'past-year':
-        dt = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=365)
+    if not (date_range is None or date_range == 'any' or date_range == ''):
+        if date_range == 'past-year':
+            dt = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=365)
+        elif date_range == 'past-month':
+            dt = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=30)
+        elif isinstance(date_range, datetime):
+            dt = date_range
+        else:
+            raise Exception('Invalid date_range parameter "%s"' % date_range)
+
         where.append("sort_date >= '%s'" % dt)
-    elif date_range == 'past-month':
-        dt = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=30)
-        where.append("sort_date >= '%s'" % dt)
-    elif not (date_range is None or date_range == 'any' or date_range == ''):
-        raise Exception('Invalid date_range parameter "%s"' \
-            % date_range)
 
     return where, extra_select, order_by, is_ranked
 
@@ -86,3 +88,8 @@ def advanced_search(query, query_title='', query_sponsors='',
             .select_related('matter_attachment', 'matter_attachment__matter')
 
     return qs, is_ranked
+
+def subscription_search(subscription):
+    """Callers are responsible for updating `last_check`"""
+    qs, is_ranked = simple_search(subscription.query, date_range=subscription.last_check)
+    return qs

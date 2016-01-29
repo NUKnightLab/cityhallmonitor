@@ -6,10 +6,9 @@
   {% for doc in documents %}
   <tr>
     <td>
-      <a href="{{ doc.published_url }}">
-        <h5>{{ doc.matter_title }}<h5>
-        <p>{{ doc.name }}</p>
-      </a>
+      <p><a href="{{ doc.published_url }}">{{ doc.matter_title }}
+        ({{ doc.name }}) </a>
+      </p>
       <hr>
     </td>
   </tr>

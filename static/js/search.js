@@ -195,13 +195,17 @@ var doSearch = function(searchUrl, subscribeUrl) {
     }
 
     //used to determine language to display and time period to return
+    var preposition = ' from '; // just a little nuance to the qualifier language
+    if (resultData.query) {
+      preposition = ' in ';
+    }
     switch (resultData.dateRangeType) {
         case 'past-year':
-            resultData.queryQualifier = ' in the past year';
+            resultData.queryQualifier = preposition + 'the past year';
             break;
 
         case 'past-month':
-            resultData.queryQualifier = ' in the last 30 days';
+            resultData.queryQualifier = preposition + 'the last 30 days';
             break;
 
         case 'any':

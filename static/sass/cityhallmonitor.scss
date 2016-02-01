@@ -114,9 +114,11 @@ body.fixed-nav {
     text-align: center;
 }
 #spinner-holder i,
-.num-of-results {
+.num-of-results,
+.query-results {
     color: $orange;
 }
+
 #results-block {
     min-height: 400px;
 }

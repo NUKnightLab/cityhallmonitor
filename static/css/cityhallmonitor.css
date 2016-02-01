@@ -91,7 +91,8 @@ body.fixed-nav #results-summary {
   text-align: center; }
 
 #spinner-holder i,
-.num-of-results {
+.num-of-results,
+.query-results {
   color: #ce4d28; }
 
 #results-block {

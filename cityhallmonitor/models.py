@@ -8,20 +8,23 @@ from django.utils import timezone
 
 # text patterns for "routine" documents
 _routine_text = [
-    'Congratulations extended',
-    'Gratitude extended',
-    'Recognition extended',
-    'Issuance of permits for sign\(s\)',
-    'Sidewalk cafe\(s\) for',
-    'Canopy\(s\) for',
-    'Awning\(s\) for',
-    'Residential permit parking',
-    'Handicapped Parking Permit',
-    'Handicapped permit',
-    'Grant\(s\) of privilege in public way',
-    'Loading/Standing/Tow',
-    'Senior citizens sewer',
-    'Oath of office'
+    re.compile('Condominium claims?', re.I),
+    re.compile('Congratulations extended', re.I),
+    re.compile('Gratitude extended', re.I),
+    re.compile('Recognition extended', re.I),
+    re.compile('Issuance of permits for sign\(s\)', re.I),
+    re.compile('Sidewalk cafe\(s\) for', re.I),
+    re.compile('Canopy\(s\) for', re.I),
+    re.compile('Awning\(s\) for', re.I),
+    re.compile('Residential permit parking', re.I),
+    re.compile('Handicapped Parking Permit', re.I),
+    re.compile('Handicapped permit', re.I),
+    re.compile('Grant\(s\) of privilege in public way', re.I),
+    re.compile('Loading/Standing', re.I),
+    re.compile('Loading Zone', re.I),
+    re.compile('Senior citizens? sewer', re.I),
+    re.compile('Oath of office', re.I),
+    re.compile('Traffic sign', re.I),
 ]
 
 
@@ -502,8 +505,8 @@ class Document(DirtyFieldsModel):
         self.sponsors = ';;;'.join(sponsors)
 
         self.is_routine = False
-        for t in _routine_text:
-            if re.search(r'\b%s\b' % t, self.text, re.I):
+        for pat in _routine_text:
+            if pat.search(self.text):
                 self.is_routine = True
                 break
 

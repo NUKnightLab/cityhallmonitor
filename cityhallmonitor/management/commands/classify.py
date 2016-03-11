@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from cityhallmonitor.models import Document
+import random
 
 # class Document(DirtyFieldsModel):
 #     """
@@ -15,8 +16,11 @@ from cityhallmonitor.models import Document
 #     is_routine = models.BooleanField(default=False)
 
 class Command(BaseCommand):
-    help = 'Adds a classification type to each document/matter.'
+	help = 'Adds a classification type to each document.'
 
-    def handle(self, *args, **options):
-	    for doc in Document.objects.all():
-	    	print(doc.title)
+	def handle(self, *args, **options):
+		wordChoices = ["Transportation", "Claims", "Exemptions", "Permits", "License", "Tax"]
+
+		for doc in Document.objects.all():
+			doc.classification = random.choice(wordChoices)
+			doc.save()

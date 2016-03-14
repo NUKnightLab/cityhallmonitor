@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from cityhallmonitor.models import Document
 import sys
-sys.path.append("/Users/Bomani/Desktop/KnightLab/cityhallmonitor/cityhallmonitor/document_classifier") 
+sys.path.append(sys.path[0] + "/cityhallmonitor/document_classifier") 
 from title_analysis import *
 import random
 

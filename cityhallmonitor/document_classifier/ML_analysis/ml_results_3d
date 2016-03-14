@@ -1,0 +1,68 @@
+Traffic : 4
+Exemptions : 0
+Public_Use : 7
+Recognition : 2
+Permit : 6
+Claims : 5
+Parking : 1
+Development : 3
+Tax : 9
+Proceedings : 8
+Other : 10
+
+
+labels dimensions: (59653,)
+dummy coding done in 0.011691s
+X_train dimensions: (39967, 172)
+y_train dimensions: (39967,)
+Classifying unlabeled data done in: 0.195258s
+             precision    recall  f1-score   support
+
+          0       0.05      0.60      0.10      1001
+          1       0.00      0.00      0.00      3344
+          2       0.19      0.08      0.11      1791
+          3       0.90      0.18      0.30      1016
+          4       0.00      0.00      0.00      1929
+          5       0.01      0.00      0.00      1881
+          6       0.10      0.15      0.12        87
+          7       1.00      0.63      0.78      7920
+          8       0.00      0.00      0.00       359
+          9       0.62      0.30      0.41       269
+         10       0.80      0.81      0.80        89
+
+avg / total       0.48      0.31      0.35     19686
+
+['10 28 015' '25 penalty' '25 penalty added' '28 015' 'added payments'
+ 'added payments received' 'adjacent premises' 'affairs consumer'
+ 'affairs consumer protection' 'agrees hold' 'agrees hold city'
+ 'associated damage' 'associated damage relocation' 'authority given'
+ 'authority given granted' 'business affairs' 'business affairs consumer'
+ 'caused city' 'caused city performing' 'chicago harmless'
+ 'chicago harmless damage' 'city chicago harmless' 'city performing'
+ 'city performing work' 'clerk said' 'conditions ordinance'
+ 'conditions ordinance maintain' 'constructed accordance plans'
+ 'consumer protection' 'costs associated' 'costs associated damage'
+ 'damage relocation' 'damage relocation removal'
+ 'damage relocation replacement' 'department business'
+ 'department business affairs' 'file department business' 'given granted'
+ 'grant privilege' 'granted sum' 'harmless damage'
+ 'harmless damage relocation' 'hold city' 'hold city chicago'
+ 'holder agrees' 'holder agrees hold' 'kept file' 'kept file department'
+ 'maintain use' 'ordinance maintain' 'ordinance maintain use'
+ 'payments received date' 'penalty added' 'penalty added payments'
+ 'performing work' 'performing work public' 'permission authority'
+ 'permission authority given' 'permit holder' 'permit holder agrees'
+ 'premises known' 'private property' 'private property caused'
+ 'privilege shall' 'privilege shall constructed' 'privilege shall shown'
+ 'property caused' 'property caused city' 'provisions section'
+ 'provisions section 10' 'public right' 'public right way' 'public way'
+ 'public way authority' 'relocation removal' 'relocation removal private'
+ 'relocation replacement' 'relocation replacement costs' 'removal private'
+ 'removal private property' 'replacement costs'
+ 'replacement costs associated' 'required provisions' 'said privilege'
+ 'said privilege shall' 'section 10 28' 'shall constructed accordance'
+ 'shall shown' 'shall shown prints' 'shall subject provisions'
+ 'shown prints' 'subject conditions' 'subject conditions ordinance'
+ 'subject provisions' 'subject provisions section' 'terms subject'
+ 'terms subject conditions' 'way authority' 'work public' 'work public way']
+

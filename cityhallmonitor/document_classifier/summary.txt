@@ -1,0 +1,38 @@
+Description of the groups:
+
+1) Public_Use: These are mostly the City of Chicago granting various organizations the right to use public land/property. For example, allowing Corner Bakery to set up sidewalk cafes or have awnings or canopies. Includes "grants of privilege in public way" and "issuance of permits for warrants" to use public areas. Also "vacation of public alleys".
+
+2) Parking: Various types of parking permits (handicapped, residential, industrial). Also includes amendments to the municipal code on laws related to parking.
+
+3) Claims: People and organizations getting refunds from the government. A lot of "condominium claims", sewer and refuse refunds. Also, some payments from the city to firefighters and policemen.
+
+4) Recognition: "Pat on the back" group. Congratulations, gratitude, recognition, welcome, etc extended to various individuals and groups. Also, honorary street designations.
+
+5) Exemptions: Fee waivers, cancellation of fees, free permits for various groups (mostly non-profits and religious organizations). Also includes amendments to the municipal code on laws related to exemptions.
+
+6) Proceedings: Documents related to the proceedings of City Hall. Amendments to the City Council Journal, time fixed for next City Council meeting, oath of office for officials, etc.
+
+7) Traffic: Documents establishing tow zones, buffer zones (for parking), traffic signs and signals, vehicle weight limits, traffic direction of a street, parking prohibited, etc.
+
+8) Permits: Tag day permits, special licenses and permits.
+
+9) Development: Sales of city-owned property, re-zoning laws. Also includes documents that update maps due to re-zoning.
+
+10) Other: "scope of services, budget and management"
+
+11) Tax: Includes documents related to tax increment funding (tifs) and tax incentives.
+
+12) Licenses: Amendments to the municipal code about liquor licenses and package goods licenses
+
+13) Interesting_Proceedings: Letters of support for reparations to victims of torture by chicago police department, special city council meetings, calls for hearings and support for various non-standard things.
+
+14) Interesting_Expenses: Settlement agreements, expenditure of open space impact fee funds for development projects, expenditure of various taxes.
+
+Questions we've had:
+- Should we merge the Parking group with the Traffic group?
+- Should "amendments to the municipal code" be included in the Parking and Exemptions groups?
+- What are tag day permits?
+- What is the Other group about?
+- The Tax group probably has some newsworthy things.
+- Claims group: Are payments to firefighters and policemen realy like refunds and condo claims?
+- What is left in the 8% not included in this group? --could continue sorting "amendment of municipal code" docs thematically

@@ -1,0 +1,48 @@
+labels dimensions: (59435,)
+X_train dimensions: (39821, 613)
+y_train dimensions: (39821,)
+Classifying unlabeled data done in: 0.725857s
+             precision    recall  f1-score   support
+
+          0       0.42      0.99      0.59      3336
+          1       0.76      1.00      0.87        68
+          2       0.96      0.51      0.67      7975
+          3       0.81      0.87      0.84      1899
+          4       1.00      0.91      0.95      1834
+          5       0.88      0.65      0.75       378
+          6       0.43      0.78      0.56        83
+          7       0.84      0.71      0.77       252
+          8       0.99      0.76      0.86       937
+          9       0.98      0.80      0.88      1005
+         10       0.98      0.76      0.85      1847
+
+avg / total       0.86      0.72      0.74     19614
+
+top 100 features
+['access' 'agreement special' 'agreement special service' 'alley access'
+ 'app' 'appointment' 'area' 'assn' 'ave' 'barrier' 'barrier requirement'
+ 'barrier requirement commercial' 'budget' 'budget management'
+ 'budget management agreement' 'cancellation' 'claim' 'commercial'
+ 'commercial driveway' 'commercial driveway alley' 'commission' 'condo'
+ 'condo assn' 'condominium' 'condominium claim' 'driveway' 'driveway alley'
+ 'driveway alley access' 'event' 'event licenses' 'event licenses permits'
+ 'exemption' 'exemption physical' 'exemption physical barrier' 'extended'
+ 'financing' 'financing tif' 'grants' 'grants privilege'
+ 'grants privilege public' 'handicapped' 'handicapped parking'
+ 'handicapped parking permit' 'increment' 'increment financing'
+ 'increment financing tif' 'issuance special' 'issuance special event'
+ 'late' 'licenses' 'licenses permits' 'loading' 'loading standing'
+ 'loading standing tow' 'management agreement'
+ 'management agreement special' 'map' 'member' 'parking' 'parking permit'
+ 'permit' 'physical barrier' 'physical barrier requirement' 'privilege'
+ 'privilege public' 'privilege public way' 'public' 'public way'
+ 'reclassification' 'reclassification map' 'requirement'
+ 'requirement commercial' 'requirement commercial driveway' 'scope'
+ 'scope services' 'scope services budget' 'service area' 'services budget'
+ 'services budget management' 'special' 'special event'
+ 'special event licenses' 'special service' 'special service area'
+ 'standing' 'standing tow' 'standing tow zones' 'tax' 'tax increment'
+ 'tax increment financing' 'tif' 'tow' 'tow zones' 'tribute' 'tribute late'
+ 'way' 'zones' 'zoning' 'zoning reclassification'
+ 'zoning reclassification map']
+

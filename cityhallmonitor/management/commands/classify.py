@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from cityhallmonitor.models import Document
-import sys
-sys.path.append(sys.path[0] + "/cityhallmonitor/document_classifier") 
-from title_analysis import *
+from cityhallmonitor.document_classifier.title_analysis import cleanTitle, classifyTitle
 import random
 
 class Command(BaseCommand):

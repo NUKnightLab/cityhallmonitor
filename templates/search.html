@@ -78,8 +78,8 @@
           <div class="small-12 columns">
             <p class="updated-date"><%= docs[0].sort_date.substring(0,10) %></p>
             <p class="help meta"> <span class="label <%= statusClass %>"><%= docs[0].matter.status %></span></p>
-            <% if (doc.classification != null) { %>
-              <p class="help meta"><span class="label info"><%= doc.classification %></span></p> 
+            <% if (docs[0].classification != null) { %>
+              <p class="help meta"><span class="label info"><%= docs[0].classification %></span></p> 
             <% } %>       
             <p class="help meta label secondary"><i class="fa fa-files-o"></i> Multiple documents</p>
             <h5><%= docs[0].matter.title %></h5>

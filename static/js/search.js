@@ -62,7 +62,9 @@ var resultData = {
   'dateRangeType': '',
   'ignoreRoutine': true,
   'queryQualifier': '',
-  'isRanked': false
+  'isRanked': false,
+  'truncated': false,
+  'fullCount': ''
 }
 
 function populateResults(sortType){
@@ -81,7 +83,7 @@ function populateResults(sortType){
     $(".sort[data-grouptype='" + sortType + "']").siblings().children().removeClass('active');
 }
 
-function appendSummaryAndStats(total, qualifier, statsData){
+function appendSummaryAndStats(total, qualifier, statsData, truncatedFlag, fullCount){
     var query = $('#search-input').val();
     // if ($('#search-input').val() != '') {
     //   query = 'matching <em>' + $('#search-input').val() + '</em>';
@@ -89,7 +91,9 @@ function appendSummaryAndStats(total, qualifier, statsData){
     $('#results-summary').html($(summaryTemplate({
         total: total,
         query: query,
-        qualifier: qualifier
+        qualifier: qualifier,
+        truncated: truncatedFlag,
+        fullCount: fullCount
     })));
     /* not using the sidebar right now */
     //$('#results-stats').empty();
@@ -109,7 +113,9 @@ var doSearch = function(searchUrl, subscribeUrl) {
       'dateRangeType': $('#date-range-type input[type="radio"]:checked').val(),
       'ignoreRoutine': $('#ignore-routine').is(':checked'),
       'queryQualifier': '',
-      'isRanked': false
+      'isRanked': false,
+      'truncated': false,
+      'fullCount':''
     }
     // only rank if there is a search term
     if (resultData.query != "") {
@@ -218,13 +224,17 @@ var doSearch = function(searchUrl, subscribeUrl) {
             query: resultData.query,
             date_range: resultData.dateRangeType,
             ignore_routine: resultData.ignoreRoutine,
-            is_ranked: resultData.isRanked
+            is_ranked: resultData.isRanked,
+            resultData: resultData.truncated,
+            fullCount: resultData.fullCount
         }
     })
     .success(function(data) {
+        resultData.truncated = data.truncated;
+        resultData.fullCount = data.fullCount;
         resultData.documents = data.documents;
         buildDateResults(data);
-        appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
+        appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData, resultData.truncated, resultData.fullCount);
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.
           buildRankResults(data);

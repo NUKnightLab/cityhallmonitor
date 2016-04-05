@@ -29,7 +29,12 @@ def _documents_json(document_list, is_ranked):
     Return JSON representation of documents
     """
     documents = []
-    for r in document_list:
+    truncateFlag = False
+    for counter, r in enumerate(document_list):
+        if(counter == 1000):
+            truncateFlag = True
+            break
+
         attachment = r.matter_attachment
         matter = attachment.matter
         numeric_id,filename = attachment.dc_id.split('-',1)
@@ -49,7 +54,7 @@ def _documents_json(document_list, is_ranked):
                 'type': matter.matter_type.name
             }
         })
-    return JsonResponse({'error': '', 'is_ranked': is_ranked, 'documents': documents})
+    return JsonResponse({'error': '', 'is_ranked': is_ranked, 'documents': documents, 'truncated': truncateFlag})
 
 
 def default_query(request):

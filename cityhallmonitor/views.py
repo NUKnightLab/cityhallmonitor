@@ -30,6 +30,8 @@ def _documents_json(document_list, is_ranked):
     """
     documents = []
     truncateFlag = False
+    documentsQSCount = len(document_list)
+    print(documentsQSCount)
     for counter, r in enumerate(document_list):
         if(counter == 1000):
             truncateFlag = True
@@ -54,7 +56,7 @@ def _documents_json(document_list, is_ranked):
                 'type': matter.matter_type.name
             }
         })
-    return JsonResponse({'error': '', 'is_ranked': is_ranked, 'documents': documents, 'truncated': truncateFlag})
+    return JsonResponse({'error': '', 'is_ranked': is_ranked, 'documents': documents, 'truncated': truncateFlag, 'full_count': documentsQSCount})
 
 
 def default_query(request):

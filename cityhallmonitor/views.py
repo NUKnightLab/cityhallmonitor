@@ -30,7 +30,7 @@ def _documents_json(document_list, is_ranked):
     """
     documents = []
     truncateFlag = False
-    documents_qs_count = len(document_list)
+    documents_qs_count = document_list.count()
     print(documents_qs_count)
     for counter, r in enumerate(document_list):
         if(counter == 1000):

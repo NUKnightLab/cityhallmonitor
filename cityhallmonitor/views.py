@@ -56,7 +56,8 @@ def _documents_json(document_list, is_ranked):
                 'type': matter.matter_type.name
             }
         })
-    return JsonResponse({'error': '', 'is_ranked': is_ranked, 'documents': documents, 'truncated': truncateFlag, 'full_count': documents_qs_count})
+    return JsonResponse({'error': '', 'is_ranked': is_ranked, 'documents': documents, 
+        'truncated': truncateFlag, 'full_count': documents_qs_count})
 
 
 def default_query(request):

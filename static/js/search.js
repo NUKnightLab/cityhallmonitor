@@ -224,9 +224,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
             query: resultData.query,
             date_range: resultData.dateRangeType,
             ignore_routine: resultData.ignoreRoutine,
-            is_ranked: resultData.isRanked,
-            resultData: resultData.truncated,
-            fullCount: resultData.fullCount
+            is_ranked: resultData.isRanked
         }
     })
     .success(function(data) {

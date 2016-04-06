@@ -231,7 +231,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     })
     .success(function(data) {
         resultData.truncated = data.truncated;
-        resultData.fullCount = data.fullCount;
+        resultData.fullCount = data.full_count;
         resultData.documents = data.documents;
         buildDateResults(data);
         appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData, resultData.truncated, resultData.fullCount);

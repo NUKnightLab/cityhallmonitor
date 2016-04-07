@@ -61,7 +61,7 @@ def classifyTitle(title):
                   ShortCircuitClassifier("Claims", ["refund", "claim"]), 
 		  TitleTermClassifier("Exemptions", ["free permit", "cancellation", "exemption", "waiver",
                                                      "refund of fee"]), 
-		  TitleTermClassifier("Public_Use", ["public way", "awning", "sidewalk cafe", "canopy", 
+		  TitleTermClassifier("Public Use", ["public way", "awning", "sidewalk cafe", "canopy", 
 		                                     "issuance of permit", "vacation of public", "public alley",
                                                      "sidewalk sales permit"]), 
                   ShortCircuitClassifier("Proceedings", ["city council journal", "city council meeting", 
@@ -70,16 +70,15 @@ def classifyTitle(title):
                                                  'issuance of special event permit']), 
 		  TitleTermClassifier("Development", ['city-owned propert', 'zoning reclassification',
                                                       'development agreement', 'city-owned building']), 
-		  TitleTermClassifier("Other", ["scope of services, budget and management agreement"]), 
+		  TitleTermClassifier("Services & Budgets", ["scope of services, budget and management agreement"]), 
 		  TitleTermClassifier("Recognition", ["honorary street", "tribute", "extended to", "congratulations",
                                                       "commemoration", "anniversary", "historical landmark designation",
                                                       "declaration of"]), 
 		  TitleTermClassifier("Tax", ["tif", "tax incentive", "tax increment financing", 
                                               "tax increment allocation", "property tax levy", "tifworks",
                                               "special service area"]),
-		  TitleTermClassifier("Interesting_Proceedings", ["call for ", "letter of support"]),
-                  TitleTermClassifier("Licenses", ["liquor license", "package goods license"]),
-                  TitleTermClassifier("Interesting_Expenses", ["expenditure of", "settlement agreement"]),
+		  TitleTermClassifier("Interesting Documents", ["call for ", "letter of support", "expenditure of", "settlement agreement"]),
+                  TitleTermClassifier("Licenses", ["liquor license", "package goods license"])
 
 		  ]
     result = apply_strategies(title, strategies)

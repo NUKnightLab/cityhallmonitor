@@ -478,13 +478,13 @@ class Document(DirtyFieldsModel):
     This is what we actually search on.
     """
     matter_attachment = models.OneToOneField(MatterAttachment, primary_key=True)
-    sort_date = models.DateTimeField(null=True)
+    sort_date = models.DateTimeField(null=True, db_index=True)
     text = models.TextField(blank=True)
     title = models.TextField(blank=True)
     sponsors = models.TextField(blank=True)
     text_vector = TsVectorField()
     text_vector_weighted = TsVectorField()
-    is_routine = models.BooleanField(default=False)
+    is_routine = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
         return "%s [%s]" % \

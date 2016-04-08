@@ -19,7 +19,7 @@ class ShortCircuitClassifier(TitleTermClassifier):
         if (title.startswith("payment ")):
             return "Claims"
         elif ("special city council meeting" in title):
-            return "Interesting_Proceedings"
+            return "Interesting Documents"
         else:
             return self.test_terms(title)
 

@@ -88,6 +88,12 @@ function populateResults(sortType = "rankGroups", filterSelection = null){
     //setTimeout(function() { hideNonPages(); }, 3000);
     $(".sort[data-grouptype='" + sortType + "']").children('.option').addClass('active');
     $(".sort[data-grouptype='" + sortType + "']").siblings().children().removeClass('active');
+    
+    if (filterSelection) {
+        $(".filter[data-grouptype='" + filterSelection + "']").children('.option').addClass('active');
+        $(".filter[data-grouptype='" + filterSelection + "']").siblings().children().removeClass('active');
+    }
+
 }
 
 function appendSummaryAndStats(total, qualifier, statsData){

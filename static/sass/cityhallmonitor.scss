@@ -153,6 +153,9 @@ input#search-subscribe-email {
 #sort-by {
     display: none;
 }
+#filter-by {
+    display: none;
+}
 .alert-box {
     margin: 40px auto;
 }
@@ -205,6 +208,35 @@ a.delete-subscription {
 
 /* Search results list */
 #sort-by {
+    display: none;
+    margin-bottom: 10px;
+    .option {
+        cursor: pointer;
+        color: $link-blue;
+        padding: 5px;
+        margin: 1px;
+        &.active {
+            margin: 0;
+            background-color: #f2f2f2;
+            border: 1px solid #d8d8d8;
+        }
+        &:hover {
+            margin: 0;
+            background-color: #f2f2f2;
+            border: 1px solid #f2f2f2;
+        }
+    }
+    .meta {
+        margin: 0;
+        color: #333;
+    }
+    p {
+        &:first-child {
+            margin-right: 10px;
+        }
+    }
+}
+#filter-by {
     display: none;
     margin-bottom: 50px;
     .option {

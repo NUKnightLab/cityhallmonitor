@@ -65,7 +65,8 @@ var resultData = {
   'isRanked': false
 }
 
-function populateResults(sortType){
+function populateResults(sortType = "rankGroups", filterSelection = null){
+    console.log("Sort Type: " + sortType + ", Filter Type: " + filterSelection)
     typeKeys = Object.keys(resultData[sortType]);
     if (sortType == "dateGroups"){
       typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
@@ -73,7 +74,15 @@ function populateResults(sortType){
     for (i=0; i<typeKeys.length; i++) {
         var resultGroups = resultData[sortType][typeKeys[i]];
         $.each(resultGroups, function(j, g) {
-            appendResult(g);
+            if (filterSelection) {
+                console.log(g.docs[0].classification);
+                if(g.docs[0].classification == filterSelection) {
+                    appendResult(g);
+                }
+            }
+            else {
+                appendResult(g);
+            }
         });
     }
     //setTimeout(function() { hideNonPages(); }, 3000);
@@ -194,6 +203,10 @@ var doSearch = function(searchUrl, subscribeUrl) {
       $('#sort-by').show();
     }
 
+    function showFilterButtons(){
+      $('#filter-by').show();
+    }
+
     //used to determine language to display and time period to return
     var preposition = ' from '; // just a little nuance to the qualifier language
     if (resultData.query) {
@@ -239,6 +252,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
         if (resultData.documents.length > 0 && resultData.isRanked) {
           showSortButtons();
+          showFilterButtons();
         }
         $("#search-results").foundation('reveal', 'reflow');
 
@@ -255,5 +269,12 @@ $('#sort-by .sort').on('click', function(){
   if (resultData.documents.length > 0){
     $('#search-results').empty();
     populateResults($(this).data('grouptype'));
+  }
+});
+
+$('#filter-by .filter').on('click', function(){
+  if (resultData.documents.length > 0){
+    $('#search-results').empty();
+    populateResults(undefined, $(this).data('grouptype'));
   }
 });

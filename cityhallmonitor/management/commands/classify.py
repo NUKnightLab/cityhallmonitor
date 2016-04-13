@@ -7,7 +7,9 @@ class Command(BaseCommand):
 	help = 'Adds a classification type to each document.'
 
 	def handle(self, *args, **options):
-
-		for doc in Document.objects.all():
+		count = 0
+		for doc in Document.objects.filter(classification__isnull=True):
+			count = count + 1
 			doc.classification = classifyTitle(cleanTitle(doc.title))
 			doc.save()
+		print("Classification Null: " + str(count))

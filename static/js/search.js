@@ -4,6 +4,7 @@ var multiResultTemplate = null;
 var resultStatsTemplate = null;
 
 $(function() {
+    filterTemplate = _.template($("#filter-template").html());
     summaryTemplate = _.template($("#summary-template").html());
     singleResultTemplate = _.template($("#single-result-template").html());
     multiResultTemplate = _.template($("#multi-result-template").html());
@@ -18,6 +19,15 @@ $(function() {
 
 var appendResult = function(obj) {
     var statusClass;
+    var unique = {};
+    var distinctClasses = [];
+    resultData.documents.forEach(function (x) {
+      if (!unique[x.classification]) {
+        distinctClasses.push(x.classification);
+        unique[x.classification] = true;
+      }
+    });
+
     switch (obj.docs[0].matter.status){
         case 'Adopted':
         case 'Approved':
@@ -50,6 +60,7 @@ var appendResult = function(obj) {
     } else {
         $(singleResultTemplate({doc: obj.docs[0], statusClass: statusClass})).appendTo('#search-results');
     }
+    $(filterTemplate({ classes: distinctClasses })).appendTo('#results-block');
 };
 
 //Need to store the results of the AJAX call somewhere so we can sort without hitting the database
@@ -88,7 +99,7 @@ function populateResults(sortType = "rankGroups", filterSelection = null){
     //setTimeout(function() { hideNonPages(); }, 3000);
     $(".sort[data-grouptype='" + sortType + "']").children('.option').addClass('active');
     $(".sort[data-grouptype='" + sortType + "']").siblings().children().removeClass('active');
-    
+
     if (filterSelection) {
         $(".filter[data-grouptype='" + filterSelection + "']").children('.option').addClass('active');
         $(".filter[data-grouptype='" + filterSelection + "']").siblings().children().removeClass('active');
@@ -243,6 +254,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
     .success(function(data) {
         resultData.documents = data.documents;
         buildDateResults(data);
+        
         appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.

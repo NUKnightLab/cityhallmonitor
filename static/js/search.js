@@ -1,4 +1,5 @@
 var summaryTemplate = null;
+var filterTemplate = null;
 var singleResultTemplate = null;
 var multiResultTemplate = null;
 var resultStatsTemplate = null;
@@ -18,15 +19,6 @@ $(function() {
 });
 
 var appendResult = function(obj) {
-    var statusClass;
-    var unique = {};
-    var distinctClasses = [];
-    resultData.documents.forEach(function (x) {
-      if (!unique[x.classification]) {
-        distinctClasses.push(x.classification);
-        unique[x.classification] = true;
-      }
-    });
 
     switch (obj.docs[0].matter.status){
         case 'Adopted':
@@ -60,7 +52,6 @@ var appendResult = function(obj) {
     } else {
         $(singleResultTemplate({doc: obj.docs[0], statusClass: statusClass})).appendTo('#search-results');
     }
-    $(filterTemplate({ classes: distinctClasses })).appendTo('#results-block');
 };
 
 //Need to store the results of the AJAX call somewhere so we can sort without hitting the database
@@ -122,6 +113,12 @@ function appendSummaryAndStats(total, qualifier, statsData){
     //if (total > 0) {
         //$('#results-stats').html(resultStatsTemplate({statsData: statsData}));
     //}
+}
+
+function appendFilterOptions(distinctClasses){
+    $('#filter-by').html($(filterTemplate({
+        classes: distinctClasses
+    })));
 }
 
 var doSearch = function(searchUrl, subscribeUrl) {
@@ -256,6 +253,27 @@ var doSearch = function(searchUrl, subscribeUrl) {
         buildDateResults(data);
         
         appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
+        
+        var statusClass;
+        var unique = {};
+        var distinctClasses = [];
+        resultData.documents.forEach(function (x) {
+          if (!unique[x.classification]) {
+            distinctClasses.push(x.classification);
+            unique[x.classification] = true;
+          }
+        });
+
+        appendFilterOptions(distinctClasses)
+
+        $("#results-block .filter").on('click', function(){
+            if (resultData.documents.length > 0){
+                $('#search-results').empty();
+                populateResults(undefined, $(this).data('grouptype'));
+            }
+
+        });
+
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.
           buildRankResults(data);
@@ -287,12 +305,5 @@ $('#sort-by .sort').on('click', function(){
   if (resultData.documents.length > 0){
     $('#search-results').empty();
     populateResults($(this).data('grouptype'));
-  }
-});
-
-$('#filter-by .filter').on('click', function(){
-  if (resultData.documents.length > 0){
-    $('#search-results').empty();
-    populateResults(undefined, $(this).data('grouptype'));
   }
 });

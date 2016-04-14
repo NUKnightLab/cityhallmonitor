@@ -28,10 +28,14 @@
             <div id="results-stats" class="small-4 medium-2 columns"></div>
             <div  class="small-8 medium-8 medium-offset-2 end columns"/>
               <div id="sort-by">
-                <p class="help meta">Sort by: </span>
+                <p class="help meta">Sort by: </p>
                 <p class="help meta sort" id="sort-relevance" data-grouptype="rankGroups"><span class="option active">Relevance</span></p>
                 <p class="help meta sort" id="sort-chron" data-grouptype="dateGroups"><span class="option">Date updated</span></p>
               </div>
+
+              <div id="filter-by">
+              </div>
+
               <div id="search-results">
               </div>
             </div>
@@ -40,8 +44,16 @@
 
 {% endblock content %}
 {% block extra_scripts %}
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+
+    <script type="text/template" id="filter-template">
+      <p class="help meta">Filter by: </p>
+      <% _.each(classes, function(className, key) { %>
+        <p class="help meta filter" id="sort-relevance" data-grouptype="<%= className %>"><span class="option"><%= className %></span></p>
+      <% });%>
+    </script>
+
     <script type="text/template" id="summary-template">
         <div class="small-12 medium-8 medium-offset-2 end columns">
           <% if (query) { %>

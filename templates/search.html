@@ -49,8 +49,8 @@
 
     <script type="text/template" id="filter-template">
       <p class="help meta">Filter by: </p>
-      <% _.each(classes, function(className, key) { %>
-        <p class="help meta filter" id="sort-relevance" data-grouptype="<%= className %>"><span class="option"><%= className %></span></p>
+      <% _.each(classes, function(count, className) { %>
+        <p class="help meta filter" id="sort-relevance" data-grouptype="<%= className %>"><span class="option"><%= className %> (<%= count %>)</span></p>
       <% });%>
     </script>
 

@@ -254,16 +254,19 @@ var doSearch = function(searchUrl, subscribeUrl) {
         
         appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData);
         
-        var statusClass;
-        var unique = {};
-        var distinctClasses = [];
-        resultData.documents.forEach(function (x) {
-          if (!unique[x.classification]) {
-            distinctClasses.push(x.classification);
-            unique[x.classification] = true;
-          }
+        var distinctClasses = {};
+        resultData.documents.forEach(function (doc) {
+            className = doc.classification;
+            if (className != null) {
+                if (!distinctClasses[className]) {
+                    distinctClasses[className] = 1;
+                }
+                else {
+                    distinctClasses[className] += 1;
+                }
+            }
         });
-
+        
         appendFilterOptions(distinctClasses)
 
         $("#results-block .filter").on('click', function(){

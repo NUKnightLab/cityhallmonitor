@@ -218,7 +218,8 @@ var doSearch = function(searchUrl, subscribeUrl) {
     }
 
     function showFilterButtons(){
-      $('#filter-by').show();
+        $('#filter-by').show();
+        $(document).foundation('reflow');
     }
 
     //used to determine language to display and time period to return

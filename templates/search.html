@@ -48,10 +48,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 
     <script type="text/template" id="filter-template">
-      <p class="help meta">Filter by: </p>
+       <button id="filter-button" href="#" data-dropdown="filter-dropdown" aria-controls="drop1" aria-expanded="false" class="button dropdown">All</button><br>
+      <ul id="filter-dropdown" data-dropdown-content class="f-dropdown" aria-hidden="true">        
       <% _.each(classes, function(count, className) { %>
-        <p class="help meta filter" id="sort-relevance" data-grouptype="<%= className %>"><span class="option"><%= className %> (<%= count %>)</span></p>
+        <li data-grouptype="<%= className %>" ><a href="#"><%= className %> (<%= count %>)</a></li>
       <% });%>
+      </ul>
     </script>
 
     <script type="text/template" id="summary-template">

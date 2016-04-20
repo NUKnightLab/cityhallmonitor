@@ -128,6 +128,10 @@ input#search-subscribe-email {
 #filter-by {
   display: none; }
 
+#filter-options {
+  line-height: 1;
+  font-size: 12px; }
+
 .alert-box {
   margin: 40px auto; }
 
@@ -166,7 +170,7 @@ a.delete-subscription {
 /* Search results list */
 #sort-by {
   display: none;
-  margin-bottom: 10px; }
+  margin-bottom: 50px; }
   #sort-by .option {
     cursor: pointer;
     color: #1dacd6;
@@ -188,7 +192,7 @@ a.delete-subscription {
 
 #filter-by {
   display: none;
-  margin-bottom: 50px; }
+  margin-bottom: 10px; }
   #filter-by .option {
     cursor: pointer;
     color: #1dacd6;

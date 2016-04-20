@@ -156,11 +156,10 @@ input#search-subscribe-email {
 #filter-by {
     display: none;
 }
-// #filter-button {
-//   height: 12px;
-//   line-height: 0;
-//   padding: 1.0625rem 2rem 1rem 2rem;
-// }
+#filter-options {
+  line-height: 1;
+  font-size: 12px;
+}
 .alert-box {
     margin: 40px auto;
 }
@@ -214,7 +213,7 @@ a.delete-subscription {
 /* Search results list */
 #sort-by {
     display: none;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
     .option {
         cursor: pointer;
         color: $link-blue;
@@ -243,7 +242,8 @@ a.delete-subscription {
 }
 #filter-by {
     display: none;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
+
     .option {
         cursor: pointer;
         color: $link-blue;

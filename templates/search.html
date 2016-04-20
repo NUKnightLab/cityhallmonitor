@@ -24,22 +24,27 @@
         </div>
         <div id="results-summary" class="row"></div>
 
-        <div id="results-block" class="row">
+        <div id="results-header-block" class="row">
             <div id="results-stats" class="small-4 medium-2 columns"></div>
+            <div class="small-8 medium-5 medium-offset-2 end columns"/>
+              <div id="filter-by">
+              </div>
+            </div>
             <div  class="small-8 medium-8 medium-offset-2 end columns"/>
               <div id="sort-by">
                 <p class="help meta">Sort by: </p>
                 <p class="help meta sort" id="sort-relevance" data-grouptype="rankGroups"><span class="option active">Relevance</span></p>
                 <p class="help meta sort" id="sort-chron" data-grouptype="dateGroups"><span class="option">Date updated</span></p>
               </div>
-
-              <div id="filter-by">
-              </div>
-
-              <div id="search-results">
-              </div>
             </div>
-        </div> <!-- #results-block -->
+        </div>
+        <div class="row">
+          <div class="small-8 medium-8 medium-offset-2 end columns">
+            <div id="search-results">
+            </div>
+          </div>
+        </div>
+        
       </div>
 
 {% endblock content %}
@@ -48,12 +53,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 
     <script type="text/template" id="filter-template">
-       <button id="filter-button" href="#" data-dropdown="filter-dropdown" aria-controls="drop1" aria-expanded="false" class="button dropdown">All</button><br>
-      <ul id="filter-dropdown" data-dropdown-content class="f-dropdown" aria-hidden="true">        
-      <% _.each(classes, function(count, className) { %>
-        <li data-grouptype="<%= className %>" ><a href="#"><%= className %> (<%= count %>)</a></li>
-      <% });%>
-      </ul>
+
+      <label class="help">Select Filter</label>
+        <select id="filter-options">
+          <option value="All">All</option>
+          <% _.each(classes, function(count, className) { %>
+            <option value="<%= className %>"><%= className %> (<%= count %>)</option>
+          <% });%>
+        </select>
     </script>
 
     <script type="text/template" id="summary-template">

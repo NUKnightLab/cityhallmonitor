@@ -270,7 +270,7 @@ var doSearch = function(searchUrl, subscribeUrl) {
         
         appendFilterOptions(distinctClasses)
 
-        $("#results-block .filter").on('click', function(){
+        $("#results-header-block .filter").on('click', function(){
             if (resultData.documents.length > 0){
                 $('#search-results').empty();
                 populateResults(undefined, $(this).data('grouptype'));

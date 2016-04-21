@@ -79,8 +79,15 @@ function populateResults(sortType, filterSelection){
         var resultGroups = resultData[sortType][typeKeys[i]];
         $.each(resultGroups, function(j, g) {
             if (filterSelection != "All") {
-                if(g.docs[0].classification == filterSelection) {
-                    appendResult(g);
+                if(filterSelection != 'None') {
+                    if(g.docs[0].classification == filterSelection) {
+                        appendResult(g);
+                    }
+                }
+                else {
+                    if(g.docs[0].classification == null) {
+                        appendResult(g);
+                    }
                 }
             }
             else {
@@ -282,13 +289,15 @@ var doSearch = function(searchUrl, subscribeUrl) {
         var distinctClasses = {};
         resultData.documents.forEach(function (doc) {
             className = doc.classification;
-            if (className != null) {
-                if (!distinctClasses[className]) {
-                    distinctClasses[className] = 1;
-                }
-                else {
-                    distinctClasses[className] += 1;
-                }
+            
+            if(!className) {
+                className = "None"
+            }
+            if (!distinctClasses[className]) {
+                distinctClasses[className] = 1;
+            }
+            else {
+                distinctClasses[className] += 1;
             }
         });
         

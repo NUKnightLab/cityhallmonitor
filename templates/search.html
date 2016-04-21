@@ -33,8 +33,8 @@
             <div  class="small-8 medium-8 medium-offset-2 end columns"/>
               <div id="sort-by">
                 <p class="help meta">Sort by: </p>
-                <p class="help meta sort" id="sort-relevance" data-grouptype="rankGroups"><span class="option active">Relevance</span></p>
-                <p class="help meta sort" id="sort-chron" data-grouptype="dateGroups"><span class="option">Date updated</span></p>
+                <p class="help meta sort results-options" id="sort-relevance" data-grouptype="rankGroups"><span class="option active">Relevance</span></p>
+                <p class="help meta sort results-options" id="sort-chron" data-grouptype="dateGroups"><span class="option">Date updated</span></p>
               </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
     <script type="text/template" id="filter-template">
 
       <label class="help">Select Filter</label>
-        <select id="filter-options">
+        <select id="filter-options" class="results-options">
           <option value="All">All</option>
           <% _.each(classes, function(count, className) { %>
             <option value="<%= className %>"><%= className %> (<%= count %>)</option>

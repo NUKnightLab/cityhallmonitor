@@ -67,8 +67,12 @@ var resultData = {
   'isRanked': false
 }
 
-function populateResults(sortType = "rankGroups", filterSelection = null){
+function populateResults(sortType, filterSelection){
+    if (typeof(filterSelection) == 'undefined') {
+      filterSelection = "All"
+    }
     console.log("Sort Type: " + sortType + ", Filter Type: " + filterSelection)
+
     typeKeys = Object.keys(resultData[sortType]);
     if (sortType == "dateGroups"){
       typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
@@ -76,8 +80,7 @@ function populateResults(sortType = "rankGroups", filterSelection = null){
     for (i=0; i<typeKeys.length; i++) {
         var resultGroups = resultData[sortType][typeKeys[i]];
         $.each(resultGroups, function(j, g) {
-            if (filterSelection) {
-                console.log(g.docs[0].classification);
+            if (filterSelection != "All") {
                 if(g.docs[0].classification == filterSelection) {
                     appendResult(g);
                 }
@@ -219,7 +222,33 @@ var doSearch = function(searchUrl, subscribeUrl) {
 
     function showFilterButtons(){
         $('#filter-by').show();
-        $(document).foundation('reflow');
+    }
+
+    function applySelectionTriggers() {
+        $('#sort-by .sort').on('click', function(event) {
+            handleSelection(event)
+        });
+        console.log("Applied filter triggers")
+        $('#filter-options').on('change', function(event){
+            handleSelection(event)
+        });
+    }
+
+    function handleSelection(event) {
+        console.log("Called Handle Selection")
+        if (resultData.documents.length > 0){
+            var sortSelection;
+            if( $(event.target).is("#filter-options") ) {
+                sortSelection = $('#sort-by span.active').parent().data('grouptype');
+            }
+            else {
+                sortSelection = $(event.target).parent().data('grouptype');
+            }
+            var filterSelection = $('#filter-options').val();
+            console.log("Filter Selection: " + filterSelection + ", Sort Selection: " + sortSelection)
+            $('#search-results').empty();
+            populateResults(sortSelection, filterSelection);
+        }
     }
 
     //used to determine language to display and time period to return
@@ -293,6 +322,9 @@ var doSearch = function(searchUrl, subscribeUrl) {
         if (resultData.documents.length > 0 && resultData.isRanked) {
           showSortButtons();
           showFilterButtons();
+          console.log('Apply Triggers')
+          applySelectionTriggers();
+
         }
         $("#search-results").foundation('reveal', 'reflow');
 
@@ -304,10 +336,3 @@ var doSearch = function(searchUrl, subscribeUrl) {
         hideLoadingState();
     });
 }; // doSearch
-
-$('#sort-by .sort').on('click', function(){
-  if (resultData.documents.length > 0){
-    $('#search-results').empty();
-    populateResults($(this).data('grouptype'));
-  }
-});

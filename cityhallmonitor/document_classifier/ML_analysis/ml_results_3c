@@ -1,0 +1,70 @@
+Tax : 3
+Traffic : 4
+Proceedings : 7
+Recognition : 5
+Parking : 6
+Permit : 0
+Claims : 8
+Development : 9
+Exemptions : 10
+Other : 1
+Public_Use : 2
+
+
+labels dimensions: (59571,)
+dummy coding done in 0.011308s
+X_train dimensions: (39912, 681)
+y_train dimensions: (39912,)
+Classifying unlabeled data done in: 0.187294s
+             precision    recall  f1-score   support
+
+          0       0.02      0.76      0.04        86
+          1       0.76      0.80      0.78        69
+          2       1.00      0.67      0.80      7949
+          3       0.44      0.51      0.48       268
+          4       0.84      0.94      0.89      1881
+          5       0.98      0.92      0.95      1795
+          6       0.99      0.89      0.94      3370
+          7       0.74      0.67      0.71       377
+          8       0.99      0.78      0.87      1892
+          9       0.52      0.65      0.58       985
+         10       0.51      0.46      0.48       987
+
+avg / total       0.91      0.75      0.82     19659
+
+['18 condominium' '18 condominium cooperative' 'advance 25'
+ 'annum advance 25' 'applicable federal' 'assignment committee finance'
+ 'assignment committee pedestrian' 'assn committee' 'association hereunder'
+ 'association hereunder reported' 'authorized directed issue'
+ 'business address' 'chicago city council' 'city comptroller'
+ 'city comptroller authorized' 'claim title' 'claim title condominium'
+ 'claims liabilities' 'claims liabilities pursuant' 'code chicago grantee'
+ 'committee claims' 'committee claims liabilities' 'committee finance'
+ 'committee pedestrian' 'committee pedestrian traffic'
+ 'comptroller authorized' 'comptroller authorized directed' 'condo assn'
+ 'condominium claim' 'condominium cooperative'
+ 'condominium cooperative refuse' 'cooperative refuse'
+ 'cooperative refuse reimbursement' 'copy resolution' 'days exceptions'
+ 'defined section' 'described section' 'directed issue payment'
+ 'directly indirectly' 'emanuel mayor' 'favorable investigation'
+ 'favorable investigation committee' 'federal state' 'federal state local'
+ 'handicapped parking' 'handicapped parking permit' 'hereunder reported'
+ 'hereunder reported attached' 'hours times' 'hours times days'
+ 'investigation committee' 'investigation committee claims' 'issue payment'
+ 'issue payment favorable' 'joint venture' 'legal entity'
+ 'liabilities pursuant' 'loading standing' 'loading standing tow'
+ 'local government' 'mayor members' 'ordered city'
+ 'ordered city comptroller' 'ordinance title handicapped'
+ 'ordinance title loading' 'parking permit' 'payment favorable'
+ 'payment favorable investigation' 'pedestrian traffic'
+ 'pedestrian traffic safety' 'person entity' 'prohibition parking'
+ 'refuse reimbursement' 'reported attached' 'resolution title'
+ 'resolved mayor' 'resolved mayor members' 'resolved suitable'
+ 'resolved suitable copy' 'set forth' 'standing tow' 'standing tow zone'
+ 'state local' 'suitable copy' 'suitable copy resolution' 'times days'
+ 'times days exceptions' 'title condominium' 'title handicapped'
+ 'title handicapped parking' 'title loading' 'title loading standing'
+ 'tow zone' 'traffic safety' 'type claim' 'type claim title'
+ 'type resolution' 'type resolution title' 'way authority given'
+ 'way shall subject']
+

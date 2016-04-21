@@ -1,9 +1,11 @@
 var summaryTemplate = null;
+var filterTemplate = null;
 var singleResultTemplate = null;
 var multiResultTemplate = null;
 var resultStatsTemplate = null;
 
 $(function() {
+    filterTemplate = _.template($("#filter-template").html());
     summaryTemplate = _.template($("#summary-template").html());
     singleResultTemplate = _.template($("#single-result-template").html());
     multiResultTemplate = _.template($("#multi-result-template").html());
@@ -17,7 +19,7 @@ $(function() {
 });
 
 var appendResult = function(obj) {
-    var statusClass;
+
     switch (obj.docs[0].matter.status){
         case 'Adopted':
         case 'Approved':
@@ -67,7 +69,10 @@ var resultData = {
   'fullCount': ''
 }
 
-function populateResults(sortType){
+function populateResults(sortType, filterSelection){
+    if (typeof(filterSelection) == 'undefined') {
+      filterSelection = "All"
+    }
     typeKeys = Object.keys(resultData[sortType]);
     if (sortType == "dateGroups"){
       typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
@@ -75,12 +80,32 @@ function populateResults(sortType){
     for (i=0; i<typeKeys.length; i++) {
         var resultGroups = resultData[sortType][typeKeys[i]];
         $.each(resultGroups, function(j, g) {
-            appendResult(g);
+            if (filterSelection != "All") {
+                if(filterSelection != 'None') {
+                    if(g.docs[0].classification == filterSelection) {
+                        appendResult(g);
+                    }
+                }
+                else {
+                    if(g.docs[0].classification == null) {
+                        appendResult(g);
+                    }
+                }
+            }
+            else {
+                appendResult(g);
+            }
         });
     }
     //setTimeout(function() { hideNonPages(); }, 3000);
     $(".sort[data-grouptype='" + sortType + "']").children('.option').addClass('active');
     $(".sort[data-grouptype='" + sortType + "']").siblings().children().removeClass('active');
+
+    if (filterSelection) {
+        $(".filter[data-grouptype='" + filterSelection + "']").children('.option').addClass('active');
+        $(".filter[data-grouptype='" + filterSelection + "']").siblings().children().removeClass('active');
+    }
+
 }
 
 function appendSummaryAndStats(total, qualifier, statsData, truncatedFlag, fullCount){
@@ -100,6 +125,12 @@ function appendSummaryAndStats(total, qualifier, statsData, truncatedFlag, fullC
     //if (total > 0) {
         //$('#results-stats').html(resultStatsTemplate({statsData: statsData}));
     //}
+}
+
+function appendFilterOptions(distinctClasses){
+    $('#filter-by').html($(filterTemplate({
+        classes: distinctClasses
+    })));
 }
 
 var doSearch = function(searchUrl, subscribeUrl) {
@@ -200,6 +231,34 @@ var doSearch = function(searchUrl, subscribeUrl) {
       $('#sort-by').show();
     }
 
+    function showFilterButtons(){
+        $('#filter-by').show();
+    }
+
+    function applySelectionTriggers() {
+        $('#sort-by .sort').on('click', function(event) {
+            handleSelection(event)
+        });
+        $('#filter-options').on('change', function(event){
+            handleSelection(event)
+        });
+    }
+
+    function handleSelection(event) {
+        if (resultData.documents.length > 0){
+            var sortSelection;
+            if( $(event.target).is("#filter-options") ) {
+                sortSelection = $('#sort-by span.active').parent().data('grouptype');
+            }
+            else {
+                sortSelection = $(event.target).parent().data('grouptype');
+            }
+            var filterSelection = $('#filter-options').val();
+            $('#search-results').empty();
+            populateResults(sortSelection, filterSelection);
+        }
+    }
+
     //used to determine language to display and time period to return
     var preposition = ' from '; // just a little nuance to the qualifier language
     if (resultData.query) {
@@ -233,6 +292,32 @@ var doSearch = function(searchUrl, subscribeUrl) {
         resultData.documents = data.documents;
         buildDateResults(data);
         appendSummaryAndStats(resultData.documents.length, resultData.queryQualifier, resultData.sidebarData, resultData.truncated, resultData.fullCount);
+        
+        var distinctClasses = {};
+        resultData.documents.forEach(function (doc) {
+            className = doc.classification;
+            
+            if(!className) {
+                className = "None"
+            }
+            if (!distinctClasses[className]) {
+                distinctClasses[className] = 1;
+            }
+            else {
+                distinctClasses[className] += 1;
+            }
+        });
+        
+        appendFilterOptions(distinctClasses)
+
+        $("#results-header-block .filter").on('click', function(){
+            if (resultData.documents.length > 0){
+                $('#search-results').empty();
+                populateResults(undefined, $(this).data('grouptype'));
+            }
+
+        });
+
         if (data.is_ranked) {
           //NOTE: are results in ranked order already? If so, we just need to create meta.
           buildRankResults(data);
@@ -247,6 +332,9 @@ var doSearch = function(searchUrl, subscribeUrl) {
         }
         if (resultData.documents.length > 0 && resultData.isRanked) {
           showSortButtons();
+          showFilterButtons();
+          applySelectionTriggers();
+
         }
         $("#search-results").foundation('reveal', 'reflow');
 
@@ -258,10 +346,3 @@ var doSearch = function(searchUrl, subscribeUrl) {
         hideLoadingState();
     });
 }; // doSearch
-
-$('#sort-by .sort').on('click', function(){
-  if (resultData.documents.length > 0){
-    $('#search-results').empty();
-    populateResults($(this).data('grouptype'));
-  }
-});

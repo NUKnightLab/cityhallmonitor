@@ -484,7 +484,8 @@ class Document(DirtyFieldsModel):
     sponsors = models.TextField(blank=True)
     text_vector = TsVectorField()
     text_vector_weighted = TsVectorField()
-    is_routine = models.BooleanField(default=False, db_index=True)
+    is_routine = models.BooleanField(default=False)
+    classification = models.TextField(null=True)
 
     def __str__(self):
         return "%s [%s]" % \

@@ -54,7 +54,8 @@ def _documents_json(document_list, is_ranked):
                 'title': matter.title,
                 'status': matter.matter_status.name,
                 'type': matter.matter_type.name
-            }
+            },
+            'classification': r.classification
         })
     return JsonResponse({'error': '', 'is_ranked': is_ranked, 'documents': documents, 
         'truncated': truncateFlag, 'full_count': documents_qs_count})

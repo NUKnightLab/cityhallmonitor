@@ -1,0 +1,73 @@
+Public_Use : 0
+Recognition : 4
+Exemptions : 1
+Other : 5
+Proceedings : 6
+Permit : 2
+Traffic : 10
+Claims : 7
+Development : 8
+Parking : 9
+Tax : 3
+
+
+labels dimensions: (59447,)
+dummy coding done in 0.011733s
+X_train dimensions: (39829, 8068)
+y_train dimensions: (39829,)
+/home/weimachine/.virtualenvs/cityhallmonitor/lib/python3.4/site-packages/sklearn/metrics/classification.py:1074: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Classifying unlabeled data done in: 0.464689s
+             precision    recall  f1-score   support
+
+          0       0.53      0.99      0.69      7895
+          1       0.17      0.03      0.06       989
+          2       0.33      0.56      0.41        88
+          3       0.81      0.30      0.44       260
+          4       0.99      0.92      0.95      1771
+          5       0.28      0.83      0.42        66
+          6       1.00      0.68      0.81       358
+          7       1.00      0.77      0.87      1851
+          8       0.85      0.66      0.75       992
+          9       0.00      0.00      0.00      3387
+         10       0.00      0.00      0.00      1961
+
+avg / total       0.48      0.61      0.51     19618
+
+['18 condominium' '18 condominium cooperative' '92 610' 'agents partners'
+ 'appointment title' 'authorized directed issue' 'chapter 156'
+ 'city comptroller' 'city comptroller authorized' 'city policy'
+ 'city remedies' 'claim title' 'claim title condominium'
+ 'claims liabilities' 'claims liabilities pursuant' 'commerce successors'
+ 'committee claims' 'committee claims liabilities' 'competent jurisdiction'
+ 'comptroller authorized' 'comptroller authorized directed'
+ 'condominium claim' 'condominium cooperative'
+ 'condominium cooperative refuse' 'contractor employees'
+ 'contractor subcontractor' 'contractors subcontractors'
+ 'cooperative refuse' 'cooperative refuse reimbursement' 'copy resolution'
+ 'court competent' 'court competent jurisdiction' 'debarment declared'
+ 'debarment declared ineligible' 'debarred suspended'
+ 'debarred suspended proposed' 'declared ineligible'
+ 'declared ineligible voluntarily' 'denied persons'
+ 'directed issue payment' 'economic disclosure'
+ 'economic disclosure statement' 'effective immediately' 'employee shall'
+ 'et seq' 'failure comply' 'favorable investigation'
+ 'favorable investigation committee' 'fully set' 'fully set forth'
+ 'hereunder reported' 'hereunder reported attached' 'immediately expiring'
+ 'incorporated reference' 'ineligible voluntarily'
+ 'investigation committee' 'investigation committee claims' 'issue payment'
+ 'issue payment favorable' 'liabilities pursuant' 'living wage'
+ 'living wage ordinance' 'maintained office' 'mayor members'
+ 'office foreign' 'office foreign assets' 'officials agents' 'ordered city'
+ 'ordered city comptroller' 'parties agree' 'payment favorable'
+ 'payment favorable investigation' 'person having' 'proposed debarment'
+ 'proposed debarment declared' 'real personal' 'refuse reimbursement'
+ 'reported attached' 'resolution title' 'resolved mayor'
+ 'resolved mayor members' 'resolved suitable' 'resolved suitable copy'
+ 'section 92 610' 'services provided' 'specially designated'
+ 'suitable copy' 'suitable copy resolution' 'suspended proposed'
+ 'title condominium' 'treasury bureau' 'type appointment'
+ 'type appointment title' 'type claim' 'type claim title' 'type resolution'
+ 'type resolution title' 'voidable city' 'voluntarily excluded'
+ 'wage ordinance']
+

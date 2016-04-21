@@ -1,0 +1,35 @@
+Machine learning with supervised data set
+
+Set up:
+Title analysis applies (good) classification labels to ~94% of my data. This gives me a data set with labels. The remaining 6% don't have labels and are more disorganized/difficult to classify than the typical new incoming document. 
+
+I will try supervised learning techniques to train and test a classifier using the 94% of the data that has labels. (Train with 66% of the 94%, and test with 33% of the 94%.) If the test-set error rate is low, then I will use the classifier to try to put the remaining 6% into groups.
+
+New documents could be organized by first applying title analysis, and then the classifier (if title analysis fails).
+
+Things I've tried and learned:
+
+(1) Bayes Classifier: I want to use a Bayes classifier because it gives the probability of being in a group. It's possible that a significant portion of the remaining 6% does not belong to any of the given classifications. With a probability, I can say, "assign this document label X if prob(label X) > cutoff value, otherwise consider it 'unsorted'".
+
+(2) TFIDFvectorizer with Bayes Classifier: Tried Tfidfvectorizer(ngram_range = (1,3), max_df=0.4, min_df=0.002), SelectKBest(k=150 features), MultinomialNB, cutoff value = 0.5, data = titles.
+This sorted 90% of
+ the 80%, but was only good for identifying typos or variations of keywords I was already using in title analysis. The classifier formed groups among the new data that reflected the relative sizes of the groups in the training data. This made a huge Public_Use group, but the documents in this group weren't "public use". 
+(2b) tried above with flat priors on MultinomailNB and clean titles: only sorted ~200 documents (cutoff = 0.5). Precision = 0.86, Recall = 0.72 on labeled test set. The classifier classified well these groups: Tax, Development, Parking, Recognition--but these groups were quite small, totaling <50 documents. Not worth it to implement large scale.
+
+(3a) Tried Tfidfvectorizer(ngram_range = (1,3), min_df = 0.01, max_df = 0.1), SelectKBest(k=100 features), MultinomialNB, cutoff value = 0.5, data = full text.
+The features did not look particularly meaningful (see below). (For the same set up, but min_df = 0.002, max_df = 0.25, I had too many common words and a couple of rare words/numbers.) The classifier put only 5-10 documents into groups.
+(3b) Tried (3a) with ngram_range = (2,3) and flat priors on MultinomialNB: vectorizer found 8000 features, precision = 0.48, recall = 0.61 on labeled test set. Classifier classified only 200 docs, all in Recognition (but did a good job with these). Low test-set accuracy suggests that we shouldn't bother lowering the cut-off.
+(3c) Raise DFs from previous trial (features too rare). Tried Tfidfvectorizer(ngram_range = (1,3), min_df = 0.05, max_df = 0.2), SelectKBest(k=100 features), MultinomialNB(flat priors), cutoff value = 0.5, data = full text. Classifier classified 800 docs, did well only in Traffic and Development. Features looked too common.
+(3d) Raise DFs from previous trial just to see what features I get. min_df = 0.25, max_df = 0.5. Results: not good, low precision/recall on test set. Features not indicative.
+-Note: ngram_range = (2,4) took more than 15 min, so I didn't do it.
+
+(4) Time issues: Tfidfvectorizer takes a really long time (460 sec). Tried HashingVectorizer on the full text--took 260 sec, but used 10^6 features in the vectorizer and had only a 53% test-set precision.
+
+
+OTHER THINGS TO TRY:
+- try classification on full text: not likely to produce good results given the features
+- play with ngram length to get more meaningful features
+- maybe take a sample of the docs to run code faster
+- is there another classifier that would give me probabilities but wouldn't reflect the relative sizes of the existing groups?--fix prior probabilities
+
+

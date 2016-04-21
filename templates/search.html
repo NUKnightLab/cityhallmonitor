@@ -24,24 +24,45 @@
         </div>
         <div id="results-summary" class="row"></div>
 
-        <div id="results-block" class="row">
+        <div id="results-header-block" class="row">
             <div id="results-stats" class="small-4 medium-2 columns"></div>
-            <div  class="small-8 medium-8 medium-offset-2 end columns"/>
-              <div id="sort-by">
-                <p class="help meta">Sort by: </span>
-                <p class="help meta sort" id="sort-relevance" data-grouptype="rankGroups"><span class="option active">Relevance</span></p>
-                <p class="help meta sort" id="sort-chron" data-grouptype="dateGroups"><span class="option">Date updated</span></p>
-              </div>
-              <div id="search-results">
+            <div class="small-8 medium-5 medium-offset-2 end columns"/>
+              <div id="filter-by">
               </div>
             </div>
-        </div> <!-- #results-block -->
+            <div  class="small-8 medium-8 medium-offset-2 end columns"/>
+              <div id="sort-by">
+                <p class="help meta">Sort by: </p>
+                <p class="help meta sort results-options" id="sort-relevance" data-grouptype="rankGroups"><span class="option active">Relevance</span></p>
+                <p class="help meta sort results-options" id="sort-chron" data-grouptype="dateGroups"><span class="option">Date updated</span></p>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="small-8 medium-8 medium-offset-2 end columns">
+            <div id="search-results">
+            </div>
+          </div>
+        </div>
+        
       </div>
 
 {% endblock content %}
 {% block extra_scripts %}
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+
+    <script type="text/template" id="filter-template">
+
+      <label class="help">Select Filter</label>
+        <select id="filter-options" class="results-options">
+          <option value="All">All</option>
+          <% _.each(classes, function(count, className) { %>
+            <option value="<%= className %>"><%= className %> (<%= count %>)</option>
+          <% });%>
+        </select>
+    </script>
+
     <script type="text/template" id="summary-template">
         <div class="small-12 medium-8 medium-offset-2 end columns">
           <% if (truncated) { %>
@@ -87,6 +108,10 @@
           <div class="small-12 columns">
             <p class="updated-date"><%= docs[0].sort_date.substring(0,10) %></p>
             <p class="help meta"> <span class="label <%= statusClass %>"><%= docs[0].matter.status %></span></p>
+            <% if (docs[0].classification != null) { 
+              var anchor = "/glossary#" + docs[0].classification.toLowerCase().replace(" ", "_") %>
+              <a href="<%= anchor %>" target="_blank"><p class="help meta"><span class="label info"><%= docs[0].classification %></span></p></a> 
+            <% } %>       
             <p class="help meta label secondary"><i class="fa fa-files-o"></i> Multiple documents</p>
             <h5><%= docs[0].matter.title %></h5>
           </div>
@@ -103,11 +128,15 @@
     </script>
 
     <script type="text/template" id="single-result-template">
-      <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
         <div class="result single row" id="<%= doc.matter.id %>">
             <div class="small-12 columns">
               <p class="updated-date"><%= doc.sort_date.substring(0,10) %></p>
               <p class="help meta"><span class="label <%= statusClass %>"><%= doc.matter.status %></span></p>
+              <% if (doc.classification != null) {
+               var anchor = "/glossary#" + doc.classification.toLowerCase().replace(" ", "_") %>
+                <p class="help meta"><a href="<%= anchor %>" target="_blank"><span class="label info"><%= doc.classification %></span></a></p>
+              <% } %>
+              <a href="/documents/<%= doc.id %>" data-document="<%= doc.dc_id %>" class="read-more">
                   <h5><%= doc.matter.title %></h5>
                   <div class="page-preview">
                       <img src="<%= doc.base_thumbnail_url %>-p1-small.gif">
@@ -119,9 +148,9 @@
                         <div class="page-count"><%= doc.page_count - 3 %> <span>more pages</span></div>
                       <% } %>
                   </div>
+              </a>
             </div>
         </div>
-      </a>
     </script>
 
     <script type="text/template" id="result-stats-sidebar">

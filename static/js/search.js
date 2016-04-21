@@ -71,8 +71,6 @@ function populateResults(sortType, filterSelection){
     if (typeof(filterSelection) == 'undefined') {
       filterSelection = "All"
     }
-    console.log("Sort Type: " + sortType + ", Filter Type: " + filterSelection)
-
     typeKeys = Object.keys(resultData[sortType]);
     if (sortType == "dateGroups"){
       typeKeys.sort(function(a,b) { return (b < a) ? -1 : 1 });
@@ -228,14 +226,12 @@ var doSearch = function(searchUrl, subscribeUrl) {
         $('#sort-by .sort').on('click', function(event) {
             handleSelection(event)
         });
-        console.log("Applied filter triggers")
         $('#filter-options').on('change', function(event){
             handleSelection(event)
         });
     }
 
     function handleSelection(event) {
-        console.log("Called Handle Selection")
         if (resultData.documents.length > 0){
             var sortSelection;
             if( $(event.target).is("#filter-options") ) {
@@ -245,7 +241,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 sortSelection = $(event.target).parent().data('grouptype');
             }
             var filterSelection = $('#filter-options').val();
-            console.log("Filter Selection: " + filterSelection + ", Sort Selection: " + sortSelection)
             $('#search-results').empty();
             populateResults(sortSelection, filterSelection);
         }
@@ -322,7 +317,6 @@ var doSearch = function(searchUrl, subscribeUrl) {
         if (resultData.documents.length > 0 && resultData.isRanked) {
           showSortButtons();
           showFilterButtons();
-          console.log('Apply Triggers')
           applySelectionTriggers();
 
         }

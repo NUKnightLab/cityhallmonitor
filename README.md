@@ -131,3 +131,5 @@ Install SASS if you need it: http://sass-lang.com/install
 From your root `cityhallmonitor` project directory, run `sass --watch static/sass:static/css`
 
 Make your changes in `cityhallmonitor.scss` and the compiler will update your CSS file when you save.
+
+.

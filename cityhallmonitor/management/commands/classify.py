@@ -8,16 +8,8 @@ class Command(BaseCommand):
 
 	def handle(self, *args, **options):
 		count = 0
-		while True:
+		for doc in Document.objects.filter(classification__isnull=True).only('title'):
 			count = count + 1
-			docs = Document.objects.filter(classification__isnull=True)[:1]
-			doc = docs[0]
-			if(doc):
-				doc.classification = classifyTitle(cleanTitle(doc.title))
-				doc.save()
-			else:
-				break
-			if (count%1000 == 0):
-				print("Total Documents Classified: {}".format(count))
-		print("Classification Null: " + str(count))
-		
+			doc.classification = classifyTitle(cleanTitle(doc.title))
+			doc.save()
+		print("Documents w/ Null Classications That Are Now Updated: " + str(count))

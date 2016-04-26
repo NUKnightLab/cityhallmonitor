@@ -528,7 +528,10 @@ class Document(DirtyFieldsModel):
 
     def save(self, *args, update_text=False, **kwargs):
         """Override to update text_vector"""
-        text_updated = update_text or (self.text != self._original_state['text'])
+        
+        text_updated = False
+        if 'text' in self._original_state:
+            text_updated = update_text or (self.text != self._original_state['text'])
         super(Document, self).save(*args, **kwargs)
 
         if text_updated:

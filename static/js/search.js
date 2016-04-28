@@ -307,8 +307,15 @@ var doSearch = function(searchUrl, subscribeUrl) {
                 distinctClasses[className] += 1;
             }
         });
-        
-        appendFilterOptions(distinctClasses)
+
+        var orderedDistinct = [];
+        for (var key in distinctClasses) orderedDistinct.push([key, distinctClasses[key]]);
+        orderedDistinct.sort(function(a, b) {
+            a = a[0];
+            b = b[0];
+            return a < b ? -1 : (a > b ? 1 : 0);
+        });        
+        appendFilterOptions(orderedDistinct)
 
         $("#results-header-block .filter").on('click', function(){
             if (resultData.documents.length > 0){

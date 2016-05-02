@@ -132,5 +132,3 @@ From your root `cityhallmonitor` project directory, run `sass --watch static/sas
 
 Make your changes in `cityhallmonitor.scss` and the compiler will update your CSS file when you save.
 
-
-testing

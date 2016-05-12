@@ -18,6 +18,7 @@ $(function() {
     buildDateUI();
 });
 
+//A function for appending results to the DOM
 var appendResult = function(obj) {
 
     switch (obj.docs[0].matter.status){

@@ -1,0 +1,17 @@
+project_name: cityhallmonitor
+service_name: cityhallmonitor
+port: 9017
+staticdir: "{{ ansible_env.TMPDIR }}/cityhallmonitor_static"
+virtualenv: "{{ ansible_env.WORKON_HOME }}/knightlab/{{ project_name }}"
+
+install_root: /home/apps/sites
+deploy_dir: "{{ install_root }}/{{ project_name }}"
+project_repo: git@github.com:NUKnightLab/cityhallmonitor.git
+
+system_packages:
+  - git
+  - nginx
+  - postgresql
+  - python-pip
+  - python-dev
+  - python-psycopg2

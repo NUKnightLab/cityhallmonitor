@@ -7,6 +7,7 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
+import os
 from os.path import abspath, dirname, join
 
 
@@ -26,7 +27,7 @@ USE_TZ = True
 
 # Application definition
 
-STATIC_ROOT = '/tmp/cityhallmonitor-static'
+STATIC_ROOT = os.path.join(os.environ['TMPDIR'], 'cityhallmonitor_static')
 
 STATICFILES_DIRS = (
     join(PROJECT_ROOT, 'static'),

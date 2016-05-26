@@ -1,3 +1,3 @@
-domain: cityhallmonitor.knilab.com
-staticbucket: media.knilab.com/cityhallmonitor
-gunicorn_reload: True
+domain: "{{ project_name }}.knilab.com"
+staticbucket: "media.knilab.com/{{ project_name }}"
+gunicorn_reload: True # generally True on staging only

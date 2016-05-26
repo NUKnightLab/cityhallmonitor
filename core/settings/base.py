@@ -27,7 +27,7 @@ USE_TZ = True
 
 # Application definition
 
-STATIC_ROOT = os.path.join(os.environ['TMPDIR'], 'cityhallmonitor_static')
+STATIC_ROOT = os.path.join(os.environ.get('TMPDIR', '/tmp'), 'cityhallmonitor_static')
 
 STATICFILES_DIRS = (
     join(PROJECT_ROOT, 'static'),

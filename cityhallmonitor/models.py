@@ -526,9 +526,12 @@ class Document(DirtyFieldsModel):
         r._set_dependent_fields()
         r.save()
 
-    def save(self, *args, update_text=False, **kwargs):
+    def save(self, *args, **kwargs):
         """Override to update text_vector"""
-        
+        update_text = False
+        if 'update_text' in kwargs:
+            update_text = kwargs['update_text']
+            del(kwargs['update_text'])
         text_updated = False
         if 'text' in self._original_state:
             text_updated = update_text or (self.text != self._original_state['text'])

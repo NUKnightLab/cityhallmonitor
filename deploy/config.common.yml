@@ -1,5 +1,5 @@
 project_name: cityhallmonitor
-service_name: cityhallmonitor
+service_name: apps/cityhallmonitor
 port: 9017
 staticdir: "{{ ansible_env.TMPDIR }}/cityhallmonitor_static"
 virtualenv: "/home/apps/env/{{ project_name }}"

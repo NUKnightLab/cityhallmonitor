@@ -1,2 +1,3 @@
 domain: cityhallmonitor.knightlab.com
-staticbucket: test.knilab.com
+staticbucket: media.knilab.com/cityhallmonitor
+gunicorn_reload: False

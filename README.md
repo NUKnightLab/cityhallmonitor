@@ -151,3 +151,5 @@ Example:
 `git deploy stg --migrate` merges master into stg and deploys code to the stg
 application and work servers, executes database migrations, and restarts
 the cityhallmonitor application service.
+
+Test

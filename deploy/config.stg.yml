@@ -1,5 +1,3 @@
 domain: cityhallmonitor.knilab.com
-staticbucket: test.knilab.com
-#staticbucket: media.knilab.com/cityhallmonitor
-gunicorn_env:
-  - DJANGO_SETTINGS_MODULE=core.settings.{{ env }}
+staticbucket: media.knilab.com/cityhallmonitor
+gunicorn_reload: True

@@ -1,5 +1,5 @@
 domain: "{{ project_name }}.knightlab.com"
-staticbucket: "media.knilab.com/{{ project_name }}"
+staticbucket: "media.knightlab.com/{{ project_name }}"
 gunicorn_reload: False
 ssl:
   ssl_certificate: /etc/nginx/ssl/knightlab/knightlab-bundle.crt

@@ -18,4 +18,4 @@ wsgi_env_stg:
 # env vars can be put into init_env (the upstart config) or wsgi_env (the wsgi
 # file). Django projects need them in the wsgi file in order for databse
 # migration to work.
-wsgi_env: "{{ init_env_common|combine(init_env_stg) }}"
+wsgi_env: "{{ wsgi_env_common|combine(wsgi_env_stg) }}"

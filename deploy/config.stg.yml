@@ -4,3 +4,15 @@ gunicorn_reload: True # generally True on staging only
 ssl:
   ssl_certificate: /etc/nginx/ssl/knilab/knilab-bundle.crt
   ssl_certificate_key: /etc/nginx/ssl/knilab/knilab-com.key
+
+init_env_stg:
+  ALLOWED_HOSTS: "cityhallmonitor.knilab.com"
+  STATIC_URL: '//media.knilab.com/cityhallmonitor/'
+  DEFAULT_DB_ENGINE: 'django.db.backends.postgresql_psycopg2'
+  DEFAULT_DB_NAME: 'cityhallmonitor_{{ env }}'
+  DEFAULT_DB_USER: '{{ vault_default_db_user }}'
+  DEFAULT_DB_PASSWORD: '{{ vault_default_db_password }}'
+  DEFAULT_DB_HOST: 'rds-pgis.knilab.com'
+  DEFAULT_DB_PORT: '5432'
+
+init_env: "{{ init_env_common|combine(init_env_stg) }}"

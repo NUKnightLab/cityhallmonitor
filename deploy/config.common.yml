@@ -1,7 +1,15 @@
 project_name: cityhallmonitor
 
-gunicorn_env:
-  - DJANGO_SETTINGS_MODULE=core.settings.{{ env }}
+init_env_common:
+  DJANGO_SETTINGS_MODULE: "core.settings.{{ env }}"
+  SECRET_KEY: "{{ vault_secret_key }}"
+  DOCUMENT_CLOUD_USERNAME: "{{ vault_document_cloud_username }}"
+  DOCUMENT_CLOUD_PASSWORD: "{{ vault_document_cloud_password }}"
+  DOCUMENT_CLOUD_ACCOUNT: "{{ vault_document_cloud_account }}"
+  DOCUMENT_CLOUD_PROJECT: "{{ vault_document_cloud_project }}"
+  EMAIL_HOST_USER: "{{ vault_email_host_user }}"
+  EMAIL_HOST_PASSWORD: "{{ vault_email_host_password }}"
+
 port: 9017
 python: python3
 type: django

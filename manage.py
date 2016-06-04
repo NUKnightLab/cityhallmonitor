@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 import os
+import re
 import sys
 import yaml
 
 PROJECT_NAME = 'cityhallmonitor'
 WARNING = '\033[93m'
 ENDC = '\033[0m'
+ENV_REGEX = re.compile(r'^\s*env\s+(.*?)=(.*)$')
 
 
 def get_dev_secrets():
@@ -23,11 +25,14 @@ def get_init_env():
     r = {}
     try:
         with open('/etc/init/apps/%s.conf' % PROJECT_NAME) as f:
-            for line in f:
-                if line.startswith('env '):
-                    line = line[4:].split('=')
-                    assert len(line) == 2
-                    r[line[0]] = line[1]
+            for match in ENV_REGEX.findall(f.read()):
+                r[match(1)] = r[match(2)]
+            #for line in f:
+            #    if line.startswith('env '):
+            #        line = line[4:].split('=')
+            #        # [1:-1] slice b/c we can't strip quote characters in
+            #        # case e.g. there is a quote character in a password
+            #        r[line[0]] = '='.join(line[1:])[1:-1]
         return r
     except FileNotFoundError:
         return {}

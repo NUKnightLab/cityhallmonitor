@@ -28,7 +28,7 @@ import yaml
 PROJECT_NAME = 'cityhallmonitor'
 WARNING = '\033[93m'
 ENDC = '\033[0m'
-ENV_REGEX = re.compile(r"^\s*env\s+(.*?)=(.*)\s*$")
+ENV_REGEX = re.compile(r"^\s*env\s+(.*?)='(.*)'\s*$")
 
 
 def get_dev_secrets():

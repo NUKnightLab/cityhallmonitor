@@ -14,6 +14,7 @@ init_env_stg:
   DEFAULT_DB_PASSWORD: '{{ vault_default_db_password }}'
   DEFAULT_DB_HOST: 'rds-pgis.knilab.com'
   DEFAULT_DB_PORT: '5432'
+  TESTING_SINGLE_QUOTE: "foo'bar"
 
 # Note that env vars set in the upstart config will also be set when using the
 # modified manage.py file for db migration and custom management commands

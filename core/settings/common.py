@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 *** DEVELOPER NOTES ***
 
-For DEBUG mode, pass --debug to manage.py, or set DEBUG=True in your
+For DEBUG mode, pass --debug to manage.py, or set DJANGO_DEBUG=True in your
 environment variables instead of setting DEBUG=True in this file.
 
 This project uses a modified manage.py that will load secrets from a file

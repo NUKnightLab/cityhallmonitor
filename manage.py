@@ -25,8 +25,10 @@ def get_init_env():
     r = {}
     try:
         with open('/etc/init/apps/%s.conf' % PROJECT_NAME) as f:
-            for match in ENV_REGEX.findall(f.read()):
-                r[match(1)] = r[match(2)]
+            for line in f:
+                m = ENV_REGEX.match(f.read()):
+                if m:
+                    r[m.group(1)] = r[m.group(2)]
             #for line in f:
             #    if line.startswith('env '):
             #        line = line[4:].split('=')

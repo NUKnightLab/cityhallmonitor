@@ -1,4 +1,25 @@
 #!/usr/bin/env python
+"""
+This is a modified version of manage.py which serves 3 primary goals:
+
+    1. Implement a --debug flag to allow Django to be run in debug mode
+       without modifying the settings file
+
+    2. Enable development-mode secrets management that is consistent with
+       Ansible Vault based secrets for deployment. Vault secrets are kept
+       in encrypted files in an external directory located at SECRETS_DIR
+       or ~/.secrets. Secrets are rarely needed in development, but if they
+       are, they can be placed into a vault.dev.yml file in the secrets
+       directory for this project.
+
+    3. Simultaneously enable environment variable based configurations for
+       deployment environment differentiation while also enabling manage.py
+       execution with those same configurations. This is implemented by
+       loading the environment variables from the Upstart config file that is
+       used to execute the web application. This approach allows us to keep a
+       single definitive source for environment settings in deployment, being
+       the Upstart config file located in /etc/init/apps.
+"""
 import os
 import re
 import sys

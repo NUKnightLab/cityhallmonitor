@@ -5,7 +5,7 @@ ssl:
   ssl_certificate: /etc/nginx/ssl/knilab/knilab-bundle.crt
   ssl_certificate_key: /etc/nginx/ssl/knilab/knilab-com.key
 
-wsgi_env_stg:
+init_env_stg:
   ALLOWED_HOSTS: "cityhallmonitor.knilab.com"
   STATIC_URL: '//media.knilab.com/cityhallmonitor/'
   DEFAULT_DB_ENGINE: 'django.db.backends.postgresql_psycopg2'
@@ -18,4 +18,11 @@ wsgi_env_stg:
 # env vars can be put into init_env (the upstart config) or wsgi_env (the wsgi
 # file). Django projects need them in the wsgi file in order for databse
 # migration to work.
-wsgi_env: "{{ wsgi_env_common|combine(wsgi_env_stg) }}"
+#
+# Ok, well, setting envs in the wsgi file doesn't work either (migrate does
+# not use a web server, thus no wsgi). Seems like what we need to do is to
+# set the variables in the virtualenv or load them up in the manage.py file
+#
+# Note: now back to init_env with attempt to load env vars from the
+# upstart config file in a modified manage.py
+init_env: "{{ init_env_common|combine(init_env_stg) }}"

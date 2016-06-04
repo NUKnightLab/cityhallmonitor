@@ -1,6 +1,6 @@
 project_name: cityhallmonitor
 
-wsgi_env_common:
+init_env_common:
   DJANGO_SETTINGS_MODULE: "core.settings.{{ env }}"
   SECRET_KEY: "{{ vault_secret_key }}"
   DOCUMENT_CLOUD_USERNAME: "{{ vault_document_cloud_username }}"

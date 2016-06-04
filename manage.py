@@ -7,7 +7,7 @@ import yaml
 PROJECT_NAME = 'cityhallmonitor'
 WARNING = '\033[93m'
 ENDC = '\033[0m'
-ENV_REGEX = re.compile(r'^\s*env\s+(.*?)=(.*)$')
+ENV_REGEX = re.compile(r"^\s*env\s+(.*?)='(.*)'\s*$")
 
 
 def get_dev_secrets():
@@ -16,7 +16,7 @@ def get_dev_secrets():
     try:
         with open(secrets_file) as f:
             cfg = yaml.safe_load(f)
-        return cfg
+        return { k.upper()[len('vault_'):]:v for k,v in cfg.items() }
     except FileNotFoundError:
         return {}
 
@@ -26,15 +26,9 @@ def get_init_env():
     try:
         with open('/etc/init/apps/%s.conf' % PROJECT_NAME) as f:
             for line in f:
-                m = ENV_REGEX.match(f.read()):
+                m = ENV_REGEX.match(line)
                 if m:
-                    r[m.group(1)] = r[m.group(2)]
-            #for line in f:
-            #    if line.startswith('env '):
-            #        line = line[4:].split('=')
-            #        # [1:-1] slice b/c we can't strip quote characters in
-            #        # case e.g. there is a quote character in a password
-            #        r[line[0]] = '='.join(line[1:])[1:-1]
+                    r[m.group(1)] = m.group(2)
         return r
     except FileNotFoundError:
         return {}
@@ -57,7 +51,7 @@ if __name__ == "__main__":
         os.environ.setdefault('DJANGO_DEBUG', 'True')
         sys.argv.remove('--debug')
     for k,v in get_env_vars().items():
-        os.environ.setdefault(k.upper()[len('vault_'):], v)
+        os.environ.setdefault(k, v)
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.dev')
     from django.core.management import execute_from_command_line
     execute_from_command_line(sys.argv)

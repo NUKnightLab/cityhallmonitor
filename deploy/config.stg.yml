@@ -6,7 +6,6 @@ ssl:
   ssl_certificate_key: /etc/nginx/ssl/knilab/knilab-com.key
 
 init_env_stg:
-  ALLOWED_HOSTS: "{{ project_name }}.knilab.com"
   STATIC_URL: '//media.knilab.com/{{ project_name }}/'
 
 # Note that env vars set in the upstart config will also be set when using the

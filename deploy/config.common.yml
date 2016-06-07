@@ -9,6 +9,12 @@ init_env_common:
   DOCUMENT_CLOUD_PROJECT: "{{ vault_document_cloud_project }}"
   EMAIL_HOST_USER: "{{ vault_email_host_user }}"
   EMAIL_HOST_PASSWORD: "{{ vault_email_host_password }}"
+  DEFAULT_DB_ENGINE: 'django.db.backends.postgresql_psycopg2'
+  DEFAULT_DB_NAME: 'cityhallmonitor_{{ env }}'
+  DEFAULT_DB_USER: '{{ vault_default_db_user }}'
+  DEFAULT_DB_PASSWORD: '{{ vault_default_db_password }}'
+  DEFAULT_DB_HOST: 'rds-pgis.knilab.com'
+  DEFAULT_DB_PORT: '5432'
 
 port: 9017
 python: python3

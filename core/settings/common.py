@@ -65,7 +65,7 @@ DEBUG = True if env.get('DJANGO_DEBUG', '').lower() == 'true' else False
 SECRET_KEY = env.get('SECRET_KEY', 'development')
 
 ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
-WSGI_APPLICATION = 'deploy.wsgi.application'
+WSGI_APPLICATION = 'core.settings.wsgi.application'
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/Chicago'
 USE_I18N = True

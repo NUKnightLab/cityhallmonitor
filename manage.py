@@ -38,7 +38,7 @@ def get_dev_secrets():
         with open(secrets_file) as f:
             cfg = yaml.safe_load(f)
         return { k.upper()[len('vault_'):]:v for k,v in cfg.items() }
-    except FileNotFoundError:
+    except IOError:
         return {}
 
 
@@ -51,7 +51,7 @@ def get_init_env():
                 if m:
                     r[m.group(1)] = m.group(2)
         return r
-    except FileNotFoundError:
+    except IOError:
         return {}
 
 

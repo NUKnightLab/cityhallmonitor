@@ -1,3 +1,6 @@
+# development or deployment specific environment variable exports
+/env.sh
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

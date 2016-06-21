@@ -18,7 +18,7 @@ should copy the vault.dev.yml.example file and fill in the values to be
 loaded by manage.py.
 """
 
-PROJECT_NAME = 'cityhallmonitor'
+PROJECT_NAME = env['PROJECT_NAME']
 
 
 ADMINS = (
@@ -52,19 +52,19 @@ CORE_ROOT = dirname(dirname(abspath(__file__)))
 PROJECT_ROOT = dirname(CORE_ROOT)
 
 # DocumentCloud credentials kept in secrets. Developers, see note at top of this file.
-DOCUMENT_CLOUD_USERNAME = env.get('DOCUMENT_CLOUD_USERNAME')
-DOCUMENT_CLOUD_PASSWORD = env.get('DOCUMENT_CLOUD_PASSWORD')
-DOCUMENT_CLOUD_ACCOUNT = env.get('DOCUMENT_CLOUD_ACCOUNT')
-DOCUMENT_CLOUD_PROJECT = env.get('DOCUMENT_CLOUD_PROJECT')
+DOCUMENT_CLOUD_USERNAME = env['DOCUMENT_CLOUD_USERNAME']
+DOCUMENT_CLOUD_PASSWORD = env['DOCUMENT_CLOUD_PASSWORD']
+DOCUMENT_CLOUD_ACCOUNT = env['DOCUMENT_CLOUD_ACCOUNT']
+DOCUMENT_CLOUD_PROJECT = env['DOCUMENT_CLOUD_PROJECT']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Avoid changing DEBUG here. Instead use the --debug manage.py flag, or
 # set the environment variable DJANGO_DEBUG=True
 DEBUG = True if env.get('DJANGO_DEBUG', '').lower() == 'true' else False
 
-SECRET_KEY = env.get('SECRET_KEY', 'development')
+SECRET_KEY = env['DJANGO_SECRET_KEY']
 
-ALLOWED_HOSTS = env.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
+ALLOWED_HOSTS = env['APPLICATION_DOMAINS'].split()
 WSGI_APPLICATION = 'core.wsgi.application'
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/Chicago'
@@ -75,11 +75,12 @@ USE_TZ = True
 # static
 
 # Static hosted in S3, thus STATIC_ROOT only used for collectstatic
-STATIC_ROOT = join(env.get('TMPDIR', '/tmp'), '%s_static' % PROJECT_NAME)
+#STATIC_ROOT = join(env.get('TMPDIR', '/tmp'), '%s_static' % PROJECT_NAME)
+STATIC_ROOT = join(env['TMPDIR'], '%s_static' % PROJECT_NAME)
 STATICFILES_DIRS = (
     join(PROJECT_ROOT, 'static'),
 )
-STATIC_URL = env.get('STATIC_URL', '/static/')
+STATIC_URL = env['STATIC_URL']
 
 FIXTURE_DIRS = (
     join(PROJECT_ROOT, 'fixtures'),
@@ -114,8 +115,8 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'knightlab.cityhallmonitor@gmail.com'
 # Email credentials kept in secrets. Developers, see note at top of this file.
-EMAIL_HOST_USER = env.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = env['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = env['EMAIL_HOST_PASSWORD']
 # Domain for links sent in emails from management commands
 DOMAIN_URL = 'https://cityhallmonitor.knightlab.com'
 
@@ -124,24 +125,30 @@ DOMAIN_URL = 'https://cityhallmonitor.knightlab.com'
 # for using sqlite3 in dev, the getter defaults should be changed accordingly
 DATABASES = {
     'default': {
-        'ENGINE': env.get(
-            'DEFAULT_DB_ENGINE',
-            'django.db.backends.postgresql_psycopg2' # postgres
-            # 'django.db.backends.sqlite3' # sqlite3
-        ),
-        'NAME': env.get(
-            'DEFAULT_DB_NAME',
-            PROJECT_NAME # postgres
-            # join(BASE_DIR, 'db.sqlite3') # sqlite3
-        ),
-        'USER': env.get('DEFAULT_DB_USER', PROJECT_NAME),
-        'PASSWORD': env.get('DEFAULT_DB_PASSWORD', PROJECT_NAME),
-        'HOST': env.get('DEFAULT_DB_HOST', '127.0.0.1'),
-        'PORT': env.get(
-            'DEFAULT_DB_PORT',
-            '5432' # postgres
-            # '' # sqlite3
-        )
+        'ENGINE': env['DB_ENGINE__DEFAULT'],
+        'NAME': env['DB_NAME__DEFAULT'],
+        'USER': env['DB_USER__DEFAULT'],
+        'PASSWORD': env['DB_PASSWORD__DEFAULT'],
+        'HOST': env['DB_HOST__DEFAULT'],
+        'PORT': env['DB_PORT__DEFAULT']
+        #'ENGINE': env.get(
+        #    'DEFAULT_DB_ENGINE',
+        #    'django.db.backends.postgresql_psycopg2' # postgres
+        #    # 'django.db.backends.sqlite3' # sqlite3
+        #),
+        #'NAME': env.get(
+        #    'DEFAULT_DB_NAME',
+        #    PROJECT_NAME # postgres
+        #    # join(BASE_DIR, 'db.sqlite3') # sqlite3
+        #),
+        #'USER': env.get('DEFAULT_DB_USER', PROJECT_NAME),
+        #'PASSWORD': env.get('DEFAULT_DB_PASSWORD', PROJECT_NAME),
+        #'HOST': env.get('DEFAULT_DB_HOST', '127.0.0.1'),
+        #'PORT': env.get(
+        #    'DEFAULT_DB_PORT',
+        #    '5432' # postgres
+        #    # '' # sqlite3
+        #)
     }
 }
 

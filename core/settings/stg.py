@@ -1,4 +1,4 @@
-from .common import *
+from .project import *
 
 # Logging overrides
 

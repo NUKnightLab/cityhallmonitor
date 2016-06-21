@@ -3,9 +3,11 @@ static_tmpdir: "/tmp/{{ project_name }}_static"
 
 # these will be merged with deployment-specific env into init_env
 init_env_common:
+  PROJECT_NAME: "{{ project_name }}"
   APPLICATION_DOMAINS: "{{ domains }}" # space-delimited
   DJANGO_SETTINGS_MODULE: "{{ django_settings_module }}"
-  SECRET_KEY: "{{ vault_secret_key }}"
+  STATIC_TMPDIR: "{{ static_tmpdir }}"
+  DJANGO_SECRET_KEY: "{{ vault_django_secret_key }}"
   DOCUMENT_CLOUD_USERNAME: "{{ vault_document_cloud_username }}"
   DOCUMENT_CLOUD_PASSWORD: "{{ vault_document_cloud_password }}"
   DOCUMENT_CLOUD_ACCOUNT: "{{ vault_document_cloud_account }}"
@@ -18,7 +20,6 @@ init_env_common:
   DB_PASSWORD__DEFAULT: "{{ vault_db_password__default }}"
   DB_HOST__DEFAULT: "{{ vault_db_host__default }}"
   DB_PORT__DEFAULT: "{{ vault_db_port__default }}"
-  STATIC_TMPDIR: "{{ static_tmpdir }}"
 
 port: 9017
 python: python3

@@ -24,7 +24,7 @@ init_env_common:
 port: 9017
 python: python3
 type: django
-django_settings_module: core.settings.{{ env }}
+django_settings_module: core.settings.ec2
 
 # Configs below will not usually change
 project_repo: "git@github.com:NUKnightLab/{{ project_name }}.git"

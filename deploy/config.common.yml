@@ -1,4 +1,5 @@
 project_name: cityhallmonitor
+static_tmpdir: "/tmp/{{ project_name }}_static"
 
 # these will be merged with deployment-specific env into init_env
 init_env_common:
@@ -17,7 +18,7 @@ init_env_common:
   DB_PASSWORD__DEFAULT: "{{ vault_db_password__default }}"
   DB_HOST__DEFAULT: "{{ vault_db_host__default }}"
   DB_PORT__DEFAULT: "{{ vault_db_port__default }}"
-  STATIC_TMPDIR: "/tmp/{{ project_name }}_static"
+  STATIC_TMPDIR: "{{ static_tmpdir }}"
 
 port: 9017
 python: python3

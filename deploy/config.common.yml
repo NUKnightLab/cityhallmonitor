@@ -11,12 +11,13 @@ init_env_common:
   DOCUMENT_CLOUD_PROJECT: "{{ vault_document_cloud_project }}"
   EMAIL_HOST_USER: "{{ vault_email_host_user }}"
   EMAIL_HOST_PASSWORD: "{{ vault_email_host_password }}"
-  DB_ENGINE__DEFAULT: 'django.db.backends.postgresql_psycopg2'
-  DB_NAME__DEFAULT: '{{ project_name }}_{{ env }}'
-  DB_USER__DEFAULT: '{{ vault_db_user__default }}'
-  DB_PASSWORD__DEFAULT: '{{ vault_db_password__default }}'
-  DB_HOST__DEFAULT: '{{ vault_db_host__default }}'
-  DB_PORT__DEFAULT: '{{ vault_db_port__default }}'
+  DB_ENGINE__DEFAULT: "django.db.backends.postgresql_psycopg2"
+  DB_NAME__DEFAULT: "{{ project_name }}_{{ env }}"
+  DB_USER__DEFAULT: "{{ vault_db_user__default }}"
+  DB_PASSWORD__DEFAULT: "{{ vault_db_password__default }}"
+  DB_HOST__DEFAULT: "{{ vault_db_host__default }}"
+  DB_PORT__DEFAULT: "{{ vault_db_port__default }}"
+  STATIC_TMPDIR: "/tmp/{{ project_name }}_static"
 
 port: 9017
 python: python3

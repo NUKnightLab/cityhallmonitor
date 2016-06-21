@@ -1,21 +1,12 @@
 """
-common.py are settings that don't tend to change from project to project and
-will generally remain stable throughout development.
-
-Import this file in your project-specific settings and override things as
-necessary. If you need to make a change to this file, consider whether the
-change applies to all of our Django projects.
-
 Django settings docs:
 https://docs.djangoproject.com/en/1.8/topics/settings/
 https://docs.djangoproject.com/en/1.8/ref/settings/
 
 *** DEVELOPER NOTES ***
 
-This project uses a modified manage.py for handling debug toggling
-
-For DEBUG mode, pass --debug to manage.py, or set DJANGO_DEBUG=True in your
-environment variables instead of setting DEBUG=True in this file.
+For DEBUG mode in deploymnet set DJANGO_DEBUG=True in the environment
+variables instead of setting DEBUG=True in the settings files.
 """
 from os.path import abspath, dirname, join
 from os import environ as env

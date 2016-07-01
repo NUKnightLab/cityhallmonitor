@@ -1,5 +1,6 @@
 # development or deployment specific environment variable exports
 /env.sh
+/env_run.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

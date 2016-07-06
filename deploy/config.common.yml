@@ -1,5 +1,5 @@
-# git-deploy 1.0.2
 project_name: cityhallmonitor
+gitdeploy_version: "1.0.3"
 port: 9017
 python: python3
 type: django

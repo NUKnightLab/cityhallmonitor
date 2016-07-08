@@ -233,7 +233,8 @@ a.delete-subscription {
       border-top: 2px solid #c34528;
       margin: 5px 0 0 0; }
 #search-result-taxonomy .explainer ~ .arrow {
-  margin-top: 4px; }
+  margin-top: 4px;
+  transform: rotate(12deg); }
 #search-result-taxonomy .page-preview {
   padding-top: 10px; }
 #search-result-taxonomy .arrow {

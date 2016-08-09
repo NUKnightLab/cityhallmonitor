@@ -1,5 +1,5 @@
 domains: "{{ project_name }}.knilab.com"
-staticbucket: "media.knilab.com"
+static_bucket: "media.knilab.com"
 gunicorn_reload: True # generally True on staging only
 
 ssl:

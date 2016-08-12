@@ -9,7 +9,7 @@ init_env_common:
   PROJECT_NAME: "{{ project_name }}"
   APPLICATION_DOMAINS: "{{ domains }}" # space-delimited
   DJANGO_SETTINGS_MODULE: "{{ django_settings_module }}"
-  STATIC_TMPDIR: "{{ static_tmpdir }}"
+  STATIC_TMPDIR: "{{ static_dir }}"
   DJANGO_SECRET_KEY: "{{ vault_django_secret_key }}"
   DOCUMENT_CLOUD_USERNAME: "{{ vault_document_cloud_username }}"
   DOCUMENT_CLOUD_PASSWORD: "{{ vault_document_cloud_password }}"

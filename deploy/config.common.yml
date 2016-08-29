@@ -29,7 +29,7 @@ init_env_common:
 django_settings_module: "core.settings.ec2"
 #static_tmpdir: "/tmp/{{ project_name }}_static"
 static_dir: "/tmp/{{ project_name }}_static"
-static_prep_exec: "{{ env_run_script }} manage.py collectstatic --noinput"
+static_prep: "{{ env_run_script }} manage.py collectstatic --noinput"
 
 
 # Configs below will not usually change

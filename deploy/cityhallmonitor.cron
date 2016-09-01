@@ -1,0 +1,16 @@
+PATH=/home/apps/env/cityhallmonitor/bin:$PATH
+MAILTO=knightlab@northwestern.edu
+DJANGO_SETTINGS_MODULE=core.settings.prd
+
+05 0,12 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Person
+10 0,12 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data BodyType
+15 0,12 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Body
+20 0,12 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data MatterType
+25 0,12 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data MatterStatus
+30 0,12 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_data Matter
+30 1,13 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_sponsors
+30 2,14 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_attachments
+30 3,15 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_pdfs
+30 5,17 * * * apps /home/apps/sites/cityhallmonitor/manage.py pull_text
+30 8,20 * * * apps /home/apps/sites/cityhallmonitor/manage.py classify
+0 20 * * * apps /home/apps/sites/cityhallmonitor/manage.py process_alerts

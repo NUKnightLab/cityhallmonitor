@@ -36,6 +36,10 @@
 
     - name: link work cron
       file:
-        src=/home/apps/sites/cityhallmonitor/deploy/cityhallmonitor.cron
+        src=/home/apps/sites/cityhallmonitor/cron/cityhallmonitor.cron
         dest=/etc/cron.d/cityhallmonitor
         state=link
+        owner=root
+        group=root
+      become: yes
+      become_user: root

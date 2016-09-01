@@ -1,0 +1,41 @@
+- hosts: "{{ env }}-work"
+  vars_files:
+    - "{{ config_dir }}/config.common.yml"
+    - "{{ config_dir }}/config.{{ env }}.yml"
+    - "{{ vault_dir }}/{{ project_name }}/vault.{{ env }}.yml"
+  gather_facts: false
+  become: yes
+  become_user: "{{ application_user }}"
+  become_method: sudo
+
+  tasks:
+
+    - name: create env setup script
+      template:
+        src={{ playbooks_dir }}/templates/env.j2
+        dest="{{ env_setup_script }}"
+      notify:
+      - restart appserver
+
+    - name: create env_run script
+      template:
+        src={{ playbooks_dir }}/templates/env_run.j2
+        dest="{{ env_run_script }}"
+        mode=u+rwx
+
+    - name: install python packages
+      pip:
+        requirements={{ requirements_file }}
+        virtualenv={{ virtualenv }}
+        virtualenv_python={{ python }}
+
+    - name: set project location in virtual environment
+      template:
+        src={{ playbooks_dir }}/templates/project.j2
+        dest="{{ virtualenv }}/.project"
+
+    - name: link work cron
+      file:
+        src=/home/apps/sites/cityhallmonitor/deploy/cityhallmonitor.cron
+        dest=/etc/cron.d/cityhallmonitor
+        state=link

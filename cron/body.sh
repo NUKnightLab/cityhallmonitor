@@ -1,3 +1,4 @@
 #!/bin/sh
 
-/home/apps/sites/cityhallmonitor/env_run.sh /home/apps/sites/cityhallmonitor/manage.py pull_data Body
+cd /home/apps/sites/cityhallmonitor
+./env_run.sh manage.py pull_data Body

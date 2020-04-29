@@ -7,7 +7,24 @@
  * Execute via a socket file for deployment simplicity. This may not be performant on non-linux systems.
  * Run multiple gunicorn workers in deployment
 
+### Prep
 
+ * create the directory `mnt` in the project root
+ * create a .env file in the project root
+
+**collect static files**
+
+Note: `STATIC_TMPDIR` in the env variables is actually the STATIC_ROOT, and should be set to:
+
+```
+STATIC_TMPDIR=mnt/static/cityhallmonitor/
+```
+
+That is, static files should be placed into a project-specific directory in order to facilitate proxying to multiple applications.
+
+```
+$ sudo docker run -it --env-file=.env -v /home/apps/sites/cityhallmonitor/mnt:/usr/src/app/mnt cityhallmonitor ./manage.py collectstatic
+```
 
 ### Running the application
 

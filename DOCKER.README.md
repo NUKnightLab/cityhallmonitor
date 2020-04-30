@@ -1,3 +1,14 @@
+## Development
+
+```
+$ docker-compose build
+$ docker-compose up
+$ docker-compose exec postgres psql -U postgres
+# create database cityhallmonitor_dev
+# \q
+$ docker-compose run web /usr/local/bin/python manage.py migrate
+```
+ 
 ## Deployment
 
 ### Principles
@@ -61,3 +72,13 @@ To run gunicorn on a port and bypass Nginx:
 ```
 $ sudo docker run -it --env-file=.env -p 8000:8000 cityhallmonitor gunicorn -b :8000 core.wsgi:application
 ```
+
+### References
+
+https://pythonspeed.com/articles/gunicorn-in-docker/
+
+https://www.digitalocean.com/community/tutorials/how-to-build-a-django-and-gunicorn-application-with-docker
+
+http://whitenoise.evans.io/en/stable/
+
+https://www.rockyourcode.com/setup-a-postgres-database-with-docker-compose/

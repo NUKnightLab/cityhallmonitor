@@ -1,15 +1,33 @@
 ## Development
 
+
+### Build and run containers
+
 ```
 $ docker-compose build
 $ docker-compose up
+```
+
+### Create the database, run migrations, and load fixtures
+
+```
 $ docker-compose exec postgres psql -U postgres
 # create database cityhallmonitor_dev
 # \q
-$ docker-compose run web /usr/local/bin/python manage.py migrate
+$ docker-compose run web ./manage.py migrate
+$ docker-compose run web ./manage.py loaddata fixtures/MatterType.json
 ```
  
 ## Deployment
+
+### With docker-compose ?
+
+```
+$ docker-compose build
+$ docker-compose -f production.yml up -d
+$ docker-compose run web ./manage.py migrate
+$ docker-compose run web ./manage.py collectstatic
+```
 
 ### Principles
 
@@ -74,6 +92,8 @@ $ sudo docker run -it --env-file=.env -p 8000:8000 cityhallmonitor gunicorn -b :
 ```
 
 ### References
+
+https://realpython.com/django-development-with-docker-compose-and-machine/
 
 https://pythonspeed.com/articles/gunicorn-in-docker/
 

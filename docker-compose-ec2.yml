@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: .
+    expose:
+      - "8000"
+    volumes:
+      - web-django:/usr/src/app
+      - web-static:/usr/src/static
+    env_file: .env
+    environment:
+      DEBUG: 'true'
+      PYTHONPATH: .:$PYTHONPATH
+    command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/app/mnt/cityhallmonitor.sock core.wsgi:application
+
+volumes:
+  web-django:
+  web-static:

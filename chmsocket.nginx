@@ -19,7 +19,7 @@ server {
   client_max_body_size 5M;
 
   #root /usr/share/nginx/cityhallmonitor;
-  root /home/apps/sites/cityhallmonitor/mnt/static;
+  root /home/apps/sites/cityhallmonitor/mnt/www;
 
   location / {
     try_files $uri @proxy_to_cityhallmonitor;

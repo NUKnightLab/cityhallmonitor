@@ -8,7 +8,7 @@ server {
   #listen 443 ssl;
   listen 80;
 
-  server_name 34.229.190.194 cityhallmonitor.knilab.com;
+  server_name stg-app2.knightlab.com;
 
   #ssl_certificate /etc/nginx/ssl/knightlab/knightlab-bundle.crt;
   #ssl_certificate_key /etc/nginx/ssl/knightlab/knightlab-com.key;

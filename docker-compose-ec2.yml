@@ -2,6 +2,8 @@ version: '3'
 
 services:
   migration:
+    build: .
+    image: app
     command: python manage.py migrate
     volumes:
       - web-django:/usr/src/app
@@ -9,6 +11,7 @@ services:
     depends_on:
       - db
   web:
+    image: app
     restart: always
     expose:
       - "8000"

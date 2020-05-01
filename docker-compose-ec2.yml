@@ -26,3 +26,5 @@ services:
 volumes:
   web-django:
   web-static:
+  mnt:
+    external: true

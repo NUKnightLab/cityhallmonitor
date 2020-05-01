@@ -1,0 +1,33 @@
+#server {
+#  listen 80;
+#  server_name 54.196.21.196 cityhallmonitor.knilab.com;
+#  return 301 https://$server_name$request_uri;
+#}
+
+server {
+  #listen 443 ssl;
+  listen 80;
+
+  server_name 54.196.21.196 cityhallmonitor.knilab.com;
+
+  #ssl_certificate /etc/nginx/ssl/knilab/knilab-bundle.crt;
+  #ssl_certificate_key /etc/nginx/ssl/knilab/knilab-com.key;
+  #ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
+
+  access_log  /var/log/nginx/cityhallmonitor.log;
+
+  client_max_body_size 5M;
+
+  root /usr/share/nginx/cityhallmonitor;
+
+  location / {
+    try_files $uri @proxy_to_cityhallmonitor;
+  }
+
+  location @proxy_to_cityhallmonitor {
+      proxy_pass http://127.0.0.1:9017;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+}

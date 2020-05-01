@@ -3,13 +3,12 @@ version: '3'
 services:
   migration:
     build: .
-    image: app
     command: python manage.py migrate
     volumes:
       - web-django:/usr/src/app
       - web-static:/usr/src/static
   web:
-    image: app
+    build: .
     restart: always
     expose:
       - "8000"

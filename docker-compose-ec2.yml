@@ -1,9 +1,15 @@
 version: '3'
 
 services:
+  migration:
+    command: python manage.py migrate
+    volumes:
+      - web-django:/usr/src/app
+      - web-static:/usr/src/static
+    depends_on:
+      - db
   web:
     restart: always
-    build: .
     expose:
       - "8000"
     volumes:
@@ -14,6 +20,8 @@ services:
       DEBUG: 'true'
       PYTHONPATH: .:$PYTHONPATH
     command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/app/mnt/cityhallmonitor.sock core.wsgi:application
+    depends_on:
+      - migration
 
 volumes:
   web-django:

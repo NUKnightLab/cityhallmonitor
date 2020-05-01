@@ -3,12 +3,22 @@ version: '3'
 services:
   migration:
     build: .
+    env_file: .env
     command: python manage.py migrate
     volumes:
       - web-django:/usr/src/app
       - web-static:/usr/src/static
+  static:
+    build: .
+    env_file: .env
+    command: python manage.py collectstatic --noinput
+    volumes:
+      - web-django:/usr/src/app
+      - web-static:/usr/src/static
+      - /home/apps/sites/cityhallmonitor/mnt:/usr/src/app/mnt
   web:
     build: .
+    env_file: .env
     restart: always
     expose:
       - "8000"
@@ -16,13 +26,13 @@ services:
       - web-django:/usr/src/app
       - web-static:/usr/src/static
       - /home/apps/sites/cityhallmonitor/mnt:/usr/src/app/mnt
-    env_file: .env
     environment:
       DEBUG: 'true'
       PYTHONPATH: .:$PYTHONPATH
     command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/app/mnt/cityhallmonitor.sock core.wsgi:application
     depends_on:
       - migration
+      - static
 
 volumes:
   web-django:

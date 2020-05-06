@@ -81,7 +81,7 @@ MANAGERS = ADMINS
 DEBUG = True if env.get('DJANGO_DEBUG', '').lower() == 'true' else False
 
 SECRET_KEY = env['DJANGO_SECRET_KEY']
-ALLOWED_HOSTS = env['APPLICATION_DOMAINS'].split()
+ALLOWED_HOSTS = env['APPLICATION_DOMAINS'].split(',')
 WSGI_APPLICATION = 'core.wsgi.application'
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/Chicago'

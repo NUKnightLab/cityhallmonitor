@@ -9,13 +9,13 @@ services:
     links:
       - postgres:postgres
     volumes:
-      - web-django:/usr/src/app
+      - .:/usr/src/app
       - web-static:/usr/src/static
     env_file: .env
     environment:
       DEBUG: 'true'
       PYTHONPATH: .:$PYTHONPATH
-    command: /usr/local/bin/gunicorn core.wsgi:application -w 2 -b :8000
+    command: /usr/local/bin/gunicorn core.wsgi:application -w 2 -b :8000 --reload
     depends_on:
       - postgres
 
@@ -41,6 +41,5 @@ services:
       - pgdata:/var/lib/postgresql/data/
 
 volumes:
-  web-django:
   web-static:
   pgdata:

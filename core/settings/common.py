@@ -92,11 +92,13 @@ USE_TZ = True
 # static
 
 # Static hosted in S3, thus STATIC_ROOT only used for collectstatic
-STATIC_ROOT = env['STATIC_TMPDIR']
+# STATIC_ROOT = env['STATIC_TMPDIR']
+STATIC_ROOT = '/var/www/cityhallmonitor/static'
 STATICFILES_DIRS = (
     join(PROJECT_ROOT, 'static'),
 )
-STATIC_URL = env['STATIC_URL']
+# STATIC_URL = env['STATIC_URL']
+STATIC_URL = '/static/'
 
 FIXTURE_DIRS = (
     join(PROJECT_ROOT, 'fixtures'),

@@ -1,3 +1,43 @@
+# City Hall Monitor
+
+## Development quickstart
+
+Typical development. `docker-compose.dev.yml` will:
+
+ * start a postgres container
+ * start an application container and run the Django dev server in debug mode.
+
+The application is served internally on port 8000 which is mapped to 80 on the localhost.
+
+```
+$ docker-compose -f docker-compose.dev.yml up
+```
+Go to: http://localhost.
+
+## Localized "deployment"
+
+This configuration looks more like deployment, but is slightly more awkward for
+development, particularly for making changes to static files:
+
+`docker-compose.local.yml` will:
+
+ * start a postgres container
+ * start an Nginx container
+ * start an application container and run the application via gunicorn
+
+The application is served internally on socket file which is proxied to port 80 on the localhost.
+
+```
+$ docker-comp
+```
+Go to: http://localhost
+
+
+**Note:** Content below here has not yet been reviewed since containerizing the application.
+
+---
+
+
 ## DEV NOTES
 
 Use `pull_data` to pull basic data into the system:

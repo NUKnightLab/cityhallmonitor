@@ -1,0 +1,42 @@
+version: '3'
+
+# Runs the Django development server, which is less than ideal in terms of
+# replicating the deployment environment locally -- for which, the
+# docker-compose-local.yml file is provided. However, due to lack of a good solution
+# for static file development in a more deployment-like configuration, this
+# current compose file is provided for development.
+
+# web service mount to apps location so that development updates in the application
+# are reflected in the container.
+
+services:
+  web:
+    restart: always
+    build: .
+    ports:
+      - "80:8000"
+    links:
+      - postgres:postgres
+    volumes:
+      - .:/usr/src/apps/cityhallmonitor
+    env_file: .env
+    environment:
+      DJANGO_DEBUG: 'true'
+      PYTHONPATH: .:$PYTHONPATH
+    command: ./manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - postgres
+
+  postgres:
+    restart: always
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: cityhallmonitor_dev
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+volumes:
+  pgdata:

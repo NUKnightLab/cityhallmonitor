@@ -20,8 +20,6 @@ services:
     build: .
     env_file: .env
     restart: always
-    expose:
-      - "8000"
     volumes:
       - web-django:/usr/src/app
       - web-static:/usr/src/static

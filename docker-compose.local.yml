@@ -21,7 +21,7 @@ services:
     restart: always
     build: .
     links:
-      - postgres:postgres
+      - pg:pg
     volumes:
       - .:/usr/src/apps/cityhallmonitor
       - web-static:/var/www/cityhallmonitor/static
@@ -31,7 +31,7 @@ services:
       PYTHONPATH: .:$PYTHONPATH
     command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/apps/cityhallmonitor/mnt/cityhallmonitor.sock core.wsgi:application
     depends_on:
-      - postgres
+      - pg
 
   nginx:
     build: ./nginx/
@@ -46,12 +46,13 @@ services:
     depends_on:
       - web
 
-  postgres:
+  pg:
     restart: always
-    image: postgres:latest
+    image: postgres:11.6
     environment:
-      POSTGRES_DB: cityhallmonitor_dev
-      POSTGRES_PASSWORD: postgres
+      PGDATABASE: cityhallmonitor
+      PGUSER: cityhallmonitor
+      PGPASSWORD: cityhallmonitor
     ports:
       - "5432:5432"
     volumes:

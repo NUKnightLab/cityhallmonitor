@@ -9,6 +9,9 @@ version: '3'
 # web service mount to apps location so that development updates in the application
 # are reflected in the container.
 
+# Note: the db build will create the default postgres database and user. To
+# create the application database, run `initdb.sh` after building.
+
 services:
   web:
     restart: always
@@ -16,23 +19,24 @@ services:
     ports:
       - "80:8000"
     links:
-      - postgres:postgres
+      - pg:pg
     volumes:
       - .:/usr/src/apps/cityhallmonitor
     env_file: .env
     environment:
       DJANGO_DEBUG: 'true'
-      PYTHONPATH: .:$PYTHONPATH
+      PYTHONPATH: .
     command: ./manage.py runserver 0.0.0.0:8000
     depends_on:
-      - postgres
+      - pg
 
-  postgres:
+  pg:
     restart: always
-    image: postgres:latest
+    image: postgres:11.6
     environment:
-      POSTGRES_DB: cityhallmonitor_dev
-      POSTGRES_PASSWORD: postgres
+      PGDATABASE: cityhallmonitor
+      PGUSER: cityhallmonitor
+      PGPASSWORD: cityhallmonitor
     ports:
       - "5432:5432"
     volumes:

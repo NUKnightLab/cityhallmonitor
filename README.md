@@ -7,12 +7,22 @@
 ```
 $ cp env.example .env
 $ docker-compose build
-$ docker-compose exec postgres psql -U postgres
-# create database cityhallmonitor_dev
-# \q
-$ docker-compose run web ./manage.py migrate
-$ docker-compose run web ./manage.py loaddata fixtures/MatterType.json
+$ docker-compose up pg
+$ ./initdb.sh
 ```
+
+Optionally, load the extra production data (a rather large data dump)
+**WARNING:** The current data file appears to be out of data and does not
+contain all of the needed data fields. Currently, this will break things.
+
+```
+$ ./importdata.sh
+```
+
+```
+$ docker-compose down
+```
+
 
 ### Run the development server
 

@@ -1,6 +1,8 @@
 # development or deployment specific environment variable exports
+.env
 /env.sh
 /env_run.sh
+/mnt/*
 
 deploy/*.retry
 # Byte-compiled / optimized / DLL files

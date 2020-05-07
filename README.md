@@ -2,7 +2,21 @@
 
 ## Development quickstart
 
-Typical development. `docker-compose.dev.yml` will:
+### Create the database, run migrations, and load fixtures
+
+```
+$ cp env.example .env
+$ docker-compose build
+$ docker-compose exec postgres psql -U postgres
+# create database cityhallmonitor_dev
+# \q
+$ docker-compose run web ./manage.py migrate
+$ docker-compose run web ./manage.py loaddata fixtures/MatterType.json
+```
+
+### Run the development server
+
+The default compose file will:
 
  * start a postgres container
  * start an application container and run the Django dev server in debug mode.
@@ -10,11 +24,12 @@ Typical development. `docker-compose.dev.yml` will:
 The application is served internally on port 8000 which is mapped to 80 on the localhost.
 
 ```
-$ docker-compose -f docker-compose.dev.yml up
+$ docker-compose up
 ```
 Go to: http://localhost.
 
-## Localized "deployment"
+
+## Alternative localized "deployment"
 
 This configuration looks more like deployment, but is slightly more awkward for
 development, particularly for making changes to static files:
@@ -28,6 +43,7 @@ development, particularly for making changes to static files:
 The application is served internally on socket file which is proxied to port 80 on the localhost.
 
 ```
+$ docker-compose -f docker-compose.local.yml build
 $ docker-comp
 ```
 Go to: http://localhost

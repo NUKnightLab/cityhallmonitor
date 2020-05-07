@@ -1,23 +1,3 @@
-## Development
-
-
-### Build and run containers
-
-```
-$ docker-compose build
-$ docker-compose up
-```
-
-### Create the database, run migrations, and load fixtures
-
-```
-$ docker-compose exec postgres psql -U postgres
-# create database cityhallmonitor_dev
-# \q
-$ docker-compose run web ./manage.py migrate
-$ docker-compose run web ./manage.py loaddata fixtures/MatterType.json
-```
- 
 ## Deployment
 
 ### With docker-compose ?
@@ -36,10 +16,6 @@ $ docker-compose run web ./manage.py collectstatic
  * Execute via a socket file for deployment simplicity. This may not be performant on non-linux systems.
  * Run multiple gunicorn workers in deployment
 
-### Prep
-
- * create the directory `mnt` in the project root
- * create a .env file in the project root
 
 **collect static files**
 

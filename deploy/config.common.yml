@@ -3,7 +3,7 @@ gitdeploy_version: "1.0.4"
 application_port: 9017
 python: python3
 type: django
-docker_compose_file: "docker-compose-ec2.yml"
+docker_compose_file: "docker-compose.ec2.yml"
 
 # these will be merged with deployment-specific env into init_env
 init_env_common:

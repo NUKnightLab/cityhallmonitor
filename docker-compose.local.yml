@@ -28,7 +28,7 @@ services:
     env_file: .env
     environment:
       DEBUG: 'true'
-      PYTHONPATH: .:$PYTHONPATH
+      PYTHONPATH: .
     command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/apps/cityhallmonitor/mnt/cityhallmonitor.sock core.wsgi:application
     depends_on:
       - pg

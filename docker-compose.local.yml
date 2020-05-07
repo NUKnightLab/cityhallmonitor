@@ -1,10 +1,10 @@
 version: '3'
 
 # For static file changes, run:
-# docker-compose run web ./manage.py collectstatic
+# docker-compose run app ./manage.py collectstatic
 
 # It is also possible to do this with fswatch:
-# fswatch -o static | xargs -I{} docker-compose run web ./manage.py collectstatic --noinput
+# fswatch -o static | xargs -I{} docker-compose run app ./manage.py collectstatic --noinput
 #
 # Note that this is done outside the containers b/c getting fswatch and Django
 # installed into the same container does not seem like a straightforward task.
@@ -17,7 +17,7 @@ version: '3'
 
 
 services:
-  web:
+  app:
     restart: always
     build: .
     links:
@@ -42,9 +42,9 @@ services:
       - .:/usr/src/apps/cityhallmonitor
       - web-static:/var/www/cityhallmonitor/static
     links:
-      - web:web
+      - app:app
     depends_on:
-      - web
+      - app
 
   pg:
     restart: always

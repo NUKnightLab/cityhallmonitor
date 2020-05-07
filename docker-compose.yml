@@ -13,7 +13,7 @@ version: '3'
 # create the application database, run `initdb.sh` after building.
 
 services:
-  web:
+  app:
     restart: always
     build: .
     ports:

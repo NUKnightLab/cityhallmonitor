@@ -13,14 +13,14 @@ services:
     command: python manage.py collectstatic --noinput
     volumes:
       - .:/usr/src/apps/cityhallmonitor
-      - web-static:/var/www/cityhallmonitor/static
+      - /var/www/cityhallmonitor:/var/www/cityhallmonitor
   app:
     build: .
     env_file: .env
     restart: always
     volumes:
       - .:/usr/src/apps/cityhallmonitor
-      - web-static:/var/www/cityhallmonitor/static
+      - /var/www/cityhallmonitor:/var/www/cityhallmonitor
     environment:
       DEBUG: 'true'
       PYTHONPATH: .

@@ -10,7 +10,7 @@ init_env_common:
   PROJECT_NAME: "{{ project_name }}"
   APPLICATION_DOMAINS: "{{ domains }}" # space-delimited
   DJANGO_SETTINGS_MODULE: "{{ django_settings_module }}"
-  STATIC_TMPDIR: "{{ static_dir }}"
+  STATIC_ROOT: "/var/www/{{ project_name }}/static"
   DJANGO_SECRET_KEY: "{{ vault_django_secret_key }}"
   DOCUMENT_CLOUD_USERNAME: "{{ vault_document_cloud_username }}"
   DOCUMENT_CLOUD_PASSWORD: "{{ vault_document_cloud_password }}"
@@ -30,8 +30,8 @@ init_env_common:
 django_settings_module: "core.settings.ec2"
 #static_tmpdir: "/tmp/{{ project_name }}_static"
 #static_dir: "/tmp/{{ project_name }}_static"
-static_dir: "/var/www/{{ project_name }}/static"
-static_prep: "{{ env_run_script }} manage.py collectstatic --noinput"
+#static_dir: "/var/www/{{ project_name }}/static"
+#static_prep: "{{ env_run_script }} manage.py collectstatic --noinput"
 
 
 # Configs below will not usually change

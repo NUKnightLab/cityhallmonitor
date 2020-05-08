@@ -54,6 +54,7 @@ application_user: apps
 install_root: /usr/src/apps
 #install_root: /home/{{ application_user }}/sites
 #virtualenv_root: /home/{{ application_user }}/env
+nginx_conf: {{ deploy_dir }}/nginx/conf.d/{{ project_name }}.conf
 
 # environment keys must match deployment branch names. Value is the name
 # of the branch to be merged into this environment during deployment.

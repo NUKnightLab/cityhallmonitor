@@ -49,9 +49,10 @@ static_dest: "s3://{{ static_bucket }}/{{ project_name }}"
 
 
 # Configs common to all projects
-application_user: apps
-install_root: /home/{{ application_user }}/sites
-virtualenv_root: /home/{{ application_user }}/env
+#application_user: apps
+install_root: /usr/src/apps/{{ project_name }}
+#install_root: /home/{{ application_user }}/sites
+#virtualenv_root: /home/{{ application_user }}/env
 
 # environment keys must match deployment branch names. Value is the name
 # of the branch to be merged into this environment during deployment.

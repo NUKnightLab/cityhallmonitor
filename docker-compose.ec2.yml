@@ -6,24 +6,21 @@ services:
     env_file: .env
     command: python manage.py migrate
     volumes:
-      - web-django:/usr/src/app
-      - web-static:/usr/src/static
+      - .:/usr/src/apps/cityhallmonitor
   static:
     build: .
     env_file: .env
     command: python manage.py collectstatic --noinput
     volumes:
-      - web-django:/usr/src/app
-      - web-static:/usr/src/static
-      - /home/apps/sites/cityhallmonitor/mnt:/usr/src/app/mnt
+      - .:/usr/src/apps/cityhallmonitor
+      - web-static:/var/www/cityhallmonitor/static
   app:
     build: .
     env_file: .env
     restart: always
     volumes:
-      - web-django:/usr/src/app
-      - web-static:/usr/src/static
-      - /home/apps/sites/cityhallmonitor/mnt:/usr/src/app/mnt
+      - .:/usr/src/apps/cityhallmonitor
+      - web-static:/var/www/cityhallmonitor/static
     environment:
       DEBUG: 'true'
       PYTHONPATH: .

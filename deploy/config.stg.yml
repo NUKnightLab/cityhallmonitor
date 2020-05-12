@@ -1,4 +1,5 @@
 domains: "stg.{{ project_name }}.knightlab.com,stg-app2.knightlab.com"
+
 static_bucket: "media.knilab.com"
 gunicorn_reload: True # generally True on staging only
 

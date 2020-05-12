@@ -25,9 +25,9 @@ services:
       DEBUG: 'true'
       PYTHONPATH: .
     command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/apps/cityhallmonitor/mnt/cityhallmonitor.sock core.wsgi:application
-    depends_on:
-      - migration
-      - static
+    #depends_on:
+    #  - migration
+    #  - static
 
 volumes:
   web-django:

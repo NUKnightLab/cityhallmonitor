@@ -4,13 +4,13 @@ services:
   migration:
     build: .
     env_file: .env
-    run: python manage.py migrate
+    command: python manage.py migrate
     volumes:
       - .:/usr/src/apps/cityhallmonitor
   static:
     build: .
     env_file: .env
-    run: python manage.py collectstatic --noinput
+    command: python manage.py collectstatic --noinput
     volumes:
       - .:/usr/src/apps/cityhallmonitor
       - /var/www/cityhallmonitor:/var/www/cityhallmonitor

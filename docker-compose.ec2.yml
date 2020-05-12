@@ -1,19 +1,19 @@
 version: '3'
 
 services:
-  migration:
-    build: .
-    env_file: .env
-    command: python manage.py migrate
-    volumes:
-      - .:/usr/src/apps/cityhallmonitor
-  static:
-    build: .
-    env_file: .env
-    command: python manage.py collectstatic --noinput
-    volumes:
-      - .:/usr/src/apps/cityhallmonitor
-      - /var/www/cityhallmonitor:/var/www/cityhallmonitor
+  #migration:
+  #  build: .
+  #  env_file: .env
+  #  command: python manage.py migrate
+  #  volumes:
+  #    - .:/usr/src/apps/cityhallmonitor
+  #static:
+  #  build: .
+  #  env_file: .env
+  #  command: python manage.py collectstatic --noinput
+  #  volumes:
+  #    - .:/usr/src/apps/cityhallmonitor
+  #    - /var/www/cityhallmonitor:/var/www/cityhallmonitor
   app:
     build: .
     env_file: .env

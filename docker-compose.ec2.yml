@@ -1,19 +1,7 @@
 version: '3'
 
 services:
-  #migration:
-  #  build: .
-  #  env_file: .env
-  #  command: python manage.py migrate
-  #  volumes:
-  #    - .:/usr/src/apps/cityhallmonitor
-  #static:
-  #  build: .
-  #  env_file: .env
-  #  command: python manage.py collectstatic --noinput
-  #  volumes:
-  #    - .:/usr/src/apps/cityhallmonitor
-  #    - /var/www/cityhallmonitor:/var/www/cityhallmonitor
+
   app:
     build: .
     env_file: .env
@@ -25,10 +13,6 @@ services:
       DEBUG: 'true'
       PYTHONPATH: .
     command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/apps/cityhallmonitor/mnt/cityhallmonitor.sock core.wsgi:application
-    #command: systemctl start cityhallmonitor
-    #depends_on:
-    #  - migration
-    #  - static
 
 volumes:
   web-django:

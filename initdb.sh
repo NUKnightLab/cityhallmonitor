@@ -4,5 +4,5 @@ docker-compose run pg psql -U postgres -h pg postgres -c "CREATE DATABASE cityha
 docker-compose run pg psql -U postgres -h pg postgres -c "DROP USER IF EXISTS cityhallmonitor"
 docker-compose run pg psql -U postgres -h pg postgres -c "CREATE USER cityhallmonitor WITH PASSWORD 'cityhallmonitor';"
 docker-compose run pg psql -U postgres -h pg postgres -c 'GRANT ALL PRIVILEGES ON DATABASE "cityhallmonitor" to cityhallmonitor;'
-docker-compose run web ./manage.py migrate
-docker-compose run web ./manage.py loaddata fixtures/MatterType.json
+docker-compose run app ./manage.py migrate
+docker-compose run app ./manage.py loaddata fixtures/MatterType.json

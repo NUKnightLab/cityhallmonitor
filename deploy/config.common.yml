@@ -1,5 +1,5 @@
 project_name: cityhallmonitor
-gitdeploy_version: "1.0.4"
+gitdeploy_version: "1.0.5"
 application_port: 9017
 python: python3
 type: django

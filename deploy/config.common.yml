@@ -1,15 +1,16 @@
 project_name: cityhallmonitor
-gitdeploy_version: "1.0.4"
-port: 9017
+gitdeploy_version: "1.0.5"
+application_port: 9017
 python: python3
 type: django
+docker_compose_file: "docker-compose.ec2.yml"
 
 # these will be merged with deployment-specific env into init_env
 init_env_common:
   PROJECT_NAME: "{{ project_name }}"
   APPLICATION_DOMAINS: "{{ domains }}" # space-delimited
   DJANGO_SETTINGS_MODULE: "{{ django_settings_module }}"
-  STATIC_TMPDIR: "{{ static_dir }}"
+  STATIC_ROOT: "/var/www/{{ project_name }}/static"
   DJANGO_SECRET_KEY: "{{ vault_django_secret_key }}"
   DOCUMENT_CLOUD_USERNAME: "{{ vault_document_cloud_username }}"
   DOCUMENT_CLOUD_PASSWORD: "{{ vault_document_cloud_password }}"
@@ -28,8 +29,12 @@ init_env_common:
 # Django specific settings
 django_settings_module: "core.settings.ec2"
 #static_tmpdir: "/tmp/{{ project_name }}_static"
-static_dir: "/tmp/{{ project_name }}_static"
-static_prep: "{{ env_run_script }} manage.py collectstatic --noinput"
+#static_dir: "/tmp/{{ project_name }}_static"
+#static_dir: "/var/www/{{ project_name }}/static"
+#static_prep: "{{ env_run_script }} manage.py collectstatic --noinput"
+run_commands:
+  - "app python manage.py migrate --noinput"
+  - "app python manage.py collectstatic --noinput"
 
 
 # Configs below will not usually change
@@ -49,8 +54,10 @@ static_dest: "s3://{{ static_bucket }}/{{ project_name }}"
 
 # Configs common to all projects
 application_user: apps
-install_root: /home/{{ application_user }}/sites
-virtualenv_root: /home/{{ application_user }}/env
+install_root: "/usr/src/apps"
+#install_root: "/home/{{ application_user }}/sites"
+#virtualenv_root: "/home/{{ application_user }}/env"
+nginx_conf: "{{ deploy_dir }}/nginx/conf.d/{{ project_name }}.conf"
 
 # environment keys must match deployment branch names. Value is the name
 # of the branch to be merged into this environment during deployment.

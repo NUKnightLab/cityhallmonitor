@@ -1,0 +1,22 @@
+[Unit]
+Description=cityhallmonitor service
+Requires=cityhallmonitor.socket
+After=network.target
+
+[Service]
+Type=notify
+User=apps
+Group=apps
+# another option for an even more restricted service is
+# DynamicUser=yes
+# see http://0pointer.net/blog/dynamic-users-with-systemd.html
+RuntimeDirectory=gunicorn
+WorkingDirectory=/usr/src/apps/cityhallmonitor
+ExecStart=/usr/local/bin/gunicorn core.wsgi
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,65 @@
+version: '3'
+
+# For static file changes, run:
+# docker-compose run app ./manage.py collectstatic
+
+# It is also possible to do this with fswatch:
+# fswatch -o static | xargs -I{} docker-compose run app ./manage.py collectstatic --noinput
+#
+# Note that this is done outside the containers b/c getting fswatch and Django
+# installed into the same container does not seem like a straightforward task.
+#
+# This fwatch approach is slow for ongoing development. For development of static
+# files, use the docker-compose.yml file which runs in Django development mode.
+# Use this docker-compose-local.yml file for verifying a more deployment-like setup.
+
+#    command: /usr/local/bin/gunicorn core.wsgi:application -w 2 -b :8000 --reload
+
+
+services:
+  app:
+    restart: always
+    build: .
+    links:
+      - pg:pg
+    volumes:
+      - .:/usr/src/apps/cityhallmonitor
+      - web-static:/var/www/cityhallmonitor/static
+    env_file: .env
+    environment:
+      DEBUG: 'true'
+      PYTHONPATH: .
+    command: gunicorn --workers 3 --worker-tmp-dir /dev/shm --bind unix:/usr/src/apps/cityhallmonitor/mnt/cityhallmonitor.sock core.wsgi:application
+    depends_on:
+      - pg
+
+  nginx:
+    build: ./nginx/
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/usr/src/apps/cityhallmonitor
+      - web-static:/var/www/cityhallmonitor/static
+      - ./nginx/logs:/var/log/nginx
+    links:
+      - app:app
+    depends_on:
+      - app
+
+  pg:
+    restart: always
+    image: postgres:11.6
+    environment:
+      PGDATABASE: cityhallmonitor
+      PGUSER: cityhallmonitor
+      PGPASSWORD: cityhallmonitor
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+volumes:
+  web-static:
+  pgdata:

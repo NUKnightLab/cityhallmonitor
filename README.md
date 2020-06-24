@@ -1,3 +1,86 @@
+# City Hall Monitor
+
+## Development quickstart
+
+### Create the database, run migrations, and load fixtures
+
+```
+$ cp env.example .env
+$ docker-compose build
+$ docker-compose up pg
+$ ./initdb.sh
+```
+
+Optionally, load the extra production data (a rather large data dump)
+**WARNING:** The current data file appears to be out of data and does not
+contain all of the needed data fields. Currently, this will break things.
+
+```
+$ ./importdata.sh
+```
+
+```
+$ docker-compose down
+```
+
+
+### Run the development server
+
+The default compose file will:
+
+ * start a postgres container
+ * start an application container and run the Django dev server in debug mode.
+
+The application is served internally on port 8000 which is mapped to 80 on the localhost.
+
+```
+$ docker-compose up
+```
+Go to: http://localhost.
+
+
+## Alternative localized "deployment"
+
+
+This configuration looks more like deployment, but is slightly more awkward for
+development, particularly for making changes to static files:
+
+`docker-compose.local.yml` will:
+
+ * start a postgres container
+ * start an Nginx container
+ * start an application container and run the application via gunicorn
+
+The application is served internally on socket file which is proxied to port 80 on the localhost.
+
+If running the local deployment on https, you will need to create ssl certs. Be sure
+to have [minica](https://github.com/jsha/minica) installed, then:
+
+```
+$ cd nginx
+$ minica --domains localhost 
+```
+
+This will create the following gitignored files that will be copied into the nginx build
+(see the nginx Dockerfile for details):
+
+ * nginx/localhost/cert.pem
+ * nginx/localhost/key.pem
+ * minica.pem
+
+
+```
+$ docker-compose -f docker-compose.local.yml build
+$ docker-compose -f docker-compose.local.yml up
+```
+Go to: http://localhost or https://localhost
+
+
+**Note:** Content below here has not yet been reviewed since containerizing the application.
+
+---
+
+
 ## DEV NOTES
 
 Use `pull_data` to pull basic data into the system:

@@ -1,3 +1,5 @@
+**Obsolete** See the main README file
+
 ### Local development setup
 
 Basically:

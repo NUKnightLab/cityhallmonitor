@@ -1,5 +1,5 @@
 Django==1.8.3
-gunicorn==19.3.0
+gunicorn==19.5.0
 psycopg2-binary
 pytz==2015.4
 requests

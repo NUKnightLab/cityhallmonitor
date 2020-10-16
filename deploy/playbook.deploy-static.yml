@@ -1,0 +1,14 @@
+# Actual static for CityHallMonitor is built via docker-compose commands.
+# This playbook is here to demonstrate an example of using the s3 sync role.
+
+- hosts: "{{ env }}"
+  vars_files:
+    - "{{ config_dir }}/config.common.yml"
+    - "{{ config_dir }}/config.{{ env }}.yml"
+    - "{{ vault }}"
+  gather_facts: false
+
+  roles:
+    - role: deploy
+    - role: s3
+

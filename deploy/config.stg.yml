@@ -1,5 +1,6 @@
 domains: "stg-{{ project_name }}.knightlab.com,stg-app2.knightlab.com"
 
+# static_bucket not used by project but here to demonstrate s3 sync
 static_bucket: "media.knilab.com"
 gunicorn_reload: True # generally True on staging only
 
@@ -7,9 +8,9 @@ ssl:
   ssl_certificate: "/etc/nginx/ssl/knilab/knilab-bundle.crt"
   ssl_certificate_key: "/etc/nginx/ssl/knilab/knilab-com.key"
 
-init_env_stg:
-  STATIC_URL: "//media.knilab.com/{{ project_name }}/"
+#init_env_stg:
+#  STATIC_URL: "//media.knilab.com/{{ project_name }}/"
 
-# init_env is used to create the deployment-specific env.sh that is used by
-# Upstart and is sourced by virtualenvwrapper and django_manage.sh
-init_env: "{{ init_env_common|combine(init_env_stg) }}"
+# init_env is used to create the deployment-specific .env
+#init_env: "{{ init_env_common|combine(init_env_stg) }}"
+init_env: "{{ init_env_common }}"

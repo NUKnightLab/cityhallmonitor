@@ -34,17 +34,10 @@ init_env_common:
   DB_PORT__DEFAULT: "{{ vault_db_port__default }}"
 
 
-# docker-compose
-
-docker_compose_file: "docker-compose.ec2.yml"
-docker_compose_commands:
-  - "app python manage.py migrate --noinput"
-  - "app python manage.py collectstatic --noinput"
-
 
 # paths
 
-install_root: "/usr/src/apps"
+install_root: "/home/apps/sites"
 deploy_dir: "{{ install_root }}/{{ project_name }}"
 env_file: "{{ deploy_dir }}/.env"
 envrc_file: "{{ deploy_dir }}/.envrc"

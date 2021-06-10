@@ -1,13 +1,14 @@
 project_name: cityhallmonitor
 gitdeploy_version: "1.0.6"
+python_version: "3.8.2"
+python: /home/apps/sites/cityhallmonitor/.venv/bin/python
+service_port: "{{ cityhallmonitor_port }}"
 
 # The deploy-static playbook is here for demo purposes and configured in stg
 # only. S3 static is not used by this project.
 
 playbooks:
   - playbook.deploy-repo.yml
-  - playbook.build-containers.yml
-  # - playbook.deploy-static.yml
   - playbook.deploy-web.yml
 
 

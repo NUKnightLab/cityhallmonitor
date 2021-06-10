@@ -1,4 +1,5 @@
 project_name: cityhallmonitor
+service_name: "{{ project_name|lower }}"
 gitdeploy_version: "1.0.6"
 python_version: "3.8.2"
 python: /home/apps/sites/cityhallmonitor/.venv/bin/python
@@ -10,6 +11,7 @@ service_port: "{{ cityhallmonitor_port }}"
 playbooks:
   - playbook.deploy-repo.yml
   - playbook.deploy-web.yml
+  - playbook.restart.yml
 
 
 
@@ -40,9 +42,13 @@ init_env_common:
 
 install_root: "/home/apps/sites"
 deploy_dir: "{{ install_root }}/{{ project_name }}"
+application_dir: "{{ deploy_dir }}"
 env_file: "{{ deploy_dir }}/.env"
 envrc_file: "{{ deploy_dir }}/.envrc"
+virtualenv: "{{ deploy_dir }}/.venv"
 project_repo: "git@github.com:NUKnightLab/{{ project_name }}.git"
+requirements_file: "{{ deploy_dir }}/requirements.txt"
+wsgi_application: "core.wsgi:application"
 nginx_conf: "{{ deploy_dir }}/nginx/conf.d/{{ project_name }}.conf"
 
 # s3 sync config for demo purposes. Not used by project

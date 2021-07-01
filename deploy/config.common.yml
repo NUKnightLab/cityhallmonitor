@@ -1,7 +1,7 @@
 project_name: cityhallmonitor
 service_name: "{{ project_name|lower }}"
 gitdeploy_version: "1.0.6"
-python_version: "3.8.2"
+python_version: "3.7.7"
 python: /home/apps/sites/cityhallmonitor/.venv/bin/python
 service_port: "{{ cityhallmonitor_port }}"
 
@@ -21,7 +21,7 @@ init_env_common:
   PROJECT_NAME: "{{ project_name }}"
   APPLICATION_DOMAINS: "{{ domains }}" # space-delimited
   DJANGO_SETTINGS_MODULE: "core.settings.ec2"
-  STATIC_ROOT: "/var/www/{{ project_name }}/static"
+  STATIC_ROOT: "{{ deploy_dir }}/static"
   DJANGO_SECRET_KEY: "{{ vault_django_secret_key }}"
   DOCUMENT_CLOUD_USERNAME: "{{ vault_document_cloud_username }}"
   DOCUMENT_CLOUD_PASSWORD: "{{ vault_document_cloud_password }}"
@@ -49,7 +49,7 @@ virtualenv: "{{ deploy_dir }}/.venv"
 project_repo: "git@github.com:NUKnightLab/{{ project_name }}.git"
 requirements_file: "{{ deploy_dir }}/requirements.txt"
 wsgi_application: "core.wsgi:application"
-nginx_conf: "{{ deploy_dir }}/nginx/conf.d/{{ project_name }}.conf"
+nginx_template: "cityhallmonitor.conf.j2"
 
 # s3 sync config for demo purposes. Not used by project
 
